@@ -21,16 +21,18 @@ The main assumption made with the stacking technique is that the source populati
   - download directly or git clone https://github.com/ckarwin/Fermi_Stacking_Analysis.git
 
 2. It's advised to add the Fermi_Stacking_Analysis directory to your python path. </b>
-
+  - open .bashrc (in home directory)
+  - add: export PYTHONPATH=$PYTHONPATH:full_path/Fermi_Stacking_Analysis
+ 
 3. For any new analysis (assuming you added your path), copy the following files to a new analysis directory: client_code.py, inputs.yaml, and submit_fermi_stacking_jobs.py. </b>
 
 4. Specify inputs in inputs.yaml. </b>
+ - This is the only file a user should have to modify (apart from running functions in the client code, as described below).
+ 
+5. Uncomment functions inside the client code that you want to run. </b>
 
-5. Specify the source sample at the top of submit_fermi_stacking_jobs.py. </b>
-
-6. To run the code, uncomment all functions inside the client code you want to run. </b>
-
-7. Batch jobs are submitted with submit_fermi_stacking_jobs.py, which runs the client code. 
- - The client code can also be ran from the terminal, i.e. to make plots, etc.
+6. To run the code: 
+ - To submit batch jobs: python submit_fermi_stacking_jobs.py 
+ - To run from terminal: python client.py
 </pre>
 
