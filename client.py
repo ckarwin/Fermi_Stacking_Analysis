@@ -21,8 +21,8 @@ def main(cmd_line):
     
     #instance.run_preprocessing(srcname,ra,dec)
     #instance.make_preprocessing_summary()
-    instance.run_stacking(srcname,psf)
-    #instance.add_stack()
+    #instance.run_stacking(srcname,psf)
+    #instance.combine_likelihood(exclusion_list,savefile)
     
     ###########################################
 
