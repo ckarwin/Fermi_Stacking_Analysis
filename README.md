@@ -21,8 +21,7 @@ The main assumption made with the stacking technique is that the source populati
   - download directly or git clone https://github.com/ckarwin/Fermi_Stacking_Analysis.git
 
 2. It's advised to add the Fermi_Stacking_Analysis directory to your python path. </b>
-  - open .bashrc (in home directory)
-  - add: export PYTHONPATH=$PYTHONPATH:full_path/Fermi_Stacking_Analysis
+  - add to your .bashrc file (in home directory): export PYTHONPATH=$PYTHONPATH:full_path/Fermi_Stacking_Analysis
  
 3. For any new analysis (assuming you added your path), copy the following files to a new analysis directory: client_code.py, inputs.yaml, and submit_fermi_stacking_jobs.py. </b>
 
