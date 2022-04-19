@@ -11,8 +11,10 @@
 #   Stacking(superclass)
 #       - ang_sep(ra0, dec0, ra1, dec1)
 #       - run_preprocessing(srcname,ra,dec)
+#       - make_preprocessing_summary()
 #       - PL2(Fit,name)
-#       - run_stacking(srcname,PSF=0,indir="default",missing_list=[],new_name_list=[])
+#       - run_stacking(srcname,PSF,indir="default")
+#       - combine_likelihood(exclusion_list, savefile)
 #
 ###########################################################
 
@@ -31,6 +33,8 @@ from fermipy.gtanalysis import GTAnalysis
 import gc
 import pyLikelihood 
 from BinnedAnalysis import *
+from astropy.io import fits
+import pandas as pd
 #######################################
 
 # Superclass:
@@ -76,8 +80,35 @@ class StackingAnalysis:
         self.index_max = inputs["index_max"]
         self.flux_min = inputs["flux_min"]
         self.flux_max = inputs["flux_max"]
+       
+        # Sample data:
+        self.sample_file = inputs["sample_file"]
+        self.file_type = inputs["file_type"]
+        self.column_name = inputs["column_name"]
         
+        if self.file_type == "fits":
+            hdu = fits.open(self.sample_file)
+            data = hdu[1].data
+            self.sample_name_list = data[self.column_name].strip().tolist()
+
+        if self.file_type == "csv":
+            df = pd.read_csv(self.sample_file)
+            self.sample_name_list = df[self.column_name].tolist()
+
+    ################
+    # Preprocessing:
+
     def ang_sep(self,ra0, dec0, ra1, dec1):
+       
+        """
+        
+        Calculate angular distance between two points on the sky.
+
+        Inputs:
+            - ra0, dec0: coordinates of point 1
+            - ra1, dec1: coordinates of point 2 
+
+        """
         
         C = np.pi/180.
         d0 = C * dec0
@@ -242,8 +273,14 @@ class StackingAnalysis:
 				print names2[i],sepp2,r95_ns2[i]
 				dist_sep = '%.2f' %sepp2
 				namee = names2[i]
-	if namee:
-		srcname=namee
+	if namee:                
+                
+                # Write name of replaced source:
+                f = open("replaced_source_name.txt","w")
+                f.write(str([srcname,namee]))
+                f.close()
+
+                srcname=namee
 	else:
         	gta.add_source(srcname,{ 'ra' : ra, 'dec' : dec,
         		'SpectrumType' : 'PowerLaw', 'Index' : 2.0,
@@ -307,10 +344,123 @@ class StackingAnalysis:
 	
         if self.use_scratch == True:
             shutil.copytree(src_scratch,src_output_main)
-        
+       
+        # Calculate likelihood for null hypothesis:
+
+        if self.JLA == False:
+            iteration_list = [0]
+        if self.JLA == True:
+            iteration_list = [0,1,2,3]
+        for j in interation_list:
+
+	    srcmap = 'srcmap_0%s.fits' %j
+	    bexpmap = 'bexpmap_0%s.fits' %j
+	    xmlfile = 'fit_model_3_0%s.xml' %j
+	    savexml = 'null_likelihood_%s.xml'%j
+	    savetxt = 'null_likelihood_%s.txt' %j
+
+	    obs = BinnedObs(srcMaps=srcmap,expCube=ltcube,binnedExpMap=bexpmap,irfs='P8R3_SOURCE_V2')
+	    like = BinnedAnalysis(obs,xmlfile,optimizer='Minuit') 
+	                    	
+	    like.deleteSource(srcname)
+	    freeze=like.freeze
+	    for k in range(len(like.model.params)):
+	        freeze(k)
+	    like.model['galdiff'].funcs['Spectrum'].getParam('Prefactor').setFree(True)
+	    like.model['galdiff'].funcs['Spectrum'].getParam('Index').setFree(True)
+	    like.model['isodiff'].funcs['Spectrum'].getParam('Normalization').setFree(True)
+	    likeobj = pyLike.Minuit(like.logLike)
+	    thisL = like.fit(verbosity=1,covar=True,optObject=likeobj) #this returns -logL
+	    value = like.logLike.value() #this returns logL
+	    like.logLike.writeXml(savexml)
+
+	    print "*********"
+	    print "-logL: " + str(thisL)
+	    print 
+	
+	    f = open(savetxt,'w')
+	    f.write(str(value))
+	    f.close()
+
+        os.chdir(self.home)
+
         return
 
+    def make_preprocessing_summary(self):
+
+        # Construct empty dataframe:
+        df_full = pd.DataFrame(data=None, columns=["name","dist_sep","flux","flux_err","index","index_err","flux_ul","TS"])
+
+        # Fill dataframe:
+        missing_list = []
+        for each in self.sample_name_list:
+	
+	    srcname = each
+            
+            # Check for updated name:
+            indir = os.path.join(self.home,"Preprocessed_Sources",srcname,"output")
+            new_name_file = os.path.join(indir,"replaced_source_name.txt")
+            replace_name = False
+            if os.path.exists(new_name_file) == True:
+                f = open(new_name_file,"r")
+                this_list = eval(f.read())
+                newsrcname = this_list[1]
+                replace_name = True
+
+            src_file = "%s/%s_Param.txt" % (srcname,srcname)
+	    wdir = os.path.join(self.home,"Preprocessed_Sources",src_file) 
+	    
+            if os.path.exists(wdir) == False and replace_name == True:
+                src_file = "%s/%s_Param.txt" % (srcname,newsrcname)
+                wdir = os.path.join(self.home,"Preprocessed_Sources",src_file)
+
+	    if os.path.exists(wdir) == False:
+	        missing_list.append(srcname)
+		print 
+		print "Does not exists: " + srcname
+		print 
+		
+	    if os.path.exists(wdir) == True:
+	        this_file = wdir
+		df = pd.read_csv(this_file,delim_whitespace=True,names=["name","dist_sep","flux","flux_err","index","index_err","flux_ul","TS"])
+		df_full = pd.concat([df,df_full]).reset_index(drop=True)
+
+        df_full = df_full.sort_values(by=["TS"],ascending=False).reset_index(drop=True)
+
+        print
+        print df_full
+        print 
+
+        # Write dataframe to text file:
+        f = open("Preprocessed_Sources/preprocessing_summary_LLAGN.txt","w")
+        f.write("\n")
+        f.write("*****************\n")
+        f.write("preprocessing summary:\n\n")
+        f.write(df_full.to_string(index=True))
+        f.write("\n\n")
+        f.write("****************\n")
+        f.write("Missing sources:")
+        f.write(str(missing_list))
+        f.close()
+
+        df_full.to_csv("Preprocessed_Sources/preprocessing_summary_LLAGN.csv",sep ="\t",index=False)
+    
+        return
+
+    #################
+    # Stack Sources:
+
     def PL2(self,Fit,name):
+
+        """
+    
+        Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.
+        Inputs:
+            - Fit: likelihood object.
+            - name: name of source. 
+
+        """
+
         Fit[name].funcs['Spectrum'].getParam('Integral').setBounds(1e-14,1e7)
         Fit[name].funcs['Spectrum'].getParam('Integral').setScale(1.0)
         Fit[name].funcs['Spectrum'].getParam('Integral').setValue(1.0)
@@ -330,7 +480,7 @@ class StackingAnalysis:
         
         return Fit
 
-    def run_stacking(self,srcname,PSF=0,indir="default",missing_list=[],new_name_list=[]):
+    def run_stacking(self,srcname,PSF,indir="default"):
         
         """
 
@@ -338,18 +488,26 @@ class StackingAnalysis:
 
         inputs:
             - srcname: name of source.
-            - PSF (optional arguement): integer ranging from 0-3 indicating PSF class for JLA. 
+            - PSF: integer ranging from 0-3 indicating PSF class for JLA. 
               Note: The passed value is 0 for standard analysis. 
             - indir (optional arguement): input preprocessing directory to use for stacking. 
               Note: Defualt is preprocessing directory from main run directory.
-            - missing_list (optional arguement): Names of missing sources from preprocessing. Must be a numpy array.
-            - new_name_list (optional arguement): New names of missing sources assigned by fermipy.
-              Note: Must match the order of missing_list! 
+        
         """
 	
         # Define default preprocessing directory:
         if indir == "default":
             indir = os.path.join(self.home,"Preprocessed_Sources",srcname,"output")
+
+        # Check for updated name:
+        replace_name = False
+        new_name_file = os.path.join(indir,"replaced_source_name.txt")
+        if os.path.exists(new_name_file) == True:
+            f = open(new_name_file,"r")
+            this_list = eval(f.read())
+            true_name = this_list[0]
+            new_name = this_list[1]
+            replace_name = True
 
         # Define main output directory for source:
         stacking_output = os.path.join(self.home,"Stacked_Sources")
@@ -408,16 +566,15 @@ class StackingAnalysis:
 	obs = BinnedObs(srcMaps='srcmap_0%s.fits' %PSF,expCube=self.ltcube,binnedExpMap='bexpmap_0%s.fits' %PSF,irfs='P8R3_SOURCE_V2')
 	
         # Define index range for scan:
-        index = -1.0*np.arange(1,4+0.1,0.1)
+        index = -1.0*np.arange(self.index_min,self.index_max+0.1,0.1)
         index = np.around(index,decimals=1)
         index = index.tolist()
 
 	for i in range(len(index)):
 
                 # Fix names for sources with offset positions:
-                if srcname in missing_list:
-		    change_index = missing_list == srcname
-                    srcname = new_name_list[change_index][0]
+                if replace_name == True:
+                    srcname = new_name 
             	
 		LOG_LIKE=[]
 		Fit_Qual=[]
@@ -426,7 +583,7 @@ class StackingAnalysis:
 		Index=[]
 
                 # Define flux range for scane:
-		flux=np.linspace(-13,-9,num=40,endpoint=False)
+		flux=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=False)
 		
                 for j in range(len(flux)):
 				
@@ -465,9 +622,8 @@ class StackingAnalysis:
                 output = '\n'.join('\t'.join(map(str,row)) for row in zip(Flux,Index,LOG_LIKE,Fit_Qual,Conv))
 	
                 # Fix names for sources with offset positions:
-                if srcname in new_name_list:
-		    change_index = new_name_list == srcname
-                    srcname = missing_list[change_index][0]
+                if replace_name == True:
+                    srcname = true_name
 
                 # Write Files:
 		with open('%s_stacking_%s.txt' %(srcname,np.fabs(index[i])),'w') as f:
@@ -486,3 +642,209 @@ class StackingAnalysis:
         
 	return
 
+    ###############
+    # Add Stacking:
+
+    def combine_likelihood(self, exclusion_list, savefile):
+	
+        """
+	Make 2D TS profiles for each source and add to get stacked profile.
+
+	Input definitions:
+            - exclusion_list: list of sources to exclude from stacked profile.
+	    - savefile: Prefix of array to be saved. Do not include ".npy" at the end of the name; it's already included.
+	
+        """
+
+        # Make print statement:
+	print
+	print "*****************"
+	print "Making stack..."
+	print
+	
+        # Make main output directories:
+        adding_main_dir = os.path.join(self.home,"Add_Stacking")
+        if os.path.exists(adding_main_dir) == False:
+            os.system("mkdir %s" %adding_main_dir)
+
+        array_main_dir = os.path.join(adding_main_dir,"Numpy_Arrays")
+        if os.path.exists(array_main_dir) == False:  
+            os.system("mkdir %s" %array_main_dir)
+   
+        individual_array_main_dir = os.path.join(array_main_dir,"Individual_Sources")
+        if os.path.exists(individual_array_main_dir) == False:  
+            os.system("mkdir %s" %individual_array_main_dir)
+        
+        image_main_dir = os.path.join(adding_main_dir,"Images")
+        if os.path.exists(image_main_dir) == False:
+            os.system("mkdir %s" %image_main_dir)
+
+        if self.JLA == False:
+
+	    # Define counters and lists:
+	    counter = 0
+	    print_list = []
+	    max_TS_list = []
+
+	    # Iterate through sources:
+	    for s in range(0,len(self.sample_name_list)):
+			
+	        srcname = self.sample_name_list[s]
+
+                likelihood_dir = os.path.join("Preprocessed_Sources",srcname,"output/null_likelihood_0.txt")
+	        stacking_dir = os.path.join("Stacked_Sources",srcname)
+	
+	        if os.path.exists(stacking_dir) == False or os.path.exists(likelihood_dir) == False:
+	            print 
+		    print 'Does not exist: ' + srcname
+		    print 
+
+	        if srcname not in exclusion_list and os.path.exists(likelihood_dir) == True and os.path.exists(stacking_dir) == True:
+				
+	            os.chdir(stacking_dir)
+	        
+                    print_list.append(srcname)
+		
+		    array_list = []
+    
+                    # Define index list of scan:
+                    index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
+                    index_list = np.around(index,decimals=1)
+                    index_list = index.tolist()
+                
+                    # Read null likelihood:
+		    f = open(likelihood_dir,'r')
+		    lines = f.readlines()
+		    null = float(lines[0])
+
+		    for i in range(0,len(index_list)):
+		        this_index = str(index_list[i])
+		        this_file = "%s_stacking_%s.txt" %(srcname,this_index)
+
+		        df = pd.read_csv(this_file,delim_whitespace=True,names=["flux","index","likelihood","quality","status"])
+
+		        flux = df["flux"]
+		        index = df["index"]
+		        likelihood = df["likelihood"].tolist()
+		        TS = 2*(df["likelihood"]-null)
+		        TS = TS.tolist()
+		        array_list.append(TS)
+
+	            final_array = np.array(array_list)
+	
+		    this_max_TS = np.max(final_array)
+		    max_TS_list.append(this_max_TS)
+	
+		    # Save each individual source array:
+                    this_file_name = srcname + "_array"
+                    source_array_file = os.path.join(individual_array_main_dir,this_file_name)            	    
+                    np.save(source_array_file,final_array)
+
+                    # Get stacked array:
+		    if counter == 0:
+	                summed_array = final_array
+		    if counter > 0:
+		        summed_array = np.add(summed_array,final_array)
+		    counter += 1
+
+            print
+	    print "sources that were added in the sum:"
+	    print "number of sources: " + str(len(print_list))
+	    print print_list
+	    print 
+
+            # Save summed array:
+	    array_file = os.path.join(array_main_dir,savefile)
+	    np.save(array_file,summed_array)
+
+        if self.JLA == True:
+	
+            # Define counters and lists:
+            total_counter = 0
+	    print_list = []
+	    max_TS_list = []
+
+	    # Iterate through sources:
+	    for s in range(0,len(self.sample_name_list)):
+			
+	        srcname = self.sample_name_list[s]
+                counter = 0
+
+                j_counter = 0
+                for j in [0,1,2,3]:
+            
+                    likelihood_dir = "Preprocessed_Sources/%s/output/null_likelihood_%.txt" %(srcname,str(j))
+	            stacking_dir = "Stacked_Sources/Likelihood_%s/%s" %(str(j),srcname)
+	
+	            if os.path.exists(stacking_dir) == False or os.path.exists(likelihood_dir) == False:
+	                print 
+		        print 'Does not exist: ' + srcname
+		        print 
+                        j_counter += 1
+
+	            if srcname not in exclusion_list and os.path.exists(likelihood_dir) == True and os.path.exists(stacking_dir) == True:
+				
+	                os.chdir(stacking_dir)
+	        
+	                array_list = []
+    
+                        # Define index list of scan:
+                        index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
+                        index_list = np.around(index,decimals=1)
+                        index_list = index.tolist()
+                
+                        # Read null likelihood:
+		        f = open(likelihood_dir,'r')
+		        lines = f.readlines()
+		        null = float(lines[0])
+
+		        for i in range(0,len(index_list)):
+		            this_index = str(index_list[i])
+		            this_file = "%s_stacking_%s.txt" %(srcname,this_index)
+
+		            df = pd.read_csv(this_file,delim_whitespace=True,names=["flux","index","likelihood","quality","status"])
+
+		            flux = df["flux"]
+		            index = df["index"]
+		            likelihood = df["likelihood"].tolist()
+		            TS = 2*(df["likelihood"]-null)
+		            TS = TS.tolist()
+		            array_list.append(TS)
+
+	                final_array = np.array(array_list)
+	                if counter == 0:
+                            summed_array = final_array
+                        if counter > 0:
+                            summed_array = np.add(summed_array,final_array)
+                        counter += 1
+            
+                if srcname not in exclusion_list and j_counter == 0:
+
+                    print_list.append(srcname)
+
+	            # Save each individual source array:
+                    this_file_name = srcname + "_array"
+                    source_array_file = os.path.join(individual_array_main_dir,this_file_name)            	    
+                    np.save(source_array_file,final_array)
+
+                    # Get stacked array:
+		    if total_counter == 0:
+	                total_summed_array = summed_array
+		    if total_counter > 0:
+		        total_summed_array = np.add(total_summed_array,summed_array)
+		    total_counter += 1
+
+            print
+	    print "sources that were added in the sum:"
+	    print "number of sources: " + str(len(print_list))
+	    print print_list
+	    print 
+
+            # Save summed array:
+	    array_file = os.path.join(array_main_dir,savefile)
+	    np.save(array_file,total_summed_array)
+
+        # Return to home:
+	os.chdir(self.home)
+		
+	return 	

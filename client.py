@@ -16,10 +16,15 @@ def main(cmd_line):
     # Define instance with input parameter card:
     instance = StackingAnalysis("inputs.yaml")
 
-    # Uncomment below to Run functions:
+    ###########################################
+    # Uncomment below to run functions:
+    
     #instance.run_preprocessing(srcname,ra,dec)
+    #instance.make_preprocessing_summary()
     instance.run_stacking(srcname,psf)
     #instance.add_stack()
+    
+    ###########################################
 
 ########################
 if __name__=="__main__":

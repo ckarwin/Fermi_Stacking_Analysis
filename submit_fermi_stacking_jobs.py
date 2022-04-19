@@ -3,24 +3,46 @@ import pandas as pd
 import os, sys
 import time 
 from astropy.io import fits
+import yaml
 
-# Sample data:
-this_file = "/zfs/astrohe/ckarwin/Stacking_Analysis/LLAGN/Sample/LLAGN_control_sample_full.fits"
-hdu = fits.open(this_file)
-data = hdu[1].data
-name_list = data["Name_1"].strip().tolist()
-ra_list = data["_RAJ20001"].tolist()
-dec_list = data["_DEJ20001"].tolist()
+# Load sample data from yaml file:
+with open(input_yaml,"r") as file:
+    inputs = yaml.load(file)
 
-# Specify which source to run.
+this_file = inputs["sample_file"]
+file_type = inputs["file_type"]
+column_name = inputs["column_name"]
+column_ra = inputs["column_ra"]
+column_dec = inputs["column_dec"]
+run_list = inputs["run_list"]
+psf_low = inputs["psf_low"]
+psf_high = inputs["psf_high"]
+run_name = inputs["run_name"]
+resource = inputs["resource"]
+
+if file_type == "fits":
+    hdu = fits.open(this_file)
+    data = hdu[1].data
+    name_list = data[column_name].strip().tolist()
+    ra_list = data[column_ra].tolist()
+    dec_list = data[column_dec].tolist()
+
+if file_type == "csv":
+    df = pd.read_csv(this_file)
+    name_list = df[column_name].tolist()
+    ra_list = df[column_ra].tolist()
+    dec_list = df[column_dec].tolist()
+
+# Specify which sources to run.
 # Set to name_list for full sample.
-run_list = ["NGC_221"]
+if run_list == "default":
+    run_list = name_list
 
 # Get current working directory:
 this_dir = os.getcwd()
 
 # Submit jobs:
-for j in range(0,1): # PSF iterator for JLA (use 0 for standard analysis).
+for j in range(psf_low,psf_high): # PSF iterator for JLA (use 0 for standard analysis).
     for i in range(0,len(name_list)):
 
 	this_name = name_list[i]
@@ -33,8 +55,8 @@ for j in range(0,1): # PSF iterator for JLA (use 0 for standard analysis).
 
 	    f = open('multiple_batch_submission.pbs','w')
 
-	    f.write("#PBS -N LLAGN_%s\n" %str(this_name))
-            f.write("#PBS -l select=1:ncpus=2:mem=45gb:interconnect=1g,walltime=72:00:00\n\n")
+	    f.write("#PBS -N %s_%s\n" %(run_name,str(this_name)))
+            f.write("#PBS -l select=1:%s\n\n" %resource)
 	    f.write("#the Fermi environment first needs to be sourced:\n")
 	    f.write("cd /zfs/astrohe/Software\n")
 	    f.write("source fermi.sh\n\n")

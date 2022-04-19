@@ -1,4 +1,18 @@
 #----------#
+# Sample data:
+sample_file: "/zfs/astrohe/ckarwin/Stacking_Analysis/LLAGN/Sample/LLAGN_control_sample_full.fits" # full path to sample file
+file_type: "fits" # fits or csv
+column_name: "Name_1"
+column_ra: "_RAJ20001"
+column_dec: "_DEJ20001"
+
+# Submission parameters:
+run_list: ["NGC_221"] # List of names to run (subsample of full sample). For full sample use "default". 
+psf_low: 0 # lower PSF iterator for JLA (0-3). Default is 0 for standard analysis.
+psf_high: 1 # upper PSF iterator for JLA (1-4). Default is 1 for standard analysis.
+run_name: "LLAGN" # main name of run.
+resource: "ncpus=1:mem=15gb:interconnect=1g,walltime=72:00:00" # palmetto submission
+
 # Main default inputs:
 ft1: '/zfs/astrohe/Fermi_Data/weekly/photon/filelist.txt' # data file
 ft2: '/zfs/astrohe/Fermi_Data/mission/spacecraft/lat_spacecraft_merged.fits' # spacecraft file
@@ -13,7 +27,7 @@ use_scratch: True
 scratch: '/scratch1/ckarwin/Run_5'
 
 # Perform joint likelihood analysis (True) or standard analysis (False):
-JLA: True
+JLA: False
 
 # Main LAT analysis parameters:
 emin: 1000 # min energy 
@@ -23,9 +37,9 @@ tmax: 611246581 # max time
 zmax: 105 # max zenith angle
 
 # Main scanning inputs:
-index_min: 1 # min index for stacking scan (absolute value)
-index_max: 4 # max index for stacking scan
-flux_min: 13 # power of min flux for stacking scan (absolute value)
-flux_max: 9 # power of max flux for stacking scan (absolute value)
+index_min: 1.0 # min index for stacking scan (absolute value, float)
+index_max: 4.0 # max index for stacking scan (absolute value, float)
+flux_min: -13.0 # power of min flux for stacking scan (float)
+flux_max: -9.0 # power of max flux for stacking scan (float)
 #----------#
 
