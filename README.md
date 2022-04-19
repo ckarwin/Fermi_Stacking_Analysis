@@ -15,8 +15,19 @@ The main assumption made with the stacking technique is that the source populati
 
 ## Quickstart Guide <br /> 
 <pre>
-1. Download Data_Challenge directory:
-  - download directly or git clone https://github.com/ckarwin/COSI.git
-  - Note: This repository does not include the geometery file. 
+1. Download Fermi_Stacking_Analysis directory:
+  - download directly or git clone https://github.com/ckarwin/Fermi_Stacking_Analysis.git
+
+2. Everything needed to run the analysis is in Fermi_Stacking_Analysis </b> 
+  - It's advised to add the Fermi_Stacking_Analysis directory to your python path.
+  - For any new analysis (assuming you added your path), copy the following files to a new analysis directory: client_code.py, inputs.yaml, and submit_fermi_stacking_jobs.py.
+
+3. Specify inputs in inputs.yaml. </b>
+
+4. Specify the source sample at the top of submit_fermi_stacking_jobs.py. </b>
+
+5. To run the code, uncomment all functions inside the client code you want to run. </b>
+
+6. Batch jobs are submitted with submit_fermi_stacking_jobs.py, and the client code can also be ran from the terminal, i.e. to make plots, etc.
 </pre>
 
