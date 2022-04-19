@@ -1,0 +1,31 @@
+#----------#
+# Main default inputs:
+ft1: '/zfs/astrohe/Fermi_Data/weekly/photon/filelist.txt' # data file
+ft2: '/zfs/astrohe/Fermi_Data/mission/spacecraft/lat_spacecraft_merged.fits' # spacecraft file
+galdiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/gll_iem_v07.fits' # Galactic diffuse model
+isodiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/iso_P8R3_SOURCE_V2_v1.txt' # isotropic model
+
+# Full path to ltcube:
+ltcube: '/zfs/astrohe/ckarwin/Stacking_Analysis/UFOs/NGC_4151_Analysis/MakeLTCube/zmax_105/UFOs_binned_ltcube.fits'
+
+# Full path to scratch directory:
+use_scratch: True
+scratch: '/scratch1/ckarwin/Run_5'
+
+# Perform joint likelihood analysis (True) or standard analysis (False):
+JLA: True
+
+# Main LAT analysis parameters:
+emin: 1000 # min energy 
+emax: 800000 # max energy
+tmin: 239557417 # min time
+tmax: 611246581 # max time
+zmax: 105 # max zenith angle
+
+# Main scanning inputs:
+index_min: 1 # min index for stacking scan (absolute value)
+index_max: 4 # max index for stacking scan
+flux_min: 13 # power of min flux for stacking scan (absolute value)
+flux_max: 9 # power of max flux for stacking scan (absolute value)
+#----------#
+
