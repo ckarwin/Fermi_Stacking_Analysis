@@ -23,7 +23,10 @@ The main assumption made with the stacking technique is that the source populati
 2. It's advised to add the Fermi_Stacking_Analysis directory to your python path: </b>
   - add to your .bashrc file (in home directory): export PYTHONPATH=$PYTHONPATH:full_path/Fermi_Stacking_Analysis
  
-3. For any new analysis (assuming you added your path), copy the following files to a new analysis directory: client_code.py, inputs.yaml, and submit_fermi_stacking_jobs.py. </b>
+3. For any new analysis (assuming you added your path), copy the following files to a new analysis directory: </b>
+ - client_code.py </b>
+ - inputs.yaml </b>
+ - submit_fermi_stacking_jobs.py </b>
 
 4. Specify inputs in inputs.yaml. </b>
  - This is the only file a user should have to modify (apart from running functions in the client code, as described below).
