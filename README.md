@@ -1,4 +1,4 @@
-# Fermi_Stacking_Analysis
+## Introduction
 This repository contains code for running a gamma-ray stacking analysis with Fermi-LAT data. The technique was originally developed by Marco Ajello, Vaidehi Paliya, and Abhishek Desai, and it has been successfully applied to the following studies: <br />
 * Extreme blazars [(link)](https://arxiv.org/pdf/1908.02496.pdf)  <br />
 * Star-forming galaxies [(link)](https://arxiv.org/pdf/2003.05493.pdf) <br />
