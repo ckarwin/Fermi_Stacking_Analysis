@@ -38,3 +38,5 @@ The main assumption made with the stacking technique is that the source populati
  - To run from terminal: python client.py
 </pre>
 
+## Notes
+* The source code is still in development. Please let me know if there are any errors to be fixed and/or functionallity that should be added.
