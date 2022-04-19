@@ -28,6 +28,7 @@ The main assumption made with the stacking technique is that the source populati
 
 6. To run the code, uncomment all functions inside the client code you want to run. </b>
 
-7. Batch jobs are submitted with submit_fermi_stacking_jobs.py, and the client code can also be ran from the terminal, i.e. to make plots, etc.
+7. Batch jobs are submitted with submit_fermi_stacking_jobs.py, which runs the client code. 
+ - The client code can also be ran from the terminal, i.e. to make plots, etc.
 </pre>
 
