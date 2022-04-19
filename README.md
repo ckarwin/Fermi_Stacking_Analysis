@@ -6,6 +6,8 @@ This repository contains code for running a gamma-ray stacking analysis with Fer
 * Ultra-fast outflows [(link)](https://iopscience.iop.org/article/10.3847/1538-4357/ac1bb2) <br />
 
 The stacking analysis requires Fermipy, available [here](https://fermipy.readthedocs.io/en/latest/). <br />
+ - The current version of the code is compatible with fermipy v0.19.0, fermitools v1.2.23, and python 2.7 or later. 
+ - An update will soon be available for the latest version of fermipy and python 3. 
 
 The stacking analysis is meant to be ran on a cluster. In particular, it has been developed using the Clemson University Palmetto Cluster. More information on the Palmetto Cluster can be found [here](https://www.palmetto.clemson.edu/palmetto/basic/started/).  <br />
 
