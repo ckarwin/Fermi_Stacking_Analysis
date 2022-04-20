@@ -40,4 +40,4 @@ The main assumption made with the stacking technique is that the source populati
 ## Development Notes
 * The source code is still in development.
 * Please let me know if there are any errors to be fixed and/or functionallity that should be added.
-* Contributions are welcome! To do so please make a standard pull request, as described in more detail [here](https://opensource.com/article/19/7/create-pull-request-github).
+* Contributions are welcome! To do so, please make a pull request, as described in more detail [here](https://opensource.com/article/19/7/create-pull-request-github).
