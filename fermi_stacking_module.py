@@ -8,8 +8,8 @@
 # 
 # Index of functions:
 #
-#   Stacking(superclass)
-#       - ang_sep(ra0, dec0, ra1, dec1)
+# Stacking(superclass)
+# 	- ang_sep(ra0, dec0, ra1, dec1)
 #       - run_preprocessing(srcname,ra,dec)
 #       - make_preprocessing_summary()
 #       - PL2(Fit,name)
