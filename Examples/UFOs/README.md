@@ -12,14 +12,14 @@ Time: 239557417 - 589820845 <br />
 
 max TS = 27.9 (sigma = 4.9) <br />
 best index = 2.2 +/- 0.3 <br />
-best flux = 3.16e-11 ph/cm^2/s <br />
+best flux = (3.16, +1.85, -1.17)e-11 ph/cm^2/s <br />
 
 ## Joint-Likelihood Analysis
 
 <p align="center">
-<img width="500"  src="summed_array_ufo_SA.png">
+<img width="500"  src="summed_array_ufo_JLA.png">
 </p>
 
-max TS = 27.9 (sigma = 4.9) <br />
-best index = 2.2 +/- 0.3 <br />
-best flux = 3.16e-11 ph/cm^2/s <br />
+max TS = 30.1 (sigma = 5.1) <br />
+best index = 2.1 +/- 0.3 <br />
+best flux = (2.51, +1.47, -0.93)e-11 ph/cm^2/s <br />
