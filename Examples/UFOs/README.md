@@ -3,6 +3,7 @@
 The corresponding publication is available [here](https://iopscience.iop.org/article/10.3847/1538-4357/ac1bb2). <br />
 Energy: 1 - 800 GeV <br />
 Time: 239557417 - 589820845 <br />
+zmax: 105 degree <br />
 
 ## Standard Analysis
 
