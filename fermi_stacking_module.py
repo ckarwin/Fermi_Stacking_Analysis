@@ -15,6 +15,7 @@
 #       - PL2(Fit,name)
 #       - run_stacking(srcname,PSF,indir="default")
 #       - combine_likelihood(exclusion_list, savefile)
+#       - plot_final_array(savefig,array)
 #
 ###########################################################
 
@@ -27,14 +28,29 @@ import random,shutil,yaml
 import os,sys
 from math import *
 import numpy as np
-import matplotlib as matplotlib
-matplotlib.use('agg')
+import matplotlib 
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 from fermipy.gtanalysis import GTAnalysis
 import gc
 import pyLikelihood 
 from BinnedAnalysis import *
 from astropy.io import fits
 import pandas as pd
+import math
+from scipy.stats import norm
+import matplotlib.mlab as mlab
+from scipy.ndimage.filters import gaussian_filter
+from astropy.convolution import convolve, Gaussian2DKernel
+from matplotlib.cm import register_cmap,cmap_d
+from scipy import stats, interpolate, optimize
+from matplotlib import ticker, cm
+from scipy.stats.contingency import margins
+import PopStudies as PS
+from IntegralUpperLimit import calc_int
+from UpperLimits import UpperLimits
+from SummedLikelihood import *
+from astropy.io import fits
 #######################################
 
 # Superclass:
@@ -80,7 +96,8 @@ class StackingAnalysis:
         self.index_max = inputs["index_max"]
         self.flux_min = inputs["flux_min"]
         self.flux_max = inputs["flux_max"]
-       
+        self.show_plots = inputs["show_plots"]
+
         # Sample data:
         self.sample_file = inputs["sample_file"]
         self.file_type = inputs["file_type"]
@@ -137,15 +154,16 @@ class StackingAnalysis:
             - dec: declination (float)
 
         """
-       
+
+	# Make print statement:
+	print
+	print "********** Fermi Stacking Analysis **********"
+	print "Running preprocessing..."
+	print
+ 
         # Need to specify coordinates as type float
         ra = float(ra)
         dec = float(dec)
-
-        # Make print statement:
-        print
-        print "Running preprocessing..."
-        print
 
         # Define main output directory for source:
         preprocess_output = os.path.join(self.home,"Preprocessed_Sources")
@@ -224,7 +242,7 @@ class StackingAnalysis:
 		yml.write("  format : png\n")
 		yml.write("#--------#\n")
 		yml.write("sed:\n")
-		yml.write("  use_local_index : True")
+		yml.write("  use_local_index : True\n")
 	        
                 # Include components for joint likelihood analysis (JLA):
                 if self.JLA == True:
@@ -276,7 +294,7 @@ class StackingAnalysis:
 	if namee:                
                 
                 # Write name of replaced source:
-                f = open("replaced_source_name.txt","w")
+                f = open("output/replaced_source_name.txt","w")
                 f.write(str([srcname,namee]))
                 f.close()
 
@@ -341,25 +359,22 @@ class StackingAnalysis:
         f = open('%s_Param.txt' % srcname, 'w')
         f.write(str(srcname) + "\t" + str(dist_sep) + "\t" + str(Flux) + "\t" + str(Flux_err) + "\t" + str(Index) + "\t" + str(Index_err) + "\t" + str(Flux_UL) + "\t" + str(TS) + "\n")
         f.close()
-	
-        if self.use_scratch == True:
-            shutil.copytree(src_scratch,src_output_main)
-       
+	 
         # Calculate likelihood for null hypothesis:
 
         if self.JLA == False:
             iteration_list = [0]
         if self.JLA == True:
             iteration_list = [0,1,2,3]
-        for j in interation_list:
+        for j in iteration_list:
 
-	    srcmap = 'srcmap_0%s.fits' %j
-	    bexpmap = 'bexpmap_0%s.fits' %j
-	    xmlfile = 'fit_model_3_0%s.xml' %j
-	    savexml = 'null_likelihood_%s.xml'%j
-	    savetxt = 'null_likelihood_%s.txt' %j
+	    srcmap = 'output/srcmap_0%s.fits' %j
+	    bexpmap = 'output/bexpmap_0%s.fits' %j
+	    xmlfile = 'output/fit_model_3_0%s.xml' %j
+	    savexml = 'output/null_likelihood_%s.xml'%j
+	    savetxt = 'output/null_likelihood_%s.txt' %j
 
-	    obs = BinnedObs(srcMaps=srcmap,expCube=ltcube,binnedExpMap=bexpmap,irfs='P8R3_SOURCE_V2')
+	    obs = BinnedObs(srcMaps=srcmap,expCube=self.ltcube,binnedExpMap=bexpmap,irfs='P8R3_SOURCE_V2')
 	    like = BinnedAnalysis(obs,xmlfile,optimizer='Minuit') 
 	                    	
 	    like.deleteSource(srcname)
@@ -382,6 +397,9 @@ class StackingAnalysis:
 	    f.write(str(value))
 	    f.close()
 
+        if self.use_scratch == True:
+            shutil.copytree(src_scratch,src_output_main)
+    
         os.chdir(self.home)
 
         return
@@ -494,7 +512,13 @@ class StackingAnalysis:
               Note: Defualt is preprocessing directory from main run directory.
         
         """
-	
+
+	# Make print statement:
+	print
+	print "********** Fermi Stacking Analysis **********"
+	print "Running stacking..."
+	print
+
         # Define default preprocessing directory:
         if indir == "default":
             indir = os.path.join(self.home,"Preprocessed_Sources",srcname,"output")
@@ -589,7 +613,7 @@ class StackingAnalysis:
 				
 			Index+=['%.1f' %np.fabs(index[i])]
 			Flux+=['%.2e' %(10**flux[j])]
-			like1 = BinnedAnalysis(obs,'fit_model_3_00.xml',optimizer='DRMNFB')
+			like1 = BinnedAnalysis(obs,'fit_model_3_0%s.xml' %PSF,optimizer='DRMNFB')
 			freeze=like1.freeze
 			for k in range(len(like1.model.params)):
 				freeze(k)
@@ -655,13 +679,13 @@ class StackingAnalysis:
 	    - savefile: Prefix of array to be saved. Do not include ".npy" at the end of the name; it's already included.
 	
         """
+        
+	# Make print statement:
+	print
+	print "********** Fermi Stacking Analysis **********"
+	print "Combining likelihood..."
+	print
 
-        # Make print statement:
-	print
-	print "*****************"
-	print "Making stack..."
-	print
-	
         # Make main output directories:
         adding_main_dir = os.path.join(self.home,"Add_Stacking")
         if os.path.exists(adding_main_dir) == False:
@@ -691,8 +715,8 @@ class StackingAnalysis:
 			
 	        srcname = self.sample_name_list[s]
 
-                likelihood_dir = os.path.join("Preprocessed_Sources",srcname,"output/null_likelihood_0.txt")
-	        stacking_dir = os.path.join("Stacked_Sources",srcname)
+                likelihood_dir = os.path.join(self.home,"Preprocessed_Sources",srcname,"output/null_likelihood_0.txt")
+	        stacking_dir = os.path.join(self.home,"Stacked_Sources",srcname)
 	
 	        if os.path.exists(stacking_dir) == False or os.path.exists(likelihood_dir) == False:
 	            print 
@@ -709,8 +733,8 @@ class StackingAnalysis:
     
                     # Define index list of scan:
                     index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
-                    index_list = np.around(index,decimals=1)
-                    index_list = index.tolist()
+                    index_list = np.around(index_list,decimals=1)
+                    index_list = index_list.tolist()
                 
                     # Read null likelihood:
 		    f = open(likelihood_dir,'r')
@@ -773,13 +797,16 @@ class StackingAnalysis:
                 j_counter = 0
                 for j in [0,1,2,3]:
             
-                    likelihood_dir = "Preprocessed_Sources/%s/output/null_likelihood_%.txt" %(srcname,str(j))
-	            stacking_dir = "Stacked_Sources/Likelihood_%s/%s" %(str(j),srcname)
-	
+                    likelihood_dir = "Preprocessed_Sources/%s/output/null_likelihood_%s.txt" %(srcname,str(j))
+	            likelihood_dir = os.path.join(self.home,likelihood_dir)
+                    stacking_dir = "Stacked_Sources/Likelihood_%s/%s" %(str(j),srcname)
+	            stacking_dir = os.path.join(self.home,stacking_dir)
+
 	            if os.path.exists(stacking_dir) == False or os.path.exists(likelihood_dir) == False:
-	                print 
-		        print 'Does not exist: ' + srcname
-		        print 
+                        if j_counter == 0:
+                            print 
+		            print 'Does not exist: ' + srcname
+		            print 
                         j_counter += 1
 
 	            if srcname not in exclusion_list and os.path.exists(likelihood_dir) == True and os.path.exists(stacking_dir) == True:
@@ -790,8 +817,8 @@ class StackingAnalysis:
     
                         # Define index list of scan:
                         index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
-                        index_list = np.around(index,decimals=1)
-                        index_list = index.tolist()
+                        index_list = np.around(index_list,decimals=1)
+                        index_list = index_list.tolist()
                 
                         # Read null likelihood:
 		        f = open(likelihood_dir,'r')
@@ -848,3 +875,185 @@ class StackingAnalysis:
 	os.chdir(self.home)
 		
 	return 	
+
+    def plot_final_array(self,savefig,array):
+
+        """
+	 
+         Input definitions:
+	 
+	 savefig: Name of image file to be saved. 
+	
+	 array: Name of input array to plot. Must include ".npy".
+	
+        """
+
+	# Make print statement:
+	print
+	print "********** Fermi Stacking Analysis **********"
+	print "Plotting final_array..."
+	print
+
+	# Specify the savefigure:
+	savefig = os.path.join("Add_Stacking/Images/",savefig)
+
+        # Specify array file to be plotted:
+        array_file = os.path.join("Add_Stacking/Numpy_Arrays/",array)
+
+	# Setup figure:
+	fig = plt.figure(figsize=(9,9))
+	ax = plt.gca()
+
+	# Upload summed array:
+	summed_array = np.load(array_file)
+
+	# Get min and max:
+	max_value = np.amax(summed_array)
+	min_value = np.amin(summed_array)
+
+	# Corresponding sigma for 2 dof:
+	num_pars = 2
+	sigma = stats.norm.ppf(1.-stats.distributions.chi2.sf(max_value,num_pars)/2.)
+
+	# Significane contours for dof=2:
+	first = max_value - 2.3 # 0.68 level
+	second = max_value - 4.61 # 0.90 level
+	third =  max_value - 9.21 # 0.99 level
+
+	# Find indices for max values:
+	ind = np.unravel_index(np.argmax(summed_array,axis=None),summed_array.shape)
+	best_index_value = ind[0]
+	best_flux_value = ind[1]
+
+	# Get best index:
+        index_list = np.arange(self.index_min,self.index_max+0.1,0.1)     
+        best_index = index_list[ind[0]]
+
+	# Get best flux:
+        flux_list=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=False)
+        flux_list = 10**flux_list 
+        best_flux = flux_list[ind[1]]
+
+	# Smooth array:
+	gauss_kernel = Gaussian2DKernel(1.5)
+	filtered_arr = convolve(summed_array, gauss_kernel, boundary='extend')
+
+	# Below I define 3 different methods to plot the array, just with different styles.
+	# Use method 1 as the default.
+
+	# Method 1
+	def plot_method_1():
+
+		img = ax.pcolormesh(flux_list,index_list,summed_array,cmap="inferno",vmin=0,vmax=max_value)
+		plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=2*4.0)
+		plt.plot(best_flux,best_index,marker="+",ms=12,color="black")
+		ax.set_xscale('log')
+		plt.xticks(fontsize=16)
+		plt.yticks(fontsize=16)
+
+		return img
+
+	# Method 2 
+	def plot_method_2():
+
+		#clip the array at zero for visualization purposes:
+		for i in range(0,summed_array.shape[0]):
+			for j in range(0,summed_array.shape[1]):
+				if summed_array[i,j] < 0:
+					summed_array[i,j] = 0
+
+		img = ax.contourf(flux_list,index_list,summed_array,100,cmap="inferno")
+		plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=4.0)
+		plt.plot(best_flux,best_index,marker="+",ms=12,color="black")
+		plt.yticks(fontsize=14)
+		return img
+
+	# Method 3
+	def plot_method_3():
+
+		img = ax.imshow(summed_array,origin="upper",cmap='inferno',vmin=0,vmax=max_value)
+		ax.contour(summed_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=4.0)
+
+		return img
+
+	# Make plot with this method:
+	img = plot_method_1()
+
+	# Plot colorbar
+	cbar = plt.colorbar(img,fraction=0.045)
+	cbar.set_label("TS",size=16,labelpad=12)
+	cbar.ax.tick_params(labelsize=12)
+
+	plt.ylabel('Photon Index',fontsize=22)
+        plt.xlabel(r'$\mathregular{\gamma}$-Ray Flux [ph $\mathrm{cm^2}$  s$\mathregular{^{-1}}$]',fontsize=22) #for flux
+	ax.set_aspect('auto')
+	ax.tick_params(axis='both',which='major',length=9)
+	ax.tick_params(axis='both',which='minor',length=5)
+	
+	plt.savefig(savefig,bbox_inches='tight')
+	
+        if self.show_plots == True:
+            plt.show()
+        
+        plt.close()
+
+	#################
+	# Find 1 sigma error from the 2d array
+
+	# Important note: the for loop is constrained to scan the respective list only once;
+	# Otherwise it will loop through numerous times.
+
+	# Get 1 sigma index upper error (lower direction of map):
+	for j in range(0,len(index_list)-best_index_value):
+	
+		if math.fabs(summed_array[ind[0]+j][ind[1]] - max_value) < 2.3:
+			pass 
+		if math.fabs(summed_array[ind[0]+j][ind[1]] - max_value) >= 2.3:
+			index_sigma_upper = math.fabs(index_list[ind[0]] - index_list[ind[0]+j])
+			break
+		if j == (len(index_list)-best_index_value-1):
+			index_sigma_upper = 0 #in this case the index is not constrained toward bottom of map
+
+	# Get 1 sigma index lower error (upper direction of map):
+	for j in range(0,best_index_value):
+
+        	if math.fabs(summed_array[ind[0]-j][ind[1]] - max_value) < 2.3:
+        		pass
+        	if math.fabs(summed_array[ind[0]-j][ind[1]] - max_value) >= 2.3:
+        		index_sigma_lower = math.fabs(index_list[ind[0]] - index_list[ind[0]-j])
+			break
+		if j == best_index_value-1:
+			index_sigma_lower = 0 #in this case the index is not constrained toward top of map
+	
+
+	# Get 1 sigma flux upper error:
+	for j in range(0,len(flux_list)-best_flux_value):
+
+        	if math.fabs(summed_array[ind[0]][ind[1]+j] - max_value) < 2.3:
+        		pass
+        	if math.fabs(summed_array[ind[0]][ind[1]+j] - max_value) >= 2.3:
+        		flux_sigma_upper = math.fabs(flux_list[ind[1]] - flux_list[ind[1]+j])
+        		break
+		if j == (len(index_list)-best_index_value - 1):
+			flux_sigma_upper = 0 #in this case the flux is not constrained toward right of map
+
+	# Get 1 sigma flux lower error:
+	for j in range(0,best_flux_value):
+
+        	if math.fabs(summed_array[ind[0]][ind[1]-j] - max_value) < 2.3:
+        		pass
+        	if math.fabs(summed_array[ind[0]][ind[1]-j] - max_value) >= 2.3:
+        		flux_sigma_lower = math.fabs(flux_list[ind[1]] - flux_list[ind[1]-j])
+        		break
+		if j == best_flux_value-1:
+			flux_sigma_lower = 0 #in this case the index is not constrained toward left of map
+
+	print 
+	print "max TS: " + str(max_value) + "; sigma: " + str(sigma)
+	print "indices for max TS: " + str(ind)
+	print "Sanity check on indices: " + str(summed_array[ind])
+	print "Best index: " + str(best_index) + ", Error:  +" + str(index_sigma_upper) + ", -" + str(index_sigma_lower)  
+	print "Best flux: " + str(best_flux)  + ", Error: +" + str(flux_sigma_upper) + ", -" + str(flux_sigma_lower)
+	print
+
+	return

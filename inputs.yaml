@@ -8,9 +8,10 @@ column_dec: "_DEJ20001"
 
 # Submission parameters:
 run_list: ["NGC_221"] # List of names to run (subsample of full sample). For full sample use "default". 
-psf_low: 0 # lower PSF iterator for JLA (0-3). Default is 0 for standard analysis.
-psf_high: 1 # upper PSF iterator for JLA (1-4). Default is 1 for standard analysis.
+psf_low: 0 # lower PSF iterator for JLA stacking (0-3). Default is 0 for standard analysis and preprocessing.
+psf_high: 1 # upper PSF iterator for JLA stacking (1-4). Default is 1 for standard analysis and preprocessing.
 run_name: "LLAGN" # main name of run.
+job_type: "p" # for palmetto output files: "p" for preprocessing or "s" for stacking.
 resource: "ncpus=1:mem=15gb:interconnect=1g,walltime=72:00:00" # palmetto submission
 
 # Main default inputs:
@@ -41,5 +42,8 @@ index_min: 1.0 # min index for stacking scan (absolute value, float)
 index_max: 4.0 # max index for stacking scan (absolute value, float)
 flux_min: -13.0 # power of min flux for stacking scan (float)
 flux_max: -9.0 # power of max flux for stacking scan (float)
+
+# Plotting:
+show_plots: True 
 #----------#
 
