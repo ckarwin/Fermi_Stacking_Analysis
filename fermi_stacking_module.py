@@ -8,7 +8,7 @@
 # 
 # Index of functions:
 #
-# Stacking(superclass)
+#   Stacking(superclass)
 # 	- ang_sep(ra0, dec0, ra1, dec1)
 #       - run_preprocessing(srcname,ra,dec)
 #       - make_preprocessing_summary()
