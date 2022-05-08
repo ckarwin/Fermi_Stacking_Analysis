@@ -26,7 +26,9 @@ def main(cmd_line):
     #instance.make_preprocessing_summary() 
     #instance.run_stacking(srcname,psf)
     #instance.combine_likelihood(exclusion_list,savefile)
-    #instance.plot_final_array("savefile.png","savefile.npy")
+    #instance.plot_final_array("name.png","name.npy")
+    #instance.make_butterfly(name)
+    #instance.get_UL95("name.npy")
 
     ###########################################
 

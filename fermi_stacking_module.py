@@ -9,13 +9,15 @@
 # Index of functions:
 #
 #   Stacking(superclass)
-# 	- ang_sep(ra0, dec0, ra1, dec1)
+#       - ang_sep(ra0, dec0, ra1, dec1)
 #       - run_preprocessing(srcname,ra,dec)
 #       - make_preprocessing_summary()
 #       - PL2(Fit,name)
 #       - run_stacking(srcname,PSF,indir="default")
 #       - combine_likelihood(exclusion_list, savefile)
 #       - plot_final_array(savefig,array)
+#       - make_butterfly(name)
+#       - get_UL95(array_file, ul_index=2.0)
 #
 ###########################################################
 
@@ -96,7 +98,19 @@ class StackingAnalysis:
         self.index_max = inputs["index_max"]
         self.flux_min = inputs["flux_min"]
         self.flux_max = inputs["flux_max"]
+      
+        # Option to run 4FGL sources:
+        # Note: If True, must provide "remove_list.csv" file in run directory, with col1=sample_name, col2=4fgl_name, and no header.
+        self.delete_4fgl = inputs["delete_4fgl"]
+        if self.delete_4fgl == True:
+            df = pd.read_csv("remove_list.csv",names=["col0","col1"])
+            self.delete_sample_name = np.array(df["col0"].tolist())
+            self.delete_4fgl_name = np.array(df["col1"].tolist())
+        
+        # Additional options:
         self.show_plots = inputs["show_plots"]
+        self.calc_sed = inputs["calc_sed"]
+        self.logEbins = inputs["sed_logEbins"]
 
         # Sample data:
         self.sample_file = inputs["sample_file"]
@@ -260,6 +274,16 @@ class StackingAnalysis:
 	
         gta = GTAnalysis('%s.yaml' % srcname,logging={'verbosity' : 3})
         gta.setup()
+    
+        # if rerunning 4fgl source, first delete source from model:
+        if self.delete_4fgl == True:
+            delete_sample_name = self.delete_sample_name
+            delete_4fgl_name = self.delete_4fgl_name
+            if srcname in delete_sample_name:
+                this_index = srcname == delete_sample_name
+                this_name = delete_4fgl_name[this_index][0]
+                gta.delete_source(this_name)
+
 	gta.optimize()
         gta.print_roi()
         gta.free_source('galdiff')
@@ -311,6 +335,11 @@ class StackingAnalysis:
         gta.free_source(srcname)
 	gta.fit()
         gta.write_roi('fit_model_3')
+        
+        # Calculate SED:
+        if self.calc_sed == True:
+            gta.sed(srcname,loge_bins=self.logEbins)
+
         p = np.load('output/fit_model_3.npy').flat[0]
         src = p['sources'][srcname]
 	if str(src['ts'])=='nan':	# To check non-convergence
@@ -491,7 +520,7 @@ class StackingAnalysis:
         Fit[name].funcs['Spectrum'].getParam('LowerLimit').setValue(self.emin)
         Fit[name].funcs['Spectrum'].getParam('LowerLimit').setFree(False)
         Fit[name].funcs['Spectrum'].getParam('LowerLimit').setScale(1.0)
-        Fit[name].funcs['Spectrum'].getParam('UpperLimit').setBounds(20000,5000000)
+        Fit[name].funcs['Spectrum'].getParam('UpperLimit').setBounds(100,5000000)
         Fit[name].funcs['Spectrum'].getParam('UpperLimit').setValue(self.emax)
         Fit[name].funcs['Spectrum'].getParam('UpperLimit').setFree(False)
         Fit[name].funcs['Spectrum'].getParam('UpperLimit').setScale(1.0)
@@ -607,7 +636,7 @@ class StackingAnalysis:
 		Index=[]
 
                 # Define flux range for scane:
-		flux=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=False)
+		flux=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
 		
                 for j in range(len(flux)):
 				
@@ -850,9 +879,8 @@ class StackingAnalysis:
                     print_list.append(srcname)
 
 	            # Save each individual source array:
-                    this_file_name = srcname + "_array"
-                    source_array_file = os.path.join(individual_array_main_dir,this_file_name)            	    
-                    np.save(source_array_file,final_array)
+                    source_array_file = os.path.join(individual_array_main_dir,srcname)            	    
+                    np.save(source_array_file,summed_array)
 
                     # Get stacked array:
 		    if total_counter == 0:
@@ -874,7 +902,10 @@ class StackingAnalysis:
         # Return to home:
 	os.chdir(self.home)
 		
-	return 	
+        return 	
+
+    #############
+    # Make plots:
 
     def plot_final_array(self,savefig,array):
 
@@ -897,8 +928,15 @@ class StackingAnalysis:
 	# Specify the savefigure:
 	savefig = os.path.join("Add_Stacking/Images/",savefig)
 
-        # Specify array file to be plotted:
+        # Specify array file to be plotted: 
         array_file = os.path.join("Add_Stacking/Numpy_Arrays/",array)
+        if os.path.exists(array_file) == False:
+            array_file = os.path.join("Add_Stacking/Numpy_Arrays/Individual_Sources/",array)
+        if os.path.exists(array_file) == False:
+            print
+            print "Error: array file does not exists."
+            print
+            sys.exit()
 
 	# Setup figure:
 	fig = plt.figure(figsize=(9,9))
@@ -930,7 +968,7 @@ class StackingAnalysis:
         best_index = index_list[ind[0]]
 
 	# Get best flux:
-        flux_list=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=False)
+        flux_list=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
         flux_list = 10**flux_list 
         best_flux = flux_list[ind[1]]
 
@@ -1057,3 +1095,272 @@ class StackingAnalysis:
 	print
 
 	return
+
+    def power_law_2(self,N,gamma,E,Emin,Emax):
+
+        """ 
+        
+        dN/dE in units of ph/cm^s/s/MeV.
+            Inputs:
+            N: Integrated flux between Emin and Emax in ph/cm^2/s.
+            gamma: Spectral index.
+            E: Energy range in MeV. Should be array.
+            Emin, Emax: Min and max energy, respectively, in MeV. 
+        
+        """
+            
+        return N*(gamma+1)*(E**gamma) / (Emax**(gamma+1) - Emin**(gamma+1))
+    
+
+    def make_butterfly(self,name):
+       
+        """ 
+        
+        Calculate butterfly plot.
+            
+        Inputs:
+            name: name of input array (not including .npy).
+                Note: this name is also used for output files. 
+            numbins: number of energy bins to use for butterfly plot.
+        
+        """
+	
+        # Make print statement:
+	print
+	print "********** Fermi Stacking Analysis **********"
+	print "Making butterfly plot..."
+	print
+       
+        conv = 1.60218e-6 # MeV to erg
+       
+        # Make output directories and file:
+        image_output = "Add_Stacking/Images/" + name + "_butterfly.pdf"
+        
+        output_data_dir = "Add_Stacking/Output_Data"
+        if os.path.exists(output_data_dir) == False:
+            os.system("mkdir %s" %output_data_dir)
+        data_output = "Add_Stacking/Output_Data/" + name + "_butterfly.dat"
+
+        # Define energy range and binning for butterfly plot:
+        E_range = np.logspace(np.log10(self.emin),np.log10(self.emax),30) 
+
+        # Define flux and index.
+        # Must be the same that was used to make the stacked array. 
+        flux_list = np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
+        flux_list = 10**flux_list
+        index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
+
+        # Load stacked array:
+        input_array = os.path.join("Add_Stacking/Numpy_Arrays/",name + ".npy")
+        if os.path.exists(input_array) == False:
+            input_array = os.path.join("Add_Stacking/Numpy_Arrays/Individual_Sources/",name + ".npy")
+        if os.path.exists(input_array) == False:
+            print
+            print "Error: array file does not exists."
+            print
+            sys.exit()
+        this_array = np.load(input_array)
+
+        # Find indices for max values:
+        ind = np.unravel_index(np.argmax(this_array,axis=None),this_array.shape)
+        best_index = index_list[ind[0]]
+        best_flux = flux_list[ind[1]]
+
+        # Get max and significane contours for dof=2:
+        max_value = np.amax(this_array)
+        first = max_value - 2.3 #0.68 level
+        second = max_value - 4.61 #0.90 level
+        third =  max_value - 9.21 #0.99 level
+
+        # Get indices within 1sigma contour:
+        contour = np.where(this_array>=first)
+     
+        # Test Method 1:
+        fig = plt.figure(figsize=(8,6))
+        ax = plt.gca()
+        plt.contour(flux_list,index_list,this_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=2*4.0)
+        #this_array[contour] = 0
+        img = ax.pcolormesh(flux_list,index_list,this_array,cmap="inferno",vmin=0,vmax=max_value)
+        ax.set_xscale('log')
+        plt.xlabel("Flux [$\mathrm{ph \ cm^{-2} \ s^{-1}}$]",fontsize=12)
+        plt.ylabel("Index", fontsize=12)
+        plt.show()
+        plt.close()
+    
+        # Setup figure:
+        fig = plt.figure(figsize=(8,6))
+        ax = plt.gca()
+
+        # Plot solutions within 1 sigma contour (sanity check):
+        x = contour[1]
+        y = contour[0]
+        for i in range(0,len(x)):
+            this_N = flux_list[x[i]]
+            this_gamma = index_list[y[i]]*-1
+            dnde = self.power_law_2(this_N,this_gamma,E_range,self.emin,self.emax)
+            plt.loglog(E_range,conv*E_range**2 * dnde,color="red")
+        
+        # Interpolate array for plotting:
+        x = flux_list
+        y = index_list
+        z = this_array
+        f = interpolate.interp2d(x, y, z, kind='linear')
+
+        # Use finer binning to fill out butterfly plot:
+        plot_flux_list = np.linspace(self.flux_min,self.flux_max,num=200,endpoint=True)
+        plot_flux_list = 10**plot_flux_list
+        plot_index_list = np.arange(self.index_min,self.index_max+0.1,0.003)
+
+        # Plot best-fit:
+        this_N = best_flux
+        this_gamma = best_index*-1
+        dnde = self.power_law_2(this_N,this_gamma,E_range,self.emin,self.emax)
+        plt.loglog(E_range,conv*E_range**2 * dnde,color="black",lw=2,alpha=0.7,zorder=1)
+        best_flux = conv*E_range**2 * dnde
+
+        # Plot butterfly:
+        plot_list = []
+        for each in plot_flux_list:
+            for every in plot_index_list:
+                
+                this_flux = each
+                this_index = every
+                this_TS = f(this_flux,this_index)
+                
+                if this_TS >= first:
+                    this_N = each
+                    this_gamma = every*-1
+                    dnde = self.power_law_2(this_N,this_gamma,E_range,self.emin,self.emax)
+                    plt.loglog(E_range,conv*E_range**2 * dnde,color="grey",alpha=0.3,zorder=0)
+                    plot_list.append(conv*E_range**2 * dnde)
+
+        plt.ylabel(r'$\mathrm{E^2 dN/dE \ [erg \ cm^{-2} \ s^{-1}]}$',fontsize=12)
+        plt.xlabel('Energy [MeV]',fontsize=12) #for flux
+        ax.tick_params(axis='both',which='major',length=9)
+        ax.tick_params(axis='both',which='minor',length=5)
+        plt.xticks(fontsize=12)                        
+        plt.yticks(fontsize=12)
+        plt.ylim(5e-16,5e-11)
+        plt.savefig(image_output,bbox_inches='tight')
+        plt.show()
+        plt.close()
+
+        # Write butterfly to data using max and min values: 
+        plot_list = np.array(plot_list)
+        plot_list = plot_list.T
+        min_list = []
+        max_list = []
+        for each in plot_list:
+            this_min = min(each)
+            this_max = max(each)
+            min_list.append(this_min)
+            max_list.append(this_max)
+        
+        # Check if source is too bright to make a butterfly plot:
+        if len(plot_list) == 0:
+            print 
+            print "Warning: butterfly plot is empty! Setting to best-fit."
+            print "This typically implies that the source is very bright, with very small error contours."
+            print 
+
+            min_list = best_flux
+            max_list = best_flux
+        
+        # Write data file:
+        d = {"Energy[MeV]":E_range,"Flux[erg/cm^2/s]":best_flux,"Flux_min[erg/cm^2/s]":min_list,"Flux_max[erg/cm^2/s]":max_list}
+        df = pd.DataFrame(data=d,columns = ["Energy[MeV]","Flux[erg/cm^2/s]","Flux_min[erg/cm^2/s]","Flux_max[erg/cm^2/s]"])
+        df.to_csv(data_output,float_format='%10.5e', sep="\t",index=False)
+
+        return
+
+    def get_UL95(self,array_file, ul_index=2.0):
+
+        '''
+	
+        Calculate ULs from the 2D arrays.
+        See get_UL_2 for ULs from the preprocessing step (needed when there is zero signal).
+        This methed is not applicable if TS<1.
+	The default index is set to -2.0. You can change it below.
+
+	Inputs definitions:
+
+	array_file: 2D array to calculate UL from
+
+        ul_index (optional arguement): spectral index to use for UL calculation.
+            Note: Default value is 2.0.
+	
+        '''
+
+	# Make print statement:
+	print
+	print "********** Fermi Stacking Analysis **********"
+	print "Running get_UL..."
+	print
+
+        this_array = os.path.join("Add_Stacking/Numpy_Arrays/",array_file)
+        if os.path.exists(this_array) == False:
+            this_array = os.path.join("Add_Stacking/Numpy_Arrays/Individual_Sources/",array_file)
+        if os.path.exists(this_array) == False:
+            print
+            print "Error: array file does not exists."
+            print
+            sys.exit()
+    
+        summed_array = np.load(this_array)
+
+        # Define flux list:
+        flux_list=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
+        flux_list = 10**flux_list 
+
+        # Get index arguement for UL calculation:
+	index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
+        index_list = np.around(index_list,decimals=1)
+        ul_arg = np.where(index_list==ul_index)[0][0]
+        print
+        print "Calculating UL for spectral index = " + str(ul_index)
+        print
+
+        # Extract row from 2d summed array corresponding to the UL index:
+        profile = summed_array[ul_arg]
+	profile =  (np.max(profile)- profile)
+	flux_interp = interpolate.interp1d(flux_list,profile,bounds_error=False,kind="linear")
+
+        # Plot profile:
+	fig = plt.figure(figsize=(8,6.2))
+	ax = plt.gca()
+
+	plt.semilogx(flux_list,profile,ls="",marker="s",label="95% UL")
+	plt.semilogx(flux_list,flux_interp(flux_list),ls="--",color="green") #,label="interpolation")
+
+	plt.hlines(2.71,1e-13,1e-9,linestyles="dashdot")
+	plt.grid(True,ls=":")
+	plt.xlabel("$\gamma$-ray Flux [$\mathrm{ph \ cm^{-2} \ s^{-1}}$]",fontsize=16)
+	plt.ylabel("2($\mathrm{logL_{max} - logL}$)",fontsize=16)
+	plt.title("Profile Likelihood",fontsize=18)
+	plt.legend(loc=2,frameon=False)
+	plt.xticks(fontsize=14)
+	plt.yticks(fontsize=14)
+	ax.tick_params(axis='both',which='major',length=7)
+	ax.tick_params(axis='both',which='minor',length=4)
+	plt.ylim(0,15)
+	plt.savefig("Add_Stacking/Images/likelihood_profile.png")
+	plt.show()
+	plt.close()
+
+	# Find min of function and corresponding x at min:
+	#note: the last entry is the staring point for x, and it needs to be close to the min to converge. 
+	print
+	print "****************"
+	print
+	min_x = optimize.fmin(lambda x: flux_interp(x),np.array([1e-10]),disp=True)
+    
+	upper = 7e-10
+	error_right = optimize.brenth(lambda x: flux_interp(x)-2.71,min_x[0],upper,xtol=1e-13) # right
+	print
+	print "Results:"
+	print "best flux: " + str(min_x[0]) + " ph/cm^2/s"
+	print "Error right: " + str(error_right - min_x[0]) + " ph/cm^2/s"
+	print "95% Flux UL: " + str(error_right) + " ph/cm^2/s"
+	print 	
+	
+	return 

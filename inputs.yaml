@@ -43,6 +43,14 @@ index_max: 4.0 # max index for stacking scan (absolute value, float)
 flux_min: -13.0 # power of min flux for stacking scan (float)
 flux_max: -9.0 # power of max flux for stacking scan (float)
 
+# Additional Options:
+calc_sed: False # calculate SED
+sed_logEbins: [ 3., 3.50489,4.00976999,4.51466001,5.01953999,5.52443,5.90308999] # log of energy bins
+
+# Option to run 4FGL source:
+# Note: If True, must provide "remove_list.csv" file in run directory, with col0=sample_name, col1=4fgl_name, and no header. 
+delete_4fgl: False 
+
 # Plotting:
 show_plots: True 
 #----------#
