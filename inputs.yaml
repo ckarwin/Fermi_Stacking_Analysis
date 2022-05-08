@@ -7,7 +7,7 @@ column_ra: "_RAJ20001"
 column_dec: "_DEJ20001"
 
 # Submission parameters:
-run_list: ["NGC_221"] # List of names to run (subsample of full sample). For full sample use "default". 
+run_list: "default" # List of names to run (subsample of full sample). For full sample use "default". 
 psf_low: 0 # lower PSF iterator for JLA stacking (0-3). Default is 0 for standard analysis and preprocessing.
 psf_high: 1 # upper PSF iterator for JLA stacking (1-4). Default is 1 for standard analysis and preprocessing.
 run_name: "LLAGN" # main name of run.
