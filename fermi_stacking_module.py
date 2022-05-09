@@ -1277,10 +1277,11 @@ class StackingAnalysis:
 
         '''
 	
-        Calculate ULs from the 2D arrays.
-        See get_UL_2 for ULs from the preprocessing step (needed when there is zero signal).
+        Calculate one-sided 95% UL from the 2D TS arrays: 2(logL_max - logL) = 2.71.
+        Note: Since the TS array is used, the factor of 2 is already included in the calculation!
         This methed is not applicable if TS<1.
-	The default index is set to -2.0. You can change it below.
+        See get_UL_2 for ULs from the preprocessing step (needed when there is zero signal).
+	The default index is set to -2.0.
 
 	Inputs definitions:
 
