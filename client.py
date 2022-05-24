@@ -28,7 +28,8 @@ def main(cmd_line):
     #instance.combine_likelihood(exclusion_list,savefile)
     #instance.plot_final_array("name.png","name.npy")
     #instance.make_butterfly(name)
-    #instance.get_UL95("name.npy")
+    #instance.get_stack_UL95("name.npy")
+    #instance.calc_upper_limit(srcname,emin,emax)
 
     ###########################################
 

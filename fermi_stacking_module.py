@@ -18,6 +18,7 @@
 #       - plot_final_array(savefig,array)
 #       - make_butterfly(name)
 #       - get_UL95(array_file, ul_index=2.0)
+#       - calc_upper_limit(srcname,ul_emin,ul_emax,comp_list=[0,1,2,3],mult_lt=False)
 #
 ###########################################################
 
@@ -907,7 +908,7 @@ class StackingAnalysis:
     #############
     # Make plots:
 
-    def plot_final_array(self,savefig,array):
+    def plot_final_array(self,savefig,array,use_index="default"):
 
         """
 	 
@@ -917,6 +918,9 @@ class StackingAnalysis:
 	
 	 array: Name of input array to plot. Must include ".npy".
 	
+         use_index (optional_arguement): option to calculate flux for specified index.
+            Note: default is best-fit index.
+
         """
 
 	# Make print statement:
@@ -960,7 +964,7 @@ class StackingAnalysis:
 
 	# Find indices for max values:
 	ind = np.unravel_index(np.argmax(summed_array,axis=None),summed_array.shape)
-	best_index_value = ind[0]
+        best_index_value = ind[0]
 	best_flux_value = ind[1]
 
 	# Get best index:
@@ -971,6 +975,18 @@ class StackingAnalysis:
         flux_list=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
         flux_list = 10**flux_list 
         best_flux = flux_list[ind[1]]
+
+        # Option to calculate flux for specified index:
+        if use_index != "default":
+            index_list = np.around(index_list,decimals=1)
+            best_index_value = np.where(index_list==use_index)[0][0]
+            ind = np.unravel_index(np.argmax(summed_array[best_index_value],axis=None),summed_array.shape)
+            best_flux_value = ind[1]
+            best_index = index_list[best_index_value]
+            best_flux = flux_list[best_flux_value]
+            ind = (best_index_value,best_flux_value)
+            max_value = np.amax(summed_array[best_index_value])
+            sigma = stats.norm.ppf(1.-stats.distributions.chi2.sf(max_value,num_pars)/2.)
 
 	# Smooth array:
 	gauss_kernel = Gaussian2DKernel(1.5)
@@ -1273,14 +1289,13 @@ class StackingAnalysis:
 
         return
 
-    def get_UL95(self,array_file, ul_index=2.0):
+    def get_stack_UL95(self, array_file, ul_index=2.0):
 
         '''
 	
         Calculate one-sided 95% UL from the 2D TS arrays: 2(logL_max - logL) = 2.71.
         Note: Since the TS array is used, the factor of 2 is already included in the calculation!
         This methed is not applicable if TS<1.
-        See get_UL_2 for ULs from the preprocessing step (needed when there is zero signal).
 	The default index is set to -2.0.
 
 	Inputs definitions:
@@ -1349,7 +1364,7 @@ class StackingAnalysis:
 	plt.close()
 
 	# Find min of function and corresponding x at min:
-	#note: the last entry is the staring point for x, and it needs to be close to the min to converge. 
+	# Note: the last entry is the staring point for x, and it needs to be close to the min to converge. 
 	print
 	print "****************"
 	print
@@ -1364,4 +1379,265 @@ class StackingAnalysis:
 	print "95% Flux UL: " + str(error_right) + " ph/cm^2/s"
 	print 	
 	
-	return 
+	return
+
+    def calc_upper_limit(self,srcname,ul_emin,ul_emax,comp_list=[0,1,2,3],mult_lt=False):
+        	
+        '''
+        
+	 Calculate upper limits using both a bayesian approach and a frequentist approach using results from preprocessing.
+	
+	 The frequentist appraoch uses the profile likelihood method, with 2.71/2 for 95% UL. This is standard in LAT analysis. 
+	 However, when there is a physical boundary on a parameter (such as a normalization) the profile likelihood is always restricted 
+	 to the physical region such that for a negative MLE the maximum is evaluated at zero.
+	 	
+	 For low significant sources the bayesian approach may be a better estimate (Thanks to Jean Ballet for pointing this out).
+
+         Inputs:
+
+         srcname: Name of source for UL calculation.
+
+         ul_emin: Lower energy bound for UL calculation.
+
+         ul_emax: Upper energy bound for UL calculation.
+
+         comp_list (optional): List of components to add to the SummedLikelihood object for the JLA. 
+            Note: Default is for typical JLA with 4 components. 
+            Note: The added components must be defined in the energy range of the UL calculation.
+            Note: The function supports up to 10 components (0-9). For more, further definitions must be added.
+
+        mult_lt (optional): If using lt cubes for each component, set to True. Default is False, for single lt cube. 
+
+	'''      
+
+	# Make print statement:
+	print
+	print "********** Fermi Stacking Analysis **********"
+	print "calculating upper limit..."
+	print
+
+        # Check that the included components are ok:
+        if self.JLA == True:
+            for each in comp_list:
+                if each > 9:
+                    print "***ERROR***"
+                    print "Looks like you have a complex analysis!"
+                    print "More than 9 components is not currently supported."
+                    print "You'll need to add more definitions to the source code."
+                    print
+                    sys.exit()
+            print
+            print "Components included in the UL calculation: " + str(comp_list)
+            print 
+
+        # Check for updated name:
+        preprocess_dir = os.path.join(self.home,"Preprocessed_Sources",srcname,"output")
+        replace_name = False
+        new_name_file = os.path.join(preprocess_dir,"replaced_source_name.txt")
+        if os.path.exists(new_name_file) == True:
+            f = open(new_name_file,"r")
+            this_list = eval(f.read())
+            true_name = this_list[0]
+            new_name = this_list[1]
+            replace_name = True
+        
+        # Define the lt cube:
+        # Note: this will be overwritten for the JLA if mult_lt is set to True.
+	my_expCube = self.ltcube
+	
+        # Analysis selections (fixed for now):
+        irfs = "P8R3_SOURCE_V2"
+	optimizer = "Minuit" # Minuit or NewMinuit
+        conf = BinnedConfig(edisp_bins=-1) #need to account for energy dispersion!
+
+        if self.JLA == True:
+
+	    # Make the summedlikelihood object:
+	    summed_like = SummedLikelihood()
+            
+            if 0 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_00.fits" %srcname
+	        my_ExpMap_0 = "Preprocessed_Sources/%s/output/bexpmap_roi_00.fits" %srcname
+    	        my_src_0 = "Preprocessed_Sources/%s/output/srcmap_00.fits" %srcname 
+	        my_xml_0 = "Preprocessed_Sources/%s/output/fit_model_3_00.xml" %srcname
+	        obs_0 = BinnedObs(srcMaps=my_src_0, expCube=my_expCube, binnedExpMap=my_ExpMap_0,irfs=irfs)
+	        like0 = BinnedAnalysis(obs_0, my_xml_0, optimizer=optimizer, config=conf)
+                like0.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like0)
+            
+            if 1 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_01.fits" %srcname
+	        my_ExpMap_1 = "Preprocessed_Sources/%s/output/bexpmap_roi_01.fits" %srcname
+	        my_src_1 = "Preprocessed_Sources/%s/output/srcmap_01.fits" %srcname
+	        my_xml_1 = "Preprocessed_Sources/%s/output/fit_model_3_01.xml" %srcname
+	        obs_1 = BinnedObs(srcMaps=my_src_1, expCube=my_expCube, binnedExpMap=my_ExpMap_1,irfs=irfs)
+	        like1 = BinnedAnalysis(obs_1, my_xml_1, optimizer=optimizer, config=conf)
+                like1.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like1)
+
+            if 2 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_02.fits" %srcname
+	        my_ExpMap_2 = "Preprocessed_Sources/%s/output/bexpmap_roi_02.fits" %srcname
+	        my_src_2 = "Preprocessed_Sources/%s/output/srcmap_02.fits" %srcname 
+	        my_xml_2 = "Preprocessed_Sources/%s/output/fit_model_3_02.xml" %srcname
+	        obs_2 = BinnedObs(srcMaps=my_src_2, expCube=my_expCube, binnedExpMap=my_ExpMap_2,irfs=irfs)
+	        like2 = BinnedAnalysis(obs_2, my_xml_2, optimizer=optimizer, config=conf)
+                like2.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like2)
+
+            if 3 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_03.fits" %srcname
+	        my_ExpMap_3 = "Preprocessed_Sources/%s/output/bexpmap_roi_03.fits" %srcname
+	        my_src_3 = "Preprocessed_Sources/%s/output/srcmap_03.fits"   %srcname
+	        my_xml_3 = "Preprocessed_Sources/%s/output/fit_model_3_03.xml" %srcname
+	        obs_3 = BinnedObs(srcMaps=my_src_3, expCube=my_expCube, binnedExpMap=my_ExpMap_3,irfs=irfs)
+	        like3 = BinnedAnalysis(obs_3, my_xml_3, optimizer=optimizer, config=conf)
+                like3.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like3)
+
+            if 4 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_04.fits" %srcname
+	        my_ExpMap_4 = "Preprocessed_Sources/%s/output/bexpmap_roi_04.fits" %srcname
+    	        my_src_4 = "Preprocessed_Sources/%s/output/srcmap_04.fits" %srcname 
+	        my_xml_4 = "Preprocessed_Sources/%s/output/fit_model_3_04.xml" %srcname
+	        obs_4 = BinnedObs(srcMaps=my_src_4, expCube=my_expCube, binnedExpMap=my_ExpMap_4,irfs=irfs)
+	        like4 = BinnedAnalysis(obs_4, my_xml_4, optimizer=optimizer, config=conf)
+                like4.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like4)
+
+            if 5 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_05.fits" %srcname
+	        my_ExpMap_5 = "Preprocessed_Sources/%s/output/bexpmap_roi_05.fits" %srcname
+	        my_src_5 = "Preprocessed_Sources/%s/output/srcmap_05.fits" %srcname
+	        my_xml_5 = "Preprocessed_Sources/%s/output/fit_model_3_05.xml" %srcname
+	        obs_5 = BinnedObs(srcMaps=my_src_5, expCube=my_expCube, binnedExpMap=my_ExpMap_5,irfs=irfs)
+	        like5 = BinnedAnalysis(obs_5, my_xml_5, optimizer=optimizer, config=conf)
+                like5.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like5)
+    
+            if 6 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_06.fits" %srcname
+	        my_ExpMap_6 = "Preprocessed_Sources/%s/output/bexpmap_roi_06.fits" %srcname
+	        my_src_6 = "Preprocessed_Sources/%s/output/srcmap_06.fits" %srcname 
+	        my_xml_6 = "Preprocessed_Sources/%s/output/fit_model_3_06.xml" %srcname
+	        obs_6 = BinnedObs(srcMaps=my_src_6, expCube=my_expCube, binnedExpMap=my_ExpMap_6,irfs=irfs)
+	        like6 = BinnedAnalysis(obs_6, my_xml_6, optimizer=optimizer, config=conf)
+                like6.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like6)
+
+            if 7 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_07.fits" %srcname
+	        my_ExpMap_7 = "Preprocessed_Sources/%s/output/bexpmap_roi_07.fits" %srcname
+	        my_src_7 = "Preprocessed_Sources/%s/output/srcmap_07.fits"   %srcname
+	        my_xml_7 = "Preprocessed_Sources/%s/output/fit_model_3_07.xml" %srcname
+	        obs_7 = BinnedObs(srcMaps=my_src_7, expCube=my_expCube, binnedExpMap=my_ExpMap_7,irfs=irfs)
+	        like7 = BinnedAnalysis(obs_7, my_xml_7, optimizer=optimizer, config=conf)
+                like7.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like7)
+
+            if 8 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_08.fits" %srcname
+	        my_ExpMap_8 = "Preprocessed_Sources/%s/output/bexpmap_roi_08.fits" %srcname
+	        my_src_8 = "Preprocessed_Sources/%s/output/srcmap_08.fits" %srcname 
+	        my_xml_8 = "Preprocessed_Sources/%s/output/fit_model_3_08.xml" %srcname
+	        obs_8 = BinnedObs(srcMaps=my_src_8, expCube=my_expCube, binnedExpMap=my_ExpMap_8,irfs=irfs)
+	        like8 = BinnedAnalysis(obs_8, my_xml_8, optimizer=optimizer, config=conf)
+                like8.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like8)
+
+            if 9 in comp_list:
+                if mult_lt == True:
+                    my_expCube = "Preprocessed_Sources/%s/output/ltcube_09.fits" %srcname
+	        my_ExpMap_9 = "Preprocessed_Sources/%s/output/bexpmap_roi_09.fits" %srcname
+	        my_src_9 = "Preprocessed_Sources/%s/output/srcmap_09.fits"   %srcname
+	        my_xml_9 = "Preprocessed_Sources/%s/output/fit_model_3_09.xml" %srcname
+	        obs_9 = BinnedObs(srcMaps=my_src_9, expCube=my_expCube, binnedExpMap=my_ExpMap_9,irfs=irfs)
+	        like9 = BinnedAnalysis(obs_9, my_xml_9, optimizer=optimizer, config=conf)
+                like9.setEnergyRange(ul_emin,ul_emax)
+                summed_like.addComponent(like9)
+
+	    summedobj=pyLike.Minuit(summed_like.logLike)
+
+            # Update name:
+            if replace_name == True:
+                srcname = new_name
+
+            # Fix parameters: 
+            freeze=summed_like.freeze
+            for k in range(len(summed_like.model.params)):
+                freeze(k)
+
+	    # Set index=2.0 for UL calculation:
+	    summed_like.model[srcname].funcs['Spectrum'].getParam('Index').setValue(2.0)
+	    summed_like.model[srcname].funcs['Spectrum'].getParam('Index').setFree(False)
+         
+            # Get TS of source:
+            src_TS = summed_like.Ts(srcname)
+        
+	    # Calculate 95% ULs using frequentist approach:
+	    ul = UpperLimits(summed_like)	
+	    ul[srcname].compute(emin=ul_emin,emax=ul_emax)	
+
+	    # Calculate 95% bayesian UL:
+	    bays_ul,results = calc_int(summed_like,srcname,emin=ul_emin, emax=ul_emax,cl = 0.95)
+            
+        if self.JLA == False:
+	    
+            my_ExpMap_0 = "Preprocessed_Sources/%s/output/bexpmap_roi_00.fits" %srcname
+    	    my_src_0 = "Preprocessed_Sources/%s/output/srcmap_00.fits" %srcname 
+	    my_xml_0 = "Preprocessed_Sources/%s/output/fit_model_3_00.xml" %srcname
+	    obs_0 = BinnedObs(srcMaps=my_src_0, expCube=my_expCube, binnedExpMap=my_ExpMap_0,irfs=irfs)
+	    like0 = BinnedAnalysis(obs_0, my_xml_0, optimizer=optimizer, config=conf)
+            like0.setEnergyRange(ul_emin,ul_emax)
+
+	    likeobj=pyLike.Minuit(like0.logLike)
+
+            # Update name:
+            if replace_name == True:
+                srcname = new_name
+
+            # Fix parameters: 
+            freeze=like0.freeze
+            for k in range(len(like0.model.params)):
+                freeze(k)
+            
+	    # Set index=2.0 for UL calculation:
+	    like0.model[srcname].funcs['Spectrum'].getParam('Index').setValue(2.0)
+	    like0.model[srcname].funcs['Spectrum'].getParam('Index').setFree(False)
+
+	    # Calculate ULs using frequentist approach:
+	    ul = UpperLimits(like0)	
+	    ul[srcname].compute(emin=ul_emin,emax=ul_emax)	
+
+	    # Calculate bayesian UL:
+	    bays_ul,results = calc_int(like0,srcname,emin=ul_emin, emax=ul_emax,cl = 0.95)
+    
+	# Convert ul to float:
+	this_string = str(ul[srcname].results[0])
+	this_string = this_string.split()	
+	freq_ul = float(this_string[0])
+
+	print
+	print "##########"
+	print srcname
+	print
+        print "Source TS: " + str(src_TS)
+        print
+        print "Frequentist 95% UL"
+	print ul[srcname].results
+        print
+	print "Bayesian 95% ULs:"
+	print str(bays_ul) + " ph/cm^2/s" 
+	print 
+
+	return freq_ul, bays_ul 
+
