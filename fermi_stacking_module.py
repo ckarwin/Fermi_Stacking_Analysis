@@ -833,10 +833,9 @@ class StackingAnalysis:
 	            stacking_dir = os.path.join(self.home,stacking_dir)
 
 	            if os.path.exists(stacking_dir) == False or os.path.exists(likelihood_dir) == False:
-                        if j_counter == 0:
-                            print 
-		            print 'Does not exist: ' + srcname
-		            print 
+                        print 
+		        print 'Does not exist: ' + srcname + "_%s" %str(j)
+		        print 
                         j_counter += 1
 
 	            if srcname not in exclusion_list and os.path.exists(likelihood_dir) == True and os.path.exists(stacking_dir) == True:
