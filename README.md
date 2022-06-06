@@ -35,7 +35,7 @@ The main assumption made with the stacking technique is that the source populati
 6. To run the code: 
  - To submit batch jobs: python submit_fermi_stacking_jobs.py 
  - To run from terminal: python client.py
-   Note: In this case the arguments can be passed from the terminial (i.e. 'srcname', ra, dec, psf) or they can be specified in the function explicityly by changing the client code.
+   Note: In this case the arguments can be passed from the terminial (i.e. 'srcname', ra, dec, psf) or they can be specified in the function explicitly by changing the client code.
 </pre>
 
 ## Development Notes
