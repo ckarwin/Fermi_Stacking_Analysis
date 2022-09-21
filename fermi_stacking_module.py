@@ -99,7 +99,8 @@ class StackingAnalysis:
         self.index_max = inputs["index_max"]
         self.flux_min = inputs["flux_min"]
         self.flux_max = inputs["flux_max"]
-      
+        self.num_flux_bins = inputs["num_flux_bins"]
+
         # Option to run 4FGL sources:
         # Note: If True, must provide "remove_list.csv" file in run directory, with col1=sample_name, col2=4fgl_name, and no header.
         self.delete_4fgl = inputs["delete_4fgl"]
@@ -637,7 +638,7 @@ class StackingAnalysis:
 		Index=[]
 
                 # Define flux range for scane:
-		flux=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
+		flux=np.linspace(self.flux_min,self.flux_max,num=self.num_flux_bins,endpoint=True)
 		
                 for j in range(len(flux)):
 				

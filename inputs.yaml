@@ -42,6 +42,7 @@ index_min: 1.0 # min index for stacking scan (absolute value, float)
 index_max: 4.0 # max index for stacking scan (absolute value, float)
 flux_min: -13.0 # power of min flux for stacking scan (float)
 flux_max: -9.0 # power of max flux for stacking scan (float)
+num_flux_bins: 40 # number of flux bins to use (int)
 
 # Additional Options:
 calc_sed: False # calculate SED
