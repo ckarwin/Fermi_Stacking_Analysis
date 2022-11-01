@@ -34,6 +34,12 @@ if file_type == "csv":
     ra_list = df[column_ra].tolist()
     dec_list = df[column_dec].tolist()
 
+if file_type == "tab":
+    df = pd.read_csv(this_file, delim_whitespace=True)
+    name_list = df[column_name].tolist()
+    ra_list = df[column_ra].tolist()
+    dec_list = df[column_dec].tolist()
+
 # Specify which sources to run.
 # Set to name_list for full sample.
 if run_list == "default":

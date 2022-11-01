@@ -31,11 +31,11 @@ scratch: '/scratch1/ckarwin/Run_5'
 JLA: False
 
 # Main LAT analysis parameters:
-emin: 1000 # min energy 
-emax: 800000 # max energy
-tmin: 239557417 # min time
-tmax: 611246581 # max time
-zmax: 105 # max zenith angle
+emin: 1000 # min energy [MeV] 
+emax: 800000 # max energy [MeV]
+tmin: 239557417 # min time [s]
+tmax: 611246581 # max time [s]
+zmax: 105 # max zenith angle [deg]
 
 # Main scanning inputs:
 index_min: 1.0 # min index for stacking scan (absolute value, float)

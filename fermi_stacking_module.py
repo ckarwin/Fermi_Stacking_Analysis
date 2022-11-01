@@ -128,6 +128,10 @@ class StackingAnalysis:
             df = pd.read_csv(self.sample_file)
             self.sample_name_list = df[self.column_name].tolist()
 
+        if self.file_type == "tab":
+            df = pd.read_csv(self.sample_file, delim_whitespace=True)
+            self.sample_name_list = df[self.column_name].tolist()
+    
     ################
     # Preprocessing:
 
@@ -190,6 +194,8 @@ class StackingAnalysis:
         src_output_main = os.path.join(preprocess_output,srcname)
         if(os.path.isdir(src_output_main)==True):
             shutil.rmtree(src_output_main)
+        # Make src output directory:
+        os.system('mkdir %s' %src_output_main)
 
         # Define scratch directory for source:
         if self.use_scratch == True:
