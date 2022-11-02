@@ -524,7 +524,7 @@ class StackingAnalysis:
         Fit[name].funcs['Spectrum'].getParam('Index').setScale(1.0)
         Fit[name].funcs['Spectrum'].getParam('Index').setValue(-2.0)
         Fit[name].funcs['Spectrum'].getParam('Index').setFree(False)
-        Fit[name].funcs['Spectrum'].getParam('LowerLimit').setBounds(100,20000)
+        Fit[name].funcs['Spectrum'].getParam('LowerLimit').setBounds(100,200000)
         Fit[name].funcs['Spectrum'].getParam('LowerLimit').setValue(self.emin)
         Fit[name].funcs['Spectrum'].getParam('LowerLimit').setFree(False)
         Fit[name].funcs['Spectrum'].getParam('LowerLimit').setScale(1.0)
