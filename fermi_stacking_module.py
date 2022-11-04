@@ -516,7 +516,7 @@ class StackingAnalysis:
 
         """
 
-        Fit[name].funcs['Spectrum'].getParam('Integral').setBounds(1e-14,1e7)
+        Fit[name].funcs['Spectrum'].getParam('Integral').setBounds(1e-17,1e7)
         Fit[name].funcs['Spectrum'].getParam('Integral').setScale(1.0)
         Fit[name].funcs['Spectrum'].getParam('Integral').setValue(1.0)
         Fit[name].funcs['Spectrum'].getParam('Integral').setFree(False)
