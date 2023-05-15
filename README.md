@@ -17,15 +17,16 @@ The main assumption made with the stacking technique is that the source populati
 
 ## Quickstart Guide <br /> 
 <pre>
-1. Download Fermi_Stacking_Analysis directory:
-  - download directly or git clone https://github.com/ckarwin/Fermi_Stacking_Analysis.git
+1. Clone Fermi_Stacking_Analysis repository:
+  - git clone https://github.com/ckarwin/Fermi_Stacking_Analysis.git
 
-2. It's advised to add the Fermi_Stacking_Analysis directory to your python path: </b>
-  - add to your .bashrc file (in home directory): export PYTHONPATH=$PYTHONPATH:full_path/Fermi_Stacking_Analysis
+2. Install with pip: </b>
+  - cd Fermi_Stacking_Analysis
+  - pip install -e .
  
-3. For any new analysis (assuming you added your path): </b>
+3. For any new analysis: </b>
  - make a new analysis directory (e.g. mkdir Run_1)
- - copy the following files into the new analysis directory: client_code.py, inputs.yaml, submit_fermi_stacking_jobs.py 
+ - copy all files from Examples/standard_analysis into the new analysis directory. 
 
 4. Specify inputs in inputs.yaml. </b>
  - This is the only file a user should have to modify (apart from running functions in the client code).
