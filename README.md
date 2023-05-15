@@ -4,6 +4,7 @@ This repository contains code for running a gamma-ray stacking analysis with Fer
 * Star-forming galaxies [(link)](https://arxiv.org/pdf/2003.05493.pdf) <br />
 * Extragalactic background light [(link)](https://arxiv.org/pdf/1812.01031.pdf) <br />
 * Ultra-fast outflows [(link)](https://iopscience.iop.org/article/10.3847/1538-4357/ac1bb2) <br />
+* Molecular outflows [(link)](https://iopscience.iop.org/article/10.3847/1538-4357/acaf57) <br />
 
 The stacking analysis requires Fermipy, available [here](https://fermipy.readthedocs.io/en/latest/). <br />
  - The current version of the code is compatible with fermipy v0.19.0, fermitools v1.2.23, and python 2.7 or later. 
@@ -38,8 +39,3 @@ The main assumption made with the stacking technique is that the source populati
  - To run from terminal: python client.py
    Note: In this case the arguments can be passed from the terminial (i.e. 'srcname', ra, dec, psf) or they can be specified in the function explicitly by changing the client code.
 </pre>
-
-## Development Notes
-* The source code is still in development.
-* Please let me know if there are any errors to be fixed and/or functionallity that should be added.
-* Contributions are welcome! To do so, please make a pull request, as described in more detail [here](https://opensource.com/article/19/7/create-pull-request-github).
