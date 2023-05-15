@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 # Setup:
 setup(
-    name='atmospheric_gammas',
+    name='Fermi_Stacking_Analysis',
     version="dev",
     url='https://github.com/ckarwin/Fermi_Stacking_Analysis.git',
     author='Chris Karwin',
