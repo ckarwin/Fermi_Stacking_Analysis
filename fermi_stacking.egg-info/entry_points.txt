@@ -1,2 +1,0 @@
-[console_scripts]
-make_stacking_run = fermi_stacking.make_new_run:main
