@@ -1,0 +1,58 @@
+#----------#
+# Sample data:
+sample_file: "/zfs/astrohe/ckarwin/Stacking_Analysis/LLAGN/Sample/LLAGN_control_sample_full.fits" # full path to sample file
+file_type: "fits" # fits or csv
+column_name: "Name_1"
+column_ra: "_RAJ20001"
+column_dec: "_DEJ20001"
+
+# Submission parameters:
+run_list: "default" # List of names to run (subsample of full sample). For full sample use "default". 
+psf_low: 0 # lower PSF iterator for JLA stacking (0-3). Default is 0 for standard analysis and preprocessing.
+psf_high: 1 # upper PSF iterator for JLA stacking (1-4). Default is 1 for standard analysis and preprocessing.
+run_name: "LLAGN" # main name of run.
+job_type: "p" # for palmetto output files: "p" for preprocessing or "s" for stacking.
+resource: "ncpus=1:mem=15gb:interconnect=1g,walltime=72:00:00" # palmetto submission
+
+# Main default inputs:
+ft1: '/zfs/astrohe/Fermi_Data/weekly/photon/filelist.txt' # data file
+ft2: '/zfs/astrohe/Fermi_Data/mission/spacecraft/lat_spacecraft_merged.fits' # spacecraft file
+galdiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/gll_iem_v07.fits' # Galactic diffuse model
+isodiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/iso_P8R3_SOURCE_V2_v1.txt' # isotropic model
+
+# Full path to ltcube:
+ltcube: '/zfs/astrohe/ckarwin/Stacking_Analysis/UFOs/NGC_4151_Analysis/MakeLTCube/zmax_105/UFOs_binned_ltcube.fits'
+
+# Full path to scratch directory:
+use_scratch: True
+scratch: '/scratch1/ckarwin/Run_5'
+
+# Perform joint likelihood analysis (True) or standard analysis (False):
+JLA: False
+
+# Main LAT analysis parameters:
+emin: 1000 # min energy [MeV] 
+emax: 800000 # max energy [MeV]
+tmin: 239557417 # min time [s]
+tmax: 611246581 # max time [s]
+zmax: 105 # max zenith angle [deg]
+
+# Main scanning inputs:
+index_min: 1.0 # min index for stacking scan (absolute value, float)
+index_max: 4.0 # max index for stacking scan (absolute value, float)
+flux_min: -13.0 # power of min flux for stacking scan (float)
+flux_max: -9.0 # power of max flux for stacking scan (float)
+num_flux_bins: 40 # number of flux bins to use (int)
+
+# Additional Options:
+calc_sed: False # calculate SED
+sed_logEbins: [ 3., 3.50489,4.00976999,4.51466001,5.01953999,5.52443,5.90308999] # log of energy bins
+
+# Option to run 4FGL source:
+# Note: If True, must provide "remove_list.csv" file in run directory, with col0=sample_name, col1=4fgl_name, and no header. 
+delete_4fgl: False 
+
+# Plotting:
+show_plots: True 
+#----------#
+

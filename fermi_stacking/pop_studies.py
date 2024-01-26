@@ -1,4 +1,4 @@
-import os,pyfits,sys #,BatLib
+import os,sys #,BatLib
 from math import *
 #from BatLib import Delete,RunCmd,GetFileType
 
@@ -75,7 +75,7 @@ class SKYCOV2D:
             self.DataArr.append(tmp)
 
 
-        print " ** Skycoverage has now %d points"%(self.np)
+        #print(" ** Skycoverage has now %d points"%(self.np))
         return
 
     """------------------------------------"""
@@ -118,8 +118,8 @@ class SKYCOV2D:
                 i4 = i
                 
         if((i1==-1 or i2==-1 or i3== -1 or i4==-1) and fx>1.5*fmin):
-            print "ERROR finding indices for fx=%.4e idx=%.2f"%(fx,idx)
-            print 1.5*fmin,i1,i2,i3,i4
+            print("ERROR finding indices for fx=%.4e idx=%.2f"%(fx,idx))
+            print(1.5*fmin,i1,i2,i3,i4)
             sys.exit()
             
         elif(fx<2.5*fmin):
@@ -153,11 +153,11 @@ class SKYCOV2D:
 
 
         if(p1>idx or p2<idx or f1>fx or f2<fx):
-            print ">>ERROR in indices during Interpolation for idx=%.2f fx=%.3e"%(idx,fx)
-            print arr[i1]
-            print arr[i2]
-            print arr[i3]
-            print arr[i4]
+            print(">>ERROR in indices during Interpolation for idx=%.2f fx=%.3e"%(idx,fx))
+            print(arr[i1])
+            print(arr[i2])
+            print(arr[i3])
+            print(arr[i4])
             
             sys.exit()
 
@@ -212,9 +212,9 @@ class SKYCOV2D:
                     return val
                 else:
                     return val
-            print "ERROR: in interpolation"
-            print "InterpVal = %.3e, q11=%.3e q12=%.3e q21=%.3e q22=%.3e"%(val,q11,q12,q21,q22)
-            print val/min(q11,q21,q12,q22)
+            print("ERROR: in interpolation")
+            print("InterpVal = %.3e, q11=%.3e q12=%.3e q21=%.3e q22=%.3e"%(val,q11,q12,q21,q22))
+            print(val/min(q11,q21,q12,q22))
             sys.exit()
 
         if(islog=="yes"):
@@ -468,8 +468,8 @@ class SKYCOV_new:
                 a = (a2-a1)/(f2-f1)*(fx-f1) + a1
                 return a
 
-        print ">>GetArea::ERROR interpolating fx=%.3e minF=%.3 maxF=%.3"%(
-            fx,self.minFlux,self.maxFlux)
+        print(">>GetArea::ERROR interpolating fx=%.3e minF=%.3 maxF=%.3"%(
+            fx,self.minFlux,self.maxFlux))
     """------------------------------------"""
     def GetErr(self,fx):
         if(fx>=self.maxFlux):
@@ -492,8 +492,8 @@ class SKYCOV_new:
                 e = (e2-e1)/(f2-f1)*(fx-f1) + e1
                 return a,e
 
-        print ">>GetArea::ERROR interp. Error fx=%.3e minF=%.3 maxF=%.3"%(
-            fx,self.minFlux,self.maxFlux)
+        print(">>GetArea::ERROR interp. Error fx=%.3e minF=%.3 maxF=%.3"%(
+            fx,self.minFlux,self.maxFlux))
         sys.exit()
     """------------------------------------"""
     def GetAreaErr(self,fx):
@@ -523,8 +523,8 @@ class SKYCOV_new:
 
                 return a,e
 
-        print ">>GetArea::ERROR interpolating fx=%.3e minF=%.3 maxF=%.3"%(
-            fx,self.minFlux,self.maxFlux)
+        print(">>GetArea::ERROR interpolating fx=%.3e minF=%.3 maxF=%.3"%(
+            fx,self.minFlux,self.maxFlux))
         
             
 ###########################################################
@@ -640,7 +640,7 @@ class SAMPLE:
         self.maxFlux  = 0
 
         self.GetMaxMin()
-        print "\n ** Sample has %d sources "%(self.nsrc)
+        print("\n ** Sample has %d sources "%(self.nsrc))
 
     """ ----------------------------------- """
     def GetMaxMin(self):
@@ -666,7 +666,7 @@ class SAMPLE:
         try:
             return self.objL[i]
         except:
-            print "ERROR: Sample has only %d objects. You requested obj num %d"%(self.nsrc,i)
+            print("ERROR: Sample has only %d objects. You requested obj num %d"%(self.nsrc,i))
             sys.exit()
     """ ----------------------------------- """
     def Remove(self,i):
@@ -674,9 +674,9 @@ class SAMPLE:
         try:
             a         = self.objL.pop(i)
             self.nsrc = len(self.objL)
-            print "Removed element source %s from Sample"%(a.name)
+            print("Removed element source %s from Sample"%(a.name))
         except:
-            print "Sample has only %d objects. You tried to remove obj num %d"%(self.nsrc,i)
+            print("Sample has only %d objects. You tried to remove obj num %d"%(self.nsrc,i))
             sys.exit()
 
     """ -----------------------------"""
@@ -708,7 +708,7 @@ class SAMPLE:
 
         self.nsrc = len(self.objL)
 
-        print "\n  ** Sample has now %d sources "%(self.nsrc)
+        print("\n  ** Sample has now %d sources "%(self.nsrc))
 
     """ ----------------------------------- """
     def  DisplayFPh(self):
@@ -952,7 +952,7 @@ def GetKLumin(ferg,z,alpha):
     try:
         o = log10(ferg)+log10(4.*pi)+2.*dlc
     except:
-        print ">>GetKLumin::ERROR: ferg=%.3e "%(ferg)
+        print(">>GetKLumin::ERROR: ferg=%.3e "%(ferg))
         sys.exit()
 
     #print "r=%e dl=%s o=%e fx=%e z=%e"%(r,dl,o,fx,z)
@@ -969,7 +969,7 @@ def GetErgFlux(flux,phI,emin,emax):
 
 
     if(emin<30 or emin>1e5 or phI<0):
-        print "WARNING::Strange emin=%.3e or phI=%.3f"%(emin,phI)
+        print("WARNING::Strange emin=%.3e or phI=%.3f"%(emin,phI))
         #sys.exit()
 
 
@@ -988,8 +988,8 @@ def GetPhFlux(ferg,phI,emin,emax):
     g2   = 2.-phI
 
 
-    if(emin<30 or emin>1e5 or phI<0):
-        print "WARNING::Strange emin=%.3e or phI=%.3f"%(emin,phI)
+    if(emin<3 or emin>1e5 or phI<0):
+        print("WARNING::Strange emin=%.3e or phI=%.3f"%(emin,phI))
         #sys.exit()
 
 
@@ -1006,7 +1006,7 @@ def GetPhFlux_fromL(lx,z,alpha,emin,emax):
     """ get Photon flux from lx,z, and photon index (k-corr)"""
 
     if(emin<30 or emin>1e5 or alpha<0):
-        print "WARNING::Strange emin=%.3e or alpha=%.3f"%(emin,alpha)
+        print("WARNING::Strange emin=%.3e or alpha=%.3f"%(emin,alpha))
         sys.exit()
 
     ferg = lx* pow(1.+z,2.0-alpha) 
@@ -1030,7 +1030,7 @@ def GetIndex(infile):
     try:
         idx = float(idx)
     except:
-        print ">>GetIndex: failed retrieving index for %s (idx=%s)"%(infile,idx)
+        print(">>GetIndex: failed retrieving index for %s (idx=%s)"%(infile,idx))
         sys.exit()
 
     return idx
@@ -1039,7 +1039,7 @@ def LoadCov(infile,lat_cut):
 
     idx = GetIndex(infile)
 
-    print " ***Loading %s with index =%.2f"%(infile,idx)
+    print(" ***Loading %s with index =%.2f"%(infile,idx))
     
     inputfile=open(infile, 'r')
     data = inputfile.readlines()
@@ -1093,14 +1093,14 @@ def LoadCov(infile,lat_cut):
         for i in range(len(degL)):
             degL[i]*=tot_area
 
-    print "Tot_area is %.1f -- maxArea is %.1f"%(tot_area,maxArea )
+    print("Tot_area is %.1f -- maxArea is %.1f"%(tot_area,maxArea ))
         
     maxFlux = max(fluxL[len(fluxL)-1],fluxL[0])
 
 
     # --- renormalize the analytical sky coverage to the right val
     if(maxArea!=tot_area and analytical==1):
-        print "Renormalizing the area to %.1f"%(tot_area)
+        print("Renormalizing the area to %.1f"%(tot_area))
         renorm  = tot_area/maxArea
         #print renorm
         maxArea = tot_area
@@ -1137,13 +1137,13 @@ def GetCovValues(lineStr):
     if(tok<0):
         tok=lineStr.find(" ")
         if(tok<0):
-            print "tok =%d in string %s"%(tok,lineStr)
+            print("tok =%d in string %s"%(tok,lineStr))
 
     flux=float(lineStr[:tok])
     try:
         deg = float(lineStr[tok+1:])
     except:
-        print ">>GetValues::ERROR reading value from line %s"%(lineStr)
+        print(">>GetValues::ERROR reading value from line %s"%(lineStr))
         sys.exit()
         
     #print "%f %f"%(flux,deg)
@@ -1173,10 +1173,10 @@ def ScanHeader(header,key1,key2,key3):
 
             
 
-            print "Keyanme =%s -- key1 was %s and key2 was %s"%(keyname,key1,key2)
+            print("Keyanme =%s -- key1 was %s and key2 was %s"%(keyname,key1,key2))
             return keyname
 
-    print "Keyword matching %s and %s not found"%(key1,key2)
+    print("Keyword matching %s and %s not found"%(key1,key2))
     return "none"
 ########################################################################
 def Pause():

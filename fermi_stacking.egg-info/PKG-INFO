@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: fermi-stacking
+Version: 0.0.1
+Summary: Performs Fermi-LAT stacking analysis.
+Home-page: https://github.com/ckarwin/Fermi_Stacking_Analysis.git
+Author: Chris Karwin
+Author-email: christopher.m.karwin@nasa.gov
+License-File: LICENSE

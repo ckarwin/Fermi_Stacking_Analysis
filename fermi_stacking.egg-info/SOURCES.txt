@@ -1,0 +1,14 @@
+LICENSE
+README.md
+setup.py
+fermi_stacking/__init__.py
+fermi_stacking/client.py
+fermi_stacking/fermi_stacking_module.py
+fermi_stacking/make_new_run.py
+fermi_stacking/pop_studies.py
+fermi_stacking/submit_fermi_stacking_jobs.py
+fermi_stacking.egg-info/PKG-INFO
+fermi_stacking.egg-info/SOURCES.txt
+fermi_stacking.egg-info/dependency_links.txt
+fermi_stacking.egg-info/entry_points.txt
+fermi_stacking.egg-info/top_level.txt
