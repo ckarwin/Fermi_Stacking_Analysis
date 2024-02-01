@@ -27,7 +27,8 @@ The main assumption made with the stacking technique is that the source populati
  
 3. For any new analysis: </b>
  - make a new analysis directory (e.g. mkdir Run_1)
- - copy all files from Examples/standard_analysis into the new analysis directory. 
+ - run the command line prompt: make_stacking_run
+ - this will copy all needed files. 
 
 4. Specify inputs in inputs.yaml. </b>
  - This is the only file a user should have to modify (apart from running functions in the client code).

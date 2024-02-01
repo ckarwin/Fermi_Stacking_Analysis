@@ -90,6 +90,7 @@ class StackingAnalysis:
         self.JLA = inputs["JLA"]
         
         # Main analysis parameters:
+        self.irfs = inputs["irfs"]
         self.emin = inputs["emin"]
         self.emax = inputs["emax"]
         self.tmin = inputs["tmin"]
@@ -246,7 +247,7 @@ class StackingAnalysis:
             yml.write("gtlike:\n")  
             yml.write("  edisp : True\n")
             yml.write("  edisp_disable : ['isodiff']\n")
-            yml.write("  irfs : 'P8R3_SOURCE_V2'\n")
+            yml.write("  irfs : %s'\n" %self.irfs)
             yml.write("#--------#\n")
             yml.write("model:\n")
             yml.write("  src_radius : 15\n")
@@ -254,8 +255,8 @@ class StackingAnalysis:
             yml.write("  galdiff : '%s'\n" %self.galdiff)
             yml.write("  isodiff : '%s'\n" %self.isodiff)
             yml.write("  catalogs :\n")
-            yml.write("    - '4FGL'\n")
-            yml.write("  extdir : '/zfs/astrohe/ckarwin/Stacking_Analysis/UFOs/Extended_Source_Archives/Extended_archive_v18/'\n")
+            yml.write("    - '4FGL-DR4'\n")
+            yml.write("  extdir : '/zfs/astrohe/Software/fermipy_source/lib/python3.9/site-packages/fermipy-1.1.3+2.g21485-py3.9.egg/fermipy/data/catalogs/Extended_12years/'\n")
             yml.write("  sources :\n")
             yml.write("    - { 'name' : '%s', 'ra' : %s, 'dec' : %s, 'SpectrumType' : PowerLaw }\n" %(srcname,ra,dec))
             yml.write("#--------#\n")
@@ -268,13 +269,13 @@ class StackingAnalysis:
             # Include components for joint likelihood analysis (JLA):
             if self.JLA == True:
                 yml.write("components:\n")
-                yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V2_PSF0_v1.txt},\n")
+                yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V3_PSF0_v1.txt},\n")
                 yml.write("      selection : { evtype : 4 } }\n")
-                yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V2_PSF1_v1.txt},\n")
+                yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V3_PSF1_v1.txt},\n")
                 yml.write("      selection : { evtype : 8 } }\n")
-                yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V2_PSF2_v1.txt},\n")
+                yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V3_PSF2_v1.txt},\n")
                 yml.write("      selection : { evtype : 16 } }\n")
-                yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V2_PSF3_v1.txt},\n")
+                yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V3_PSF3_v1.txt},\n")
                 yml.write("      selection : { evtype : 32 } }\n")
         
         yml.close()

@@ -18,7 +18,7 @@ resource: "ncpus=1:mem=15gb:interconnect=1g,walltime=72:00:00" # palmetto submis
 ft1: '/zfs/astrohe/Fermi_Data/weekly/photon/filelist.txt' # data file
 ft2: '/zfs/astrohe/Fermi_Data/mission/spacecraft/lat_spacecraft_merged.fits' # spacecraft file
 galdiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/gll_iem_v07.fits' # Galactic diffuse model
-isodiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/iso_P8R3_SOURCE_V2_v1.txt' # isotropic model
+isodiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/iso_P8R3_SOURCE_V3_v1.txt' # isotropic model
 
 # Full path to ltcube:
 ltcube: '/zfs/astrohe/ckarwin/Stacking_Analysis/UFOs/NGC_4151_Analysis/MakeLTCube/zmax_105/UFOs_binned_ltcube.fits'
@@ -31,6 +31,7 @@ scratch: '/scratch1/ckarwin/Run_5'
 JLA: False
 
 # Main LAT analysis parameters:
+irfs: 'P8R3_SOURCE_V3' # instrument response functions
 emin: 1000 # min energy [MeV] 
 emax: 800000 # max energy [MeV]
 tmin: 239557417 # min time [s]
