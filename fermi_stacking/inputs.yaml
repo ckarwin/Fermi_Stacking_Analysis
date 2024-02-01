@@ -12,7 +12,6 @@ psf_low: 0 # lower PSF iterator for JLA stacking (0-3). Default is 0 for standar
 psf_high: 1 # upper PSF iterator for JLA stacking (1-4). Default is 1 for standard analysis and preprocessing.
 run_name: "LLAGN" # main name of run.
 job_type: "p" # for palmetto output files: "p" for preprocessing or "s" for stacking.
-resource: "ncpus=1:mem=15gb:interconnect=1g,walltime=72:00:00" # palmetto submission
 
 # Main default inputs:
 ft1: '/zfs/astrohe/Fermi_Data/weekly/photon/filelist.txt' # data file
@@ -20,7 +19,7 @@ ft2: '/zfs/astrohe/Fermi_Data/mission/spacecraft/lat_spacecraft_merged.fits' # s
 galdiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/gll_iem_v07.fits' # Galactic diffuse model
 isodiff: '/zfs/astrohe/Software/ScienceTools/share/fermitools/refdata/fermi/galdiffuse/iso_P8R3_SOURCE_V3_v1.txt' # isotropic model
 
-# Full path to ltcube:
+# Full path to ltcube or 'None' for no precomputed ltcube:
 ltcube: '/zfs/astrohe/ckarwin/Stacking_Analysis/UFOs/NGC_4151_Analysis/MakeLTCube/zmax_105/UFOs_binned_ltcube.fits'
 
 # Full path to scratch directory:
@@ -56,4 +55,3 @@ delete_4fgl: False
 # Plotting:
 show_plots: True 
 #----------#
-
