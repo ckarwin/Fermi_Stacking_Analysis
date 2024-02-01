@@ -68,7 +68,7 @@ class StackingAnalysis:
 	
         # Load main inputs from yaml file:
         with open(input_yaml,"r") as file:
-            inputs = yaml.load(file)
+            inputs = yaml.load(file,Loader=yaml.FullLoader)
 
         # Main default inputs:
         self.ft1 = inputs["ft1"] # data file
@@ -225,7 +225,8 @@ class StackingAnalysis:
             yml.write("data:\n")
             yml.write("  evfile : '%s'\n" %self.ft1)
             yml.write("  scfile : '%s'\n" %self.ft2)
-            yml.write("  ltcube : '%s'\n" %self.ltcube)
+            if self.ltcube != "None":
+                yml.write("  ltcube : '%s'\n" %self.ltcube)
             yml.write("#--------#\n")
             yml.write("binning:\n")
             yml.write("  roiwidth : 10\n")
@@ -255,7 +256,7 @@ class StackingAnalysis:
             yml.write("  galdiff : '%s'\n" %self.galdiff)
             yml.write("  isodiff : '%s'\n" %self.isodiff)
             yml.write("  catalogs :\n")
-            yml.write("    - '4FGL-DR4'\n")
+            yml.write("    - '4FGL-DR3'\n")
             yml.write("  extdir : '/zfs/astrohe/Software/fermipy_source/lib/python3.9/site-packages/fermipy-1.1.3+2.g21485-py3.9.egg/fermipy/data/catalogs/Extended_12years/'\n")
             yml.write("  sources :\n")
             yml.write("    - { 'name' : '%s', 'ra' : %s, 'dec' : %s, 'SpectrumType' : PowerLaw }\n" %(srcname,ra,dec))

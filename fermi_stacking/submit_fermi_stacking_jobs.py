@@ -5,9 +5,11 @@ import time
 from astropy.io import fits
 import yaml
 
+this_run = int(sys.argv[1])
+
 # Load sample data from yaml file:
 with open("inputs.yaml","r") as file:
-    inputs = yaml.load(file)
+    inputs = yaml.load(file,Loader=yaml.FullLoader)
 
 this_file = inputs["sample_file"]
 file_type = inputs["file_type"]
@@ -52,33 +54,21 @@ this_dir = os.getcwd()
 if(os.path.isdir("palmetto_output")==False):
     os.system('mkdir palmetto_output')
 
-# Submit jobs:
-for j in range(psf_low,psf_high): # PSF iterator for JLA (use 0 for standard analysis).
-    for i in range(0,len(name_list)):
+# Construct PSF list:
+psf_list = []
+for i in range(psf_low,psf_high):
+    psf_list += [i]*len(name_list)
 
-	this_name = name_list[i]
-	this_ra = ra_list[i]
-	this_dec = dec_list[i]
+# Duplicate lists to match PSF runs:
+name_list = name_list*psf_high
+ra_list = ra_list*psf_high
+dec_list = dec_list*psf_high
 
-        if this_name in run_list:
+# Specify run:
+this_name = name_list[this_run]
+this_ra = ra_list[this_run]
+this_dec = dec_list[this_run]
+this_psf = psf_list[this_run]
 
-    	    "Submitting source: " + str(this_name)
-
-	    f = open('multiple_batch_submission.pbs','w')
-
-	    f.write("#PBS -N %s_%s\n" %(run_name,str(this_name)))
-            f.write("#PBS -l select=1:%s\n" %resource)
-	    f.write("#PBS -o palmetto_output/%s_%s%s_out.txt\n" %(str(this_name),job_type,str(j)))
-            f.write("#PBS -e palmetto_output/%s_%s%s_err.txt\n\n" %(str(this_name),job_type,str(j)))
-            f.write("#the Fermi environment first needs to be sourced:\n")
-	    f.write("cd /zfs/astrohe/Software\n")
-	    f.write("source fermi.sh\n\n")
-	    f.write("#change to working directory and run job\n")
-	    f.write("cd %s\n" %this_dir)
-	    f.write("python client.py '%s' %s %s %s" % (this_name,this_ra,this_dec,j))
-	    f.close()
-	
-	    os.system("qsub multiple_batch_submission.pbs")
-	    
-            # Sleep a bit in order to not overwhelm the batch system:
-            time.sleep(3)
+# Run job:
+os.system("python client.py '%s' %s %s %s" % (this_name,this_ra,this_dec,this_psf))
