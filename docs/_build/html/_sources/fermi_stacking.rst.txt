@@ -3,7 +3,7 @@ Fermi Stacking
 
 Fermi Stacking! Hello world.
 
-FullDetectorResponse
+StackingAnalysis
 --------------------
 
 .. autoclass:: fermi_stacking.fermi_stacking_module.StackingAnalysis
