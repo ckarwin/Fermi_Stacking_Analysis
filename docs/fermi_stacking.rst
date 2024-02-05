@@ -6,6 +6,7 @@ Fermi Stacking! Hello world.
 FullDetectorResponse
 --------------------
 
-.. autoclass:: fermi_stacking.fermi_stacking_module
-   :show-inheritance:
+.. automodule:: fermi_stacking.fermi_stacking_module
+   :imported-members:
    :members:
+   :undoc-members:
