@@ -21,7 +21,6 @@ psf_low = inputs["psf_low"]
 psf_high = inputs["psf_high"]
 run_name = inputs["run_name"]
 job_type = inputs["job_type"]
-resource = inputs["resource"]
 
 if file_type == "fits":
     hdu = fits.open(this_file)
