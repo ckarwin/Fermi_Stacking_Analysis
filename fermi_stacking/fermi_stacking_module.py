@@ -491,14 +491,15 @@ class StackingAnalysis:
 
     def PL2(self,Fit,name):
 
-        """
-    
-        Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.
-        Inputs:
-            - Fit: likelihood object.
-            - name: name of source. 
-
-        """
+        '''Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.
+        
+        Parameters
+        ------
+        Fit : str
+            likelihood object.
+        name : str 
+            name of source. 
+        '''
 
         Fit[name].funcs['Spectrum'].getParam('Integral').setBounds(1e-17,1e7)
         Fit[name].funcs['Spectrum'].getParam('Integral').setScale(1.0)
@@ -1119,16 +1120,14 @@ class StackingAnalysis:
 
     def make_butterfly(self,name):
        
-        """ 
-        
-        Calculate butterfly plot.
+        '''Calculate butterfly plot.
             
-        Inputs:
-            name: name of input array (not including .npy).
-                Note: this name is also used for output files. 
-            numbins: number of energy bins to use for butterfly plot.
-        
-        """
+        Parameters
+        ----------
+
+        name : str 
+            name of input array (not including .npy). Note: this name is also used for output files.  
+        '''
 	
         # Make print statement:
         print()

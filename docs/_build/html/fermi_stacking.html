@@ -35,88 +35,26 @@
   <section id="fermi-stacking">
 <h1>Fermi Stacking<a class="headerlink" href="#fermi-stacking" title="Permalink to this headline">¶</a></h1>
 <p>Fermi Stacking! Hello world.</p>
-<section id="module-fermi_stacking.fermi_stacking_module">
-<span id="fulldetectorresponse"></span><h2>FullDetectorResponse<a class="headerlink" href="#module-fermi_stacking.fermi_stacking_module" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.Gaussian2DKernel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">Gaussian2DKernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_stddev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_stddev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astropy/convolution/kernels.html#Gaussian2DKernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.Gaussian2DKernel" title="Permalink to this definition">¶</a></dt>
-<dd><p>2D Gaussian filter kernel.</p>
-<p>The Gaussian filter is a filter with great smoothing properties. It is
-isotropic and does not produce artifacts.</p>
-<p>The generated kernel is normalized so that it integrates to 1.</p>
+<section id="module-fermi_stacking.fermi_stacking_module.StackingAnalysis">
+<span id="fulldetectorresponse"></span><h2>FullDetectorResponse<a class="headerlink" href="#module-fermi_stacking.fermi_stacking_module.StackingAnalysis" title="Permalink to this headline">¶</a></h2>
+<p>Main inputs are specified in inputs.yaml file</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.PL2">
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">PL2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.PL2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x_stddev</strong> (<em>float</em>) – Standard deviation of the Gaussian in x before rotating by theta.</p></li>
-<li><p><strong>y_stddev</strong> (<em>float</em>) – Standard deviation of the Gaussian in y before rotating by theta.</p></li>
-<li><p><strong>theta</strong> (float or <cite>~astropy.units.Quantity</cite> [‘angle’]) – Rotation angle. If passed as a float, it is assumed to be in radians.
-The rotation angle increases counterclockwise.</p></li>
-<li><p><strong>x_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Size in x direction of the kernel array. Default = ⌊8*stddev + 1⌋.</p></li>
-<li><p><strong>y_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Size in y direction of the kernel array. Default = ⌊8*stddev + 1⌋.</p></li>
-<li><p><strong>mode</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>One of the following discretization modes:</dt><dd><ul>
-<li><dl class="simple">
-<dt>’center’ (default)</dt><dd><p>Discretize model by taking the value
-at the center of the bin.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>’linear_interp’</dt><dd><p>Discretize model by performing a bilinear interpolation
-between the values at the corners of the bin.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>’oversample’</dt><dd><p>Discretize model by taking the average
-on an oversampled grid.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>’integrate’</dt><dd><p>Discretize model by integrating the
-model over the bin.</p>
-</dd>
-</dl>
-</li>
+<li><p><strong>Fit</strong> (<em>str</em>) – likelihood object.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – name of source.</p></li>
 </ul>
 </dd>
 </dl>
-</p></li>
-<li><p><strong>factor</strong> (<em>number</em><em>, </em><em>optional</em>) – Factor of oversampling. Default factor = 10.</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Box2DKernel</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">Tophat2DKernel</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">RickerWavelet2DKernel</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">Ring2DKernel</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">TrapezoidDisk2DKernel</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">AiryDisk2DKernel</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">Moffat2DKernel</span></code></p>
-</div>
-<p class="rubric">Examples</p>
-<p>Kernel response:</p>
-<blockquote>
-<div></div></blockquote>
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">StackingAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_yaml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main inputs are specified in inputs.yaml file</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.PL2">
-<span class="sig-name descname"><span class="pre">PL2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.PL2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.PL2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.
-Inputs:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Fit: likelihood object.</p></li>
-<li><p>name: name of source.</p></li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.ang_sep">
-<span class="sig-name descname"><span class="pre">ang_sep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.ang_sep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.ang_sep" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">ang_sep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.ang_sep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate angular distance between two points on the sky.</p>
 <dl class="simple">
 <dt>Inputs:</dt><dd><ul class="simple">
@@ -127,9 +65,9 @@ Inputs:</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.calc_upper_limit">
-<span class="sig-name descname"><span class="pre">calc_upper_limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_emax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mult_lt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.calc_upper_limit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.calc_upper_limit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">calc_upper_limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_emax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mult_lt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.calc_upper_limit" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Calculate upper limits using both a bayesian approach and a frequentist approach using results from preprocessing.</p>
 <p>The frequentist appraoch uses the profile likelihood method, with 2.71/2 for 95% UL. This is standard in LAT analysis.
@@ -150,9 +88,9 @@ Note: The function supports up to 10 components (0-9). For more, further definit
 <p>mult_lt (optional): If using lt cubes for each component, set to True. Default is False, for single lt cube.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.combine_likelihood">
-<span class="sig-name descname"><span class="pre">combine_likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exclusion_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.combine_likelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.combine_likelihood" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">combine_likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclusion_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.combine_likelihood" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make 2D TS profiles for each source and add to get stacked profile.</p>
 <dl class="simple">
 <dt>Input definitions:</dt><dd><ul class="simple">
@@ -163,9 +101,9 @@ Note: The function supports up to 10 components (0-9). For more, further definit
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.get_stack_UL95">
-<span class="sig-name descname"><span class="pre">get_stack_UL95</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.get_stack_UL95"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.get_stack_UL95" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">get_stack_UL95</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.get_stack_UL95" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate one-sided 95% UL from the 2D TS arrays: 2(logL_max - logL) = 2.71.
 Note: Since the TS array is used, the factor of 2 is already included in the calculation!
 This methed is not applicable if TS&lt;1.
@@ -178,28 +116,25 @@ The default index is set to -2.0.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.make_butterfly">
-<span class="sig-name descname"><span class="pre">make_butterfly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.make_butterfly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.make_butterfly" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">make_butterfly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.make_butterfly" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate butterfly plot.</p>
-<dl>
-<dt>Inputs:</dt><dd><dl class="simple">
-<dt>name: name of input array (not including .npy).</dt><dd><p>Note: this name is also used for output files.</p>
-</dd>
-</dl>
-<p>numbins: number of energy bins to use for butterfly plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name of input array (not including .npy). Note: this name is also used for output files.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.make_preprocessing_summary">
-<span class="sig-name descname"><span class="pre">make_preprocessing_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.make_preprocessing_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.make_preprocessing_summary" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">make_preprocessing_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.make_preprocessing_summary" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.plot_final_array">
-<span class="sig-name descname"><span class="pre">plot_final_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">savefig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.plot_final_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.plot_final_array" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">plot_final_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.plot_final_array" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input definitions:</p>
 <p>savefig: Name of image file to be saved.</p>
 <p>array: Name of input array to plot. Must include “.npy”.</p>
@@ -209,9 +144,9 @@ The default index is set to -2.0.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.power_law_2">
-<span class="sig-name descname"><span class="pre">power_law_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Emax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.power_law_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.power_law_2" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">power_law_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Emax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.power_law_2" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>dN/dE in units of ph/cm^s/s/MeV.</dt><dd><p>Inputs:
 N: Integrated flux between Emin and Emax in ph/cm^2/s.
@@ -222,9 +157,9 @@ Emin, Emax: Min and max energy, respectively, in MeV.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.run_preprocessing">
-<span class="sig-name descname"><span class="pre">run_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.run_preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.run_preprocessing" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">run_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.run_preprocessing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform preprocessing of sources.</p>
 <dl class="simple">
 <dt>Inputs:</dt><dd><ul class="simple">
@@ -236,9 +171,9 @@ Emin, Emax: Min and max energy, respectively, in MeV.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py function">
 <dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.run_stacking">
-<span class="sig-name descname"><span class="pre">run_stacking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.run_stacking"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.run_stacking" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.StackingAnalysis.</span></span><span class="sig-name descname"><span class="pre">run_stacking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.run_stacking" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct 2D TS profiles for sources.</p>
 <dl class="simple">
 <dt>inputs:</dt><dd><ul class="simple">
@@ -250,685 +185,6 @@ Note: Defualt is preprocessing directory from main run directory.</p></li>
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.acos">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">acos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.acos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the arc cosine (measured in radians) of x.</p>
-<p>The result is between 0 and pi.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.acosh">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">acosh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.acosh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the inverse hyperbolic cosine of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.asin">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">asin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.asin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the arc sine (measured in radians) of x.</p>
-<p>The result is between -pi/2 and pi/2.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.asinh">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">asinh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.asinh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the inverse hyperbolic sine of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.atan">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">atan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.atan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the arc tangent (measured in radians) of x.</p>
-<p>The result is between -pi/2 and pi/2.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.atan2">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">atan2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.atan2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the arc tangent (measured in radians) of y/x.</p>
-<p>Unlike atan(y/x), the signs of both x and y are considered.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.atanh">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">atanh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.atanh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the inverse hyperbolic tangent of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.ceil">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">ceil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.ceil" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the ceiling of x as an Integral.</p>
-<p>This is the smallest integer &gt;= x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.comb">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">comb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.comb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of ways to choose k items from n items without repetition and without order.</p>
-<p>Evaluates to n! / (k! * (n - k)!) when k &lt;= n and evaluates
-to zero when k &gt; n.</p>
-<p>Also called the binomial coefficient because it is equivalent
-to the coefficient of k-th term in polynomial expansion of the
-expression (1 + x)**n.</p>
-<p>Raises TypeError if either of the arguments are not integers.
-Raises ValueError if either of the arguments are negative.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.convolve">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">convolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fill'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_treatment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interpolate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization_zero_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/astropy/convolution/convolve.html#convolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.convolve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convolve an array with a kernel.</p>
-<p>This routine differs from <cite>scipy.ndimage.convolve</cite> because
-it includes a special treatment for <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values. Rather than
-including <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values in the array in the convolution calculation, which
-causes large <code class="docutils literal notranslate"><span class="pre">NaN</span></code> holes in the convolved array, <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values are
-replaced with interpolated values using the kernel as an interpolation
-function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<cite>~astropy.nddata.NDData</cite> or array-like) – The array to convolve. This should be a 1, 2, or 3-dimensional array
-or a list or a set of nested lists representing a 1, 2, or
-3-dimensional array.  If an <cite>~astropy.nddata.NDData</cite>, the <code class="docutils literal notranslate"><span class="pre">mask</span></code> of
-the <cite>~astropy.nddata.NDData</cite> will be used as the <code class="docutils literal notranslate"><span class="pre">mask</span></code> argument.</p></li>
-<li><p><strong>kernel</strong> (<cite>numpy.ndarray</cite> or <cite>~astropy.convolution.Kernel</cite>) – The convolution kernel. The number of dimensions should match those for
-the array, and the dimensions should be odd in all directions.  If a
-masked array, the masked values will be replaced by <code class="docutils literal notranslate"><span class="pre">fill_value</span></code>.</p></li>
-<li><p><strong>boundary</strong> (<em>str</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>A flag indicating how to handle boundaries:</dt><dd><ul>
-<li><dl class="simple">
-<dt><cite>None</cite></dt><dd><p>Set the <code class="docutils literal notranslate"><span class="pre">result</span></code> values to zero where the kernel
-extends beyond the edge of the array.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>’fill’</dt><dd><p>Set values outside the array boundary to <code class="docutils literal notranslate"><span class="pre">fill_value</span></code> (default).</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>’wrap’</dt><dd><p>Periodic boundary that wrap to the other side of <code class="docutils literal notranslate"><span class="pre">array</span></code>.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>’extend’</dt><dd><p>Set values outside the array to the nearest <code class="docutils literal notranslate"><span class="pre">array</span></code>
-value.</p>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>fill_value</strong> (<em>float</em><em>, </em><em>optional</em>) – The value to use outside the array when using <code class="docutils literal notranslate"><span class="pre">boundary='fill'</span></code>.</p></li>
-<li><p><strong>normalize_kernel</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to normalize the kernel to have a sum of one.</p></li>
-<li><p><strong>nan_treatment</strong> (<em>{'interpolate'</em><em>, </em><em>'fill'}</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>The method used to handle NaNs in the input <code class="docutils literal notranslate"><span class="pre">array</span></code>:</dt><dd><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">'interpolate'</span></code>: <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values are replaced with
-interpolated values using the kernel as an interpolation
-function. Note that if the kernel has a sum equal to
-zero, NaN interpolation is not possible and will raise an
-exception.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">'fill'</span></code>: <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values are replaced by <code class="docutils literal notranslate"><span class="pre">fill_value</span></code>
-prior to convolution.</p></li>
-</ul>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>preserve_nan</strong> (<em>bool</em><em>, </em><em>optional</em>) – After performing convolution, should pixels that were originally NaN
-again become NaN?</p></li>
-<li><p><strong>mask</strong> (<em>None</em><em> or </em><em>ndarray</em><em>, </em><em>optional</em>) – A “mask” array.  Shape must match <code class="docutils literal notranslate"><span class="pre">array</span></code>, and anything that is masked
-(i.e., not 0/<cite>False</cite>) will be set to NaN for the convolution.  If
-<cite>None</cite>, no masking will be performed unless <code class="docutils literal notranslate"><span class="pre">array</span></code> is a masked array.
-If <code class="docutils literal notranslate"><span class="pre">mask</span></code> is not <cite>None</cite> <em>and</em> <code class="docutils literal notranslate"><span class="pre">array</span></code> is a masked array, a pixel is
-masked of it is masked in either <code class="docutils literal notranslate"><span class="pre">mask</span></code> <em>or</em> <code class="docutils literal notranslate"><span class="pre">array.mask</span></code>.</p></li>
-<li><p><strong>normalization_zero_tol</strong> (<em>float</em><em>, </em><em>optional</em>) – The absolute tolerance on whether the kernel is different than zero.
-If the kernel sums to zero to within this precision, it cannot be
-normalized. Default is “1e-8”.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>result</strong> – An array with the same dimensions and as the input array,
-convolved with kernel.  The data type depends on the input
-array type.  If array is a floating point type, then the
-return array keeps the same data type, otherwise the type
-is <code class="docutils literal notranslate"><span class="pre">numpy.float</span></code>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>numpy.ndarray</cite></p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>For masked arrays, masked values are treated as NaNs.  The convolution
-is always done at <code class="docutils literal notranslate"><span class="pre">numpy.float</span></code> precision.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.copysign">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">copysign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.copysign" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a float with the magnitude (absolute value) of x but the sign of y.</p>
-<p>On platforms that support signed zeros, copysign(1.0, -0.0)
-returns -1.0.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.cos">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.cos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the cosine of x (measured in radians).</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.cosh">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">cosh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.cosh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the hyperbolic cosine of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.degrees">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">degrees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.degrees" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert angle x from radians to degrees.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.dist">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.dist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the Euclidean distance between two points p and q.</p>
-<p>The points should be specified as sequences (or iterables) of
-coordinates.  Both inputs must have the same dimension.</p>
-<dl class="simple">
-<dt>Roughly equivalent to:</dt><dd><p>sqrt(sum((px - qx) ** 2.0 for px, qx in zip(p, q)))</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.erf">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">erf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.erf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Error function at x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.erfc">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">erfc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.erfc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Complementary error function at x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.exp">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.exp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return e raised to the power of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.expm1">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">expm1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.expm1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return exp(x)-1.</p>
-<p>This function avoids the loss of precision involved in the direct evaluation of exp(x)-1 for small x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.fabs">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">fabs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.fabs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the absolute value of the float x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.factorial">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">factorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.factorial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find x!.</p>
-<p>Raise a ValueError if x is negative or non-integral.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.floor">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">floor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.floor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the floor of x as an Integral.</p>
-<p>This is the largest integer &lt;= x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.fmod">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">fmod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.fmod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return fmod(x, y), according to platform C.</p>
-<p>x % y may differ.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.frexp">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">frexp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.frexp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the mantissa and exponent of x, as pair (m, e).</p>
-<p>m is a float and e is an int, such that x = m * 2.**e.
-If x is 0, m and e are both 0.  Else 0.5 &lt;= abs(m) &lt; 1.0.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.fsum">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">fsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.fsum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an accurate floating point sum of values in the iterable seq.</p>
-<p>Assumes IEEE-754 floating point arithmetic.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.gamma">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.gamma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gamma function at x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.gaussian_filter">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">gaussian_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reflect'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truncate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scipy/ndimage/filters.html#gaussian_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.gaussian_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multidimensional Gaussian filter.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input</strong> (<em>array_like</em>) – The input array.</p></li>
-<li><p><strong>sigma</strong> (<em>scalar</em><em> or </em><em>sequence of scalars</em>) – Standard deviation for Gaussian kernel. The standard
-deviations of the Gaussian filter are given for each axis as a
-sequence, or as a single number, in which case it is equal for
-all axes.</p></li>
-<li><p><strong>order</strong> (<em>int</em><em> or </em><em>sequence of ints</em><em>, </em><em>optional</em>) – The order of the filter along each axis is given as a sequence
-of integers, or as a single number. An order of 0 corresponds
-to convolution with a Gaussian kernel. A positive order
-corresponds to convolution with that derivative of a Gaussian.</p></li>
-<li><p><strong>output</strong> (<em>array</em><em> or </em><em>dtype</em><em>, </em><em>optional</em>) – The array in which to place the output, or the dtype of the
-returned array. By default an array of the same dtype as input
-will be created.</p></li>
-<li><p><strong>mode</strong> (<em>str</em><em> or </em><em>sequence</em><em>, </em><em>optional</em>) – <p>The <cite>mode</cite> parameter determines how the input array is extended
-when the filter overlaps a border. By passing a sequence of modes
-with length equal to the number of dimensions of the input array,
-different modes can be specified along each axis. Default value is
-‘reflect’. The valid values and their behavior is as follows:</p>
-<dl class="simple">
-<dt>’reflect’ (<cite>d c b a | a b c d | d c b a</cite>)</dt><dd><p>The input is extended by reflecting about the edge of the last
-pixel. This mode is also sometimes referred to as half-sample
-symmetric.</p>
-</dd>
-<dt>’constant’ (<cite>k k k k | a b c d | k k k k</cite>)</dt><dd><p>The input is extended by filling all values beyond the edge with
-the same constant value, defined by the <cite>cval</cite> parameter.</p>
-</dd>
-<dt>’nearest’ (<cite>a a a a | a b c d | d d d d</cite>)</dt><dd><p>The input is extended by replicating the last pixel.</p>
-</dd>
-<dt>’mirror’ (<cite>d c b | a b c d | c b a</cite>)</dt><dd><p>The input is extended by reflecting about the center of the last
-pixel. This mode is also sometimes referred to as whole-sample
-symmetric.</p>
-</dd>
-<dt>’wrap’ (<cite>a b c d | a b c d | a b c d</cite>)</dt><dd><p>The input is extended by wrapping around to the opposite edge.</p>
-</dd>
-</dl>
-<p>For consistency with the interpolation functions, the following mode
-names can also be used:</p>
-<dl class="simple">
-<dt>’grid-constant’</dt><dd><p>This is a synonym for ‘constant’.</p>
-</dd>
-<dt>’grid-mirror’</dt><dd><p>This is a synonym for ‘reflect’.</p>
-</dd>
-<dt>’grid-wrap’</dt><dd><p>This is a synonym for ‘wrap’.</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>cval</strong> (<em>scalar</em><em>, </em><em>optional</em>) – Value to fill past edges of input if <cite>mode</cite> is ‘constant’. Default
-is 0.0.</p></li>
-<li><p><strong>truncate</strong> (<em>float</em>) – Truncate the filter at this many standard deviations.
-Default is 4.0.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>gaussian_filter</strong> – Returned array of same shape as <cite>input</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The multidimensional filter is implemented as a sequence of
-1-D convolution filters. The intermediate arrays are
-stored in the same data type as the output. Therefore, for output
-types with a limited precision, the results may be imprecise
-because intermediate results may be stored with insufficient
-precision.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">gaussian_filter</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">array([[ 0,  2,  4,  6,  8],</span>
-<span class="go">       [10, 12, 14, 16, 18],</span>
-<span class="go">       [20, 22, 24, 26, 28],</span>
-<span class="go">       [30, 32, 34, 36, 38],</span>
-<span class="go">       [40, 42, 44, 46, 48]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gaussian_filter</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="go">array([[ 4,  6,  8,  9, 11],</span>
-<span class="go">       [10, 12, 14, 15, 17],</span>
-<span class="go">       [20, 22, 24, 25, 27],</span>
-<span class="go">       [29, 31, 33, 34, 36],</span>
-<span class="go">       [35, 37, 39, 40, 42]])</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">misc</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">gray</span><span class="p">()</span>  <span class="c1"># show the filtered result in grayscale</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>  <span class="c1"># left side</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>  <span class="c1"># right side</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ascent</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">ascent</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">gaussian_filter</span><span class="p">(</span><span class="n">ascent</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ascent</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ax2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.gcd">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">gcd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">integers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.gcd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Greatest Common Divisor.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.hypot">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">hypot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">coordinates</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">value</span></span></span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.hypot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multidimensional Euclidean distance from the origin to a point.</p>
-<dl class="simple">
-<dt>Roughly equivalent to:</dt><dd><p>sqrt(sum(x**2 for x in coordinates))</p>
-</dd>
-</dl>
-<p>For a two dimensional point (x, y), gives the hypotenuse
-using the Pythagorean theorem:  sqrt(x*x + y*y).</p>
-<p>For example, the hypotenuse of a 3/4/5 right triangle is:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hypot</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
-<span class="go">5.0</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.isclose">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">isclose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-09</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abs_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.isclose" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine whether two floating point numbers are close in value.</p>
-<blockquote>
-<div><dl class="simple">
-<dt>rel_tol</dt><dd><p>maximum difference for being considered “close”, relative to the
-magnitude of the input values</p>
-</dd>
-<dt>abs_tol</dt><dd><p>maximum difference for being considered “close”, regardless of the
-magnitude of the input values</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>Return True if a is close in value to b, and False otherwise.</p>
-<p>For the values to be considered close, the difference between them
-must be smaller than at least one of the tolerances.</p>
-<p>-inf, inf and NaN behave similarly to the IEEE 754 Standard.  That
-is, NaN is not close to anything, even itself.  inf and -inf are
-only close to themselves.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.isfinite">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">isfinite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.isfinite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return True if x is neither an infinity nor a NaN, and False otherwise.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.isinf">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">isinf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.isinf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return True if x is a positive or negative infinity, and False otherwise.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.isnan">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">isnan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.isnan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return True if x is a NaN (not a number), and False otherwise.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.isqrt">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">isqrt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.isqrt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the integer part of the square root of the input.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.lcm">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">lcm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">integers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.lcm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Least Common Multiple.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.ldexp">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">ldexp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.ldexp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return x * (2**i).</p>
-<p>This is essentially the inverse of frexp().</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.lgamma">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">lgamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.lgamma" title="Permalink to this definition">¶</a></dt>
-<dd><p>Natural logarithm of absolute value of Gamma function at x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.log">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">base=math.e</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.log" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the logarithm of x to the given base.</p>
-<p>If the base not specified, returns the natural logarithm (base e) of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.log10">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">log10</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.log10" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the base 10 logarithm of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.log1p">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">log1p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.log1p" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the natural logarithm of 1+x (base e).</p>
-<p>The result is computed in a way which is accurate for x near zero.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.log2">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">log2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.log2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the base 2 logarithm of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.margins">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">margins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scipy/stats/contingency.html#margins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.margins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of the marginal sums of the array <cite>a</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>a</strong> (<em>ndarray</em>) – The array for which to compute the marginal sums.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>margsums</strong> – A list of length <cite>a.ndim</cite>.  <cite>margsums[k]</cite> is the result
-of summing <cite>a</cite> over all axes except <cite>k</cite>; it has the same
-number of dimensions as <cite>a</cite>, but the length of each axis
-except axis <cite>k</cite> will be 1.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of ndarrays</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">array([[ 0,  1,  2,  3,  4,  5],</span>
-<span class="go">       [ 6,  7,  8,  9, 10, 11]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.stats.contingency</span> <span class="kn">import</span> <span class="n">margins</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m0</span><span class="p">,</span> <span class="n">m1</span> <span class="o">=</span> <span class="n">margins</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m0</span>
-<span class="go">array([[15],</span>
-<span class="go">       [51]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span>
-<span class="go">array([[ 6,  8, 10, 12, 14, 16]])</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">m2</span> <span class="o">=</span> <span class="n">margins</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m0</span>
-<span class="go">array([[[ 66]],</span>
-<span class="go">       [[210]]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m1</span>
-<span class="go">array([[[ 60],</span>
-<span class="go">        [ 92],</span>
-<span class="go">        [124]]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m2</span>
-<span class="go">array([[[60, 66, 72, 78]]])</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.modf">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">modf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.modf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the fractional and integer parts of x.</p>
-<p>Both results carry the sign of x and are floats.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.nextafter">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">nextafter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.nextafter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the next floating-point value after x towards y.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.perm">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">perm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.perm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of ways to choose k items from n items without repetition and with order.</p>
-<p>Evaluates to n! / (n - k)! when k &lt;= n and evaluates
-to zero when k &gt; n.</p>
-<p>If k is not specified or is None, then k defaults to n
-and the function returns n!.</p>
-<p>Raises TypeError if either of the arguments are not integers.
-Raises ValueError if either of the arguments are negative.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.pow">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">pow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.pow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return x**y (x to the power of y).</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.prod">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">prod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.prod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the product of all the elements in the input iterable.</p>
-<p>The default start value for the product is 1.</p>
-<p>When the iterable is empty, return the start value.  This function is
-intended specifically for use with numeric values and may reject
-non-numeric types.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.radians">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">radians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.radians" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert angle x from degrees to radians.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.randint">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">randint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.randint" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return random integer in range [a, b], including both end points.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.register_cmap">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">register_cmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_builtin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matplotlib/cm.html#register_cmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.register_cmap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a colormap to the set recognized by <code class="xref py py-func docutils literal notranslate"><span class="pre">get_cmap()</span></code>.</p>
-<p>Register a new colormap to be accessed by name</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LinearSegmentedColormap</span><span class="p">(</span><span class="s1">&#39;swirly&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">lut</span><span class="p">)</span>
-<span class="n">register_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">swirly_cmap</span><span class="p">)</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The name that can be used in <code class="xref py py-func docutils literal notranslate"><span class="pre">get_cmap()</span></code> or <a href="#id1"><span class="problematic" id="id2">:rc:`image.cmap`</span></a></p>
-<p>If absent, the name will be the <code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code>
-attribute of the <em>cmap</em>.</p>
-</p></li>
-<li><p><strong>cmap</strong> (<em>matplotlib.colors.Colormap</em>) – Despite being the second argument and having a default value, this
-is a required argument.</p></li>
-<li><p><strong>override_builtin</strong> (<em>bool</em>) – <p>Allow built-in colormaps to be overridden by a user-supplied
-colormap.</p>
-<p>Please do not use this unless you are sure you need it.</p>
-</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>Registering a colormap stores a reference to the colormap object
-which can currently be modified and inadvertently change the global
-colormap state. This behavior is deprecated and in Matplotlib 3.5
-the registered colormap will be immutable.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.remainder">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">remainder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.remainder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Difference between x and the closest integer multiple of y.</p>
-<p>Return x - n*y where n*y is the closest integer multiple of y.
-In the case where x is exactly halfway between two multiples of
-y, the nearest even value of n is used. The result is always exact.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.sin">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">sin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.sin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the sine of x (measured in radians).</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.sinh">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">sinh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.sinh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the hyperbolic sine of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.sleep">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">sleep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.sleep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delay execution for a given number of seconds.  The argument may be
-a floating point number for subsecond precision.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.sqrt">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">sqrt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.sqrt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the square root of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.tan">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">tan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.tan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the tangent of x (measured in radians).</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.tanh">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">tanh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.tanh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the hyperbolic tangent of x.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.trunc">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">trunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.trunc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Truncates the Real x to the nearest Integral toward 0.</p>
-<p>Uses the __trunc__ magic method.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.ulp">
-<span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">ulp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.ulp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the value of the least significant bit of the float x.</p>
 </dd></dl>
 
 </section>
@@ -954,7 +210,7 @@ a floating point number for subsecond precision.</p>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fermi Stacking</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-fermi_stacking.fermi_stacking_module">FullDetectorResponse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fermi_stacking.fermi_stacking_module.StackingAnalysis">FullDetectorResponse</a></li>
 </ul>
 </li>
 </ul>
