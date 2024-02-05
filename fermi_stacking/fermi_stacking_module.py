@@ -234,7 +234,7 @@ class StackingAnalysis:
             yml.write("gtlike:\n")  
             yml.write("  edisp : True\n")
             yml.write("  edisp_disable : ['isodiff']\n")
-            yml.write("  irfs : %s'\n" %self.irfs)
+            yml.write("  irfs : '%s'\n" %self.irfs)
             yml.write("#--------#\n")
             yml.write("model:\n")
             yml.write("  src_radius : 15\n")
