@@ -524,14 +524,15 @@
 
 <div class="viewcode-block" id="StackingAnalysis.PL2"><a class="viewcode-back" href="../../fermi_stacking.html#fermi_stacking.fermi_stacking_module.StackingAnalysis.PL2">[docs]</a>    <span class="k">def</span> <span class="nf">PL2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Fit</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
 
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    </span>
-<span class="sd">        Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.</span>
-<span class="sd">        Inputs:</span>
-<span class="sd">            - Fit: likelihood object.</span>
-<span class="sd">            - name: name of source. </span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39;Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ------</span>
+<span class="sd">        Fit : str</span>
+<span class="sd">            likelihood object.</span>
+<span class="sd">        name : str </span>
+<span class="sd">            name of source. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="n">Fit</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">funcs</span><span class="p">[</span><span class="s1">&#39;Spectrum&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getParam</span><span class="p">(</span><span class="s1">&#39;Integral&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setBounds</span><span class="p">(</span><span class="mf">1e-17</span><span class="p">,</span><span class="mf">1e7</span><span class="p">)</span>
         <span class="n">Fit</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">funcs</span><span class="p">[</span><span class="s1">&#39;Spectrum&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getParam</span><span class="p">(</span><span class="s1">&#39;Integral&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setScale</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
@@ -1152,16 +1153,14 @@
 
 <div class="viewcode-block" id="StackingAnalysis.make_butterfly"><a class="viewcode-back" href="../../fermi_stacking.html#fermi_stacking.fermi_stacking_module.StackingAnalysis.make_butterfly">[docs]</a>    <span class="k">def</span> <span class="nf">make_butterfly</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">):</span>
        
-        <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        </span>
-<span class="sd">        Calculate butterfly plot.</span>
+        <span class="sd">&#39;&#39;&#39;Calculate butterfly plot.</span>
 <span class="sd">            </span>
-<span class="sd">        Inputs:</span>
-<span class="sd">            name: name of input array (not including .npy).</span>
-<span class="sd">                Note: this name is also used for output files. </span>
-<span class="sd">            numbins: number of energy bins to use for butterfly plot.</span>
-<span class="sd">        </span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        name : str </span>
+<span class="sd">            name of input array (not including .npy). Note: this name is also used for output files.  </span>
+<span class="sd">        &#39;&#39;&#39;</span>
 	
         <span class="c1"># Make print statement:</span>
         <span class="nb">print</span><span class="p">()</span>
