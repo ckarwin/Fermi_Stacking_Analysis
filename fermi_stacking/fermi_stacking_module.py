@@ -5,20 +5,6 @@
 # Based on original code from Marco Ajello, Vaidehi Paliya, and Abhishek Desai.
 #
 # Purpose: Main script for Fermi-LAT stacking analysis.
-# 
-# Index of functions:
-#
-#   Stacking(superclass)
-#       - ang_sep(ra0, dec0, ra1, dec1)
-#       - run_preprocessing(srcname,ra,dec)
-#       - make_preprocessing_summary()
-#       - PL2(Fit,name)
-#       - run_stacking(srcname,PSF,indir="default")
-#       - combine_likelihood(exclusion_list, savefile)
-#       - plot_final_array(savefig,array)
-#       - make_butterfly(name)
-#       - get_UL95(array_file, ul_index=2.0)
-#       - calc_upper_limit(srcname,ul_emin,ul_emax,comp_list=[0,1,2,3],mult_lt=False)
 #
 ###########################################################
 
