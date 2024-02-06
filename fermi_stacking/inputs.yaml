@@ -1,7 +1,7 @@
 #----------#
 # Sample data:
 sample_file: "/zfs/astrohe/ckarwin/Stacking_Analysis/LLAGN/Sample/LLAGN_control_sample_full.fits" # full path to sample file
-file_type: "fits" # fits or csv
+file_type: "fits" # 'fits', 'csv', or 'tab'
 column_name: "Name_1"
 column_ra: "_RAJ20001"
 column_dec: "_DEJ20001"
