@@ -1,5 +1,5 @@
 # Imports:
-from fermi_stacking_module import StackingAnalysis
+from fermi_stacking.stacking.Stack import MakeStack
 import sys 
 
 def main(cmd_line):
@@ -14,7 +14,7 @@ def main(cmd_line):
         psf = cmd_line[4]
 
     # Define instance with input parameter card:
-    instance = StackingAnalysis("inputs.yaml")
+    instance = MakeStack("inputs.yaml")
     
     # Define exclusion list:
     exclusion_list = []
