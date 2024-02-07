@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Preprocess &#8212; fermi_stacking  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
@@ -32,14 +32,15 @@
 
           <div class="body" role="main">
             
-  <section id="module-fermi_stacking.preprocessing">
-<span id="preprocess"></span><h1>Preprocess<a class="headerlink" href="#module-fermi_stacking.preprocessing" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
+  <section id="preprocess">
+<h1>Preprocess<a class="headerlink" href="#preprocess" title="Permalink to this headline">¶</a></h1>
+<p>Test</p>
+<span class="target" id="module-fermi_stacking.preprocessing"></span><dl class="py class">
 <dt class="sig sig-object py" id="fermi_stacking.preprocessing.StackingAnalysis">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fermi_stacking.preprocessing.</span></span><span class="sig-name descname"><span class="pre">StackingAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_yaml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fermi_stacking/preprocessing/Preprocess.html#StackingAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.preprocessing.StackingAnalysis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Superclass for conducting Fermi-LAT stacking.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sample_file</strong> (<em>str</em>) – Full path to sample file.</p></li>
 <li><p><strong>file_type</strong> (<em>str</em>) – Type for the sample file. Must be either ‘csv’, ‘fits’, or ‘tab’.</p></li>
@@ -80,13 +81,13 @@ col2=4fgl_name, and no header.</p></li>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>All inputs are passed with inputs.yaml file.</p>
-</div>
+</aside>
 <dl class="py method">
 <dt class="sig sig-object py" id="fermi_stacking.preprocessing.StackingAnalysis.ang_sep">
 <span class="sig-name descname"><span class="pre">ang_sep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fermi_stacking/preprocessing/Preprocess.html#StackingAnalysis.ang_sep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.preprocessing.StackingAnalysis.ang_sep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate angular distance between two points on the sky.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ra0</strong> (<em>float</em>) – Right ascension of first source in degrees.</p></li>
 <li><p><strong>dec0</strong> (<em>float</em>) – Declination of first source in degrees.</p></li>
@@ -94,10 +95,10 @@ col2=4fgl_name, and no header.</p></li>
 <li><p><strong>dec1</strong> (<em>float</em>) – Declination of first source in degrees.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Angular distance between two sources in degrees.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -108,7 +109,7 @@ col2=4fgl_name, and no header.</p></li>
 <span class="sig-name descname"><span class="pre">run_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fermi_stacking/preprocessing/Preprocess.html#StackingAnalysis.run_preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.preprocessing.StackingAnalysis.run_preprocessing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform preprocessing of source.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>srcname</strong> (<em>str</em>) – Name of source.</p></li>
 <li><p><strong>ra</strong> (<em>float</em>) – Right ascension of source.</p></li>
