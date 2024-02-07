@@ -1,7 +1,7 @@
 Preprocess
-=======
+==========
 
-.. automodule:: fermi_stacking.preprocessing.Preprocess
+.. automodule:: fermi_stacking.preprocessing
    :imported-members:
    :members:
    :undoc-members:

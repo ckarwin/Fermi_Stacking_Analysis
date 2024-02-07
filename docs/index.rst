@@ -12,10 +12,3 @@ Welcome to fermi_stacking's documentation!
 
    api/index
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

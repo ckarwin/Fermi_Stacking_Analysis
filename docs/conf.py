@@ -22,7 +22,8 @@ extensions = ['sphinx.ext.mathjax',
               'sphinx.ext.viewcode',
               'sphinx.ext.napoleon',
               'sphinx.ext.intersphinx',
-              'sphinx.ext.coverage'
+              'sphinx.ext.coverage',
+              #'nbsphinx'
 ]
 
 
@@ -31,10 +32,17 @@ autodoc_mock_imports = ['fermipy','pyLikelihood','BinnedAnalysis','IntegralUpper
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-
+# The master toctree document.
+master_doc = 'index'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+# nbpshinx
+nbsphinx_execute = 'never'
+
+# Autodoc
+autodoc_member_order = 'bysource'
