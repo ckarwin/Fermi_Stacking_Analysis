@@ -35,98 +35,15 @@
   <section id="preprocess">
 <h1>Preprocess<a class="headerlink" href="#preprocess" title="Permalink to this headline">¶</a></h1>
 <p>Test</p>
-<span class="target" id="module-fermi_stacking.preprocessing"></span><dl class="py class">
-<dt class="sig sig-object py" id="fermi_stacking.preprocessing.StackingAnalysis">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fermi_stacking.preprocessing.</span></span><span class="sig-name descname"><span class="pre">StackingAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_yaml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fermi_stacking/preprocessing/Preprocess.html#StackingAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.preprocessing.StackingAnalysis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Superclass for conducting Fermi-LAT stacking.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sample_file</strong> (<em>str</em>) – Full path to sample file.</p></li>
-<li><p><strong>file_type</strong> (<em>str</em>) – Type for the sample file. Must be either ‘csv’, ‘fits’, or ‘tab’.</p></li>
-<li><p><strong>column_name</strong> (<em>str</em>) – Header of name column in sample file.</p></li>
-<li><p><strong>column_ra</strong> (<em>str</em>) – Header of ra column in sample file.</p></li>
-<li><p><strong>column_dec</strong> (<em>str</em>) – Header of dec column in sample file.</p></li>
-<li><p><strong>ft1</strong> (<em>str</em>) – Full path to ft1 photon data file.</p></li>
-<li><p><strong>ft2</strong> (<em>str</em>) – Full path to spacecraft file.</p></li>
-<li><p><strong>galdiff</strong> (<em>str</em>) – Full path to Galactic diffuse model.</p></li>
-<li><p><strong>isodiff</strong> (<em>str</em>) – Full path to isotropic model.</p></li>
-<li><p><strong>ltcube</strong> (<em>str</em><em>, </em><em>optional</em>) – Full path to precomputed ltcube (the default is ‘None’, in
-which case the ltcube is calculated on the fly).</p></li>
-<li><p><strong>use_scratch</strong> (<em>bool</em>) – If True, will perform analysis in scratch directory.</p></li>
-<li><p><strong>scratch</strong> (<em>str</em>) – Full path to sratch directory.</p></li>
-<li><p><strong>JLA</strong> (<em>bool</em>) – If True will perform joint likelihood analysis, using 4
-different PSF classes. If False, a standard analysis will
-be performed.</p></li>
-<li><p><strong>irfs</strong> (<em>str</em>) – Name of LAT instrument response functions.</p></li>
-<li><p><strong>emin</strong> (<em>float</em><em> or </em><em>int</em>) – Miminum energy of analysis in MeV.</p></li>
-<li><p><strong>emax</strong> (<em>float</em><em> or </em><em>int</em>) – Maximum energy of analysis in MeV.</p></li>
-<li><p><strong>tmin</strong> (<em>float</em><em> or </em><em>int</em>) – Minimum time of analysis in mission elapsed time (MET).</p></li>
-<li><p><strong>tmax</strong> (<em>float</em><em> or </em><em>int</em>) – Maximum time of analysis in mission elapsed time (MET).</p></li>
-<li><p><strong>zmax</strong> (<em>float</em><em> or </em><em>int</em>) – Maximun zenith angle to use in the analysis in degrees.</p></li>
-<li><p><strong>index_min</strong> (<em>float</em>) – Minimum index for stacking scan (absolute value).</p></li>
-<li><p><strong>index_max</strong> (<em>float</em>) – Maximum index for stacking scan (absolute value).</p></li>
-<li><p><strong>flux_min</strong> (<em>float</em>) – Power of min flux for stacking scan.</p></li>
-<li><p><strong>flux_max</strong> (<em>float</em>) – Power of max flux for stacking scan.</p></li>
-<li><p><strong>num_flux_bins</strong> (<em>int</em>) – Number of flux bins to use.</p></li>
-<li><p><strong>calc_sed</strong> (<em>bool</em>) – If True will calculate SED.</p></li>
-<li><p><strong>sed_logEbins</strong> (<em>list</em>) – Log of energy bin edges for SED calculation.</p></li>
-<li><p><strong>delete_4fgl</strong> (<em>bool</em>) – Option to run 4FGL source. If True, must provide
-“remove_list.csv” file in run directory, with col1=sample_name,
-col2=4fgl_name, and no header.</p></li>
-<li><p><strong>show_plots</strong> (<em>bool</em>) – If True will show plots. Set to False for submitted batch jobs.</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>All inputs are passed with inputs.yaml file.</p>
-</aside>
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.preprocessing.StackingAnalysis.ang_sep">
-<span class="sig-name descname"><span class="pre">ang_sep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fermi_stacking/preprocessing/Preprocess.html#StackingAnalysis.ang_sep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.preprocessing.StackingAnalysis.ang_sep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate angular distance between two points on the sky.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ra0</strong> (<em>float</em>) – Right ascension of first source in degrees.</p></li>
-<li><p><strong>dec0</strong> (<em>float</em>) – Declination of first source in degrees.</p></li>
-<li><p><strong>ra1</strong> (<em>float</em>) – Right ascension of second source in degrees.</p></li>
-<li><p><strong>dec1</strong> (<em>float</em>) – Declination of first source in degrees.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Angular distance between two sources in degrees.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
+<section id="id1">
+<h2>Preprocess<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fermi_stacking.preprocessing.Preprocess">
+<span class="sig-prename descclassname"><span class="pre">fermi_stacking.preprocessing.</span></span><span class="sig-name descname"><span class="pre">Preprocess</span></span><a class="headerlink" href="#fermi_stacking.preprocessing.Preprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of &lt;module ‘fermi_stacking.preprocessing.Preprocess’ from ‘/zfs/astrohe/ckarwin/My_Class_Library/Stacking_Analysis/Fermi_Stacking_Module/Git_Updates/Fermi_Stacking_Analysis/fermi_stacking/preprocessing/Preprocess.py’&gt;</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.preprocessing.StackingAnalysis.run_preprocessing">
-<span class="sig-name descname"><span class="pre">run_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fermi_stacking/preprocessing/Preprocess.html#StackingAnalysis.run_preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.preprocessing.StackingAnalysis.run_preprocessing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform preprocessing of source.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>srcname</strong> (<em>str</em>) – Name of source.</p></li>
-<li><p><strong>ra</strong> (<em>float</em>) – Right ascension of source.</p></li>
-<li><p><strong>dec</strong> (<em>float</em>) – Declination of source.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.preprocessing.StackingAnalysis.make_preprocessing_summary">
-<span class="sig-name descname"><span class="pre">make_preprocessing_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fermi_stacking/preprocessing/Preprocess.html#StackingAnalysis.make_preprocessing_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.preprocessing.StackingAnalysis.make_preprocessing_summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Makes sumarray of preprocessing.</p>
-</dd></dl>
-
-</dd></dl>
-
+</section>
 </section>
 
 
