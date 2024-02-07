@@ -15,7 +15,6 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Welcome to fermi_stacking’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,157 +36,6 @@
 <p>Fermi Stacking! Hello world.</p>
 <section id="stackinganalysis">
 <h2>StackingAnalysis<a class="headerlink" href="#stackinganalysis" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fermi_stacking.fermi_stacking_module.</span></span><span class="sig-name descname"><span class="pre">StackingAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_yaml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Main inputs are specified in inputs.yaml file</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.PL2">
-<span class="sig-name descname"><span class="pre">PL2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.PL2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.PL2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Fit</strong> (<em>str</em>) – likelihood object.</p></li>
-<li><p><strong>name</strong> (<em>str</em>) – name of source.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.ang_sep">
-<span class="sig-name descname"><span class="pre">ang_sep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.ang_sep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.ang_sep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate angular distance between two points on the sky.</p>
-<dl class="simple">
-<dt>Inputs:</dt><dd><ul class="simple">
-<li><p>ra0, dec0: coordinates of point 1</p></li>
-<li><p>ra1, dec1: coordinates of point 2</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.calc_upper_limit">
-<span class="sig-name descname"><span class="pre">calc_upper_limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_emax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mult_lt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.calc_upper_limit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.calc_upper_limit" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Calculate upper limits using both a bayesian approach and a frequentist approach using results from preprocessing.</p>
-<p>The frequentist appraoch uses the profile likelihood method, with 2.71/2 for 95% UL. This is standard in LAT analysis.
-However, when there is a physical boundary on a parameter (such as a normalization) the profile likelihood is always restricted
-to the physical region such that for a negative MLE the maximum is evaluated at zero.</p>
-<p>For low significant sources the bayesian approach may be a better estimate (Thanks to Jean Ballet for pointing this out).</p>
-<p>Inputs:</p>
-<p>srcname: Name of source for UL calculation.</p>
-<p>ul_emin: Lower energy bound for UL calculation.</p>
-<p>ul_emax: Upper energy bound for UL calculation.</p>
-<dl class="simple">
-<dt>comp_list (optional): List of components to add to the SummedLikelihood object for the JLA.</dt><dd><p>Note: Default is for typical JLA with 4 components.
-Note: The added components must be defined in the energy range of the UL calculation.
-Note: The function supports up to 10 components (0-9). For more, further definitions must be added.</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>mult_lt (optional): If using lt cubes for each component, set to True. Default is False, for single lt cube.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.combine_likelihood">
-<span class="sig-name descname"><span class="pre">combine_likelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exclusion_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.combine_likelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.combine_likelihood" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make 2D TS profiles for each source and add to get stacked profile.</p>
-<dl class="simple">
-<dt>Input definitions:</dt><dd><ul class="simple">
-<li><p>exclusion_list: list of sources to exclude from stacked profile.</p></li>
-<li><p>savefile: Prefix of array to be saved. Do not include “.npy” at the end of the name; it’s already included.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.get_stack_UL95">
-<span class="sig-name descname"><span class="pre">get_stack_UL95</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ul_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.get_stack_UL95"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.get_stack_UL95" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate one-sided 95% UL from the 2D TS arrays: 2(logL_max - logL) = 2.71.
-Note: Since the TS array is used, the factor of 2 is already included in the calculation!
-This methed is not applicable if TS&lt;1.
-The default index is set to -2.0.</p>
-<p>Inputs definitions:</p>
-<p>array_file: 2D array to calculate UL from</p>
-<dl class="simple">
-<dt>ul_index (optional arguement): spectral index to use for UL calculation.</dt><dd><p>Note: Default value is 2.0.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.make_butterfly">
-<span class="sig-name descname"><span class="pre">make_butterfly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.make_butterfly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.make_butterfly" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate butterfly plot.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – name of input array (not including .npy). Note: this name is also used for output files.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.plot_final_array">
-<span class="sig-name descname"><span class="pre">plot_final_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">savefig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.plot_final_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.plot_final_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Input definitions:</p>
-<p>savefig: Name of image file to be saved.</p>
-<p>array: Name of input array to plot. Must include “.npy”.</p>
-<dl class="simple">
-<dt>use_index (optional_arguement): option to calculate flux for specified index.</dt><dd><p>Note: default is best-fit index.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.power_law_2">
-<span class="sig-name descname"><span class="pre">power_law_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Emin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Emax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.power_law_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.power_law_2" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>dN/dE in units of ph/cm^s/s/MeV.</dt><dd><p>Inputs:
-N: Integrated flux between Emin and Emax in ph/cm^2/s.
-gamma: Spectral index.
-E: Energy range in MeV. Should be array.
-Emin, Emax: Min and max energy, respectively, in MeV.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.run_preprocessing">
-<span class="sig-name descname"><span class="pre">run_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.run_preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.run_preprocessing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform preprocessing of sources.</p>
-<dl class="simple">
-<dt>Inputs:</dt><dd><ul class="simple">
-<li><p>srcname: name of source (string)</p></li>
-<li><p>ra: right ascension (float)</p></li>
-<li><p>dec: declination (float)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fermi_stacking.fermi_stacking_module.StackingAnalysis.run_stacking">
-<span class="sig-name descname"><span class="pre">run_stacking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PSF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fermi_stacking/fermi_stacking_module.html#StackingAnalysis.run_stacking"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fermi_stacking.fermi_stacking_module.StackingAnalysis.run_stacking" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct 2D TS profiles for sources.</p>
-<dl class="simple">
-<dt>inputs:</dt><dd><ul class="simple">
-<li><p>srcname: name of source.</p></li>
-<li><p>PSF: integer ranging from 0-3 indicating PSF class for JLA.
-Note: The passed value is 0 for standard analysis.</p></li>
-<li><p>indir (optional arguement): input preprocessing directory to use for stacking.
-Note: Defualt is preprocessing directory from main run directory.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 </section>
 
@@ -209,18 +57,14 @@ Note: Defualt is preprocessing directory from main run directory.</p></li>
 
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Fermi Stacking</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#stackinganalysis">StackingAnalysis</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to fermi_stacking’s documentation!</a></li>
   </ul></li>
 </ul>
 </div>

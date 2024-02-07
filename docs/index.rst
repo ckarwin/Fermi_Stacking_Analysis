@@ -10,7 +10,7 @@ Welcome to fermi_stacking's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   fermi_stacking
+   api/index
 
 
 Indices and tables
