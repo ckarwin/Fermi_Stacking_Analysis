@@ -419,7 +419,8 @@ class StackingAnalysis:
             f.close()
 
         if self.use_scratch == True:
-            shutil.copytree(src_scratch,src_output_main)
+            
+            shutil.copytree(src_scratch,src_output_main,dirs_exist_ok=True)
     
         os.chdir(self.home)
 
