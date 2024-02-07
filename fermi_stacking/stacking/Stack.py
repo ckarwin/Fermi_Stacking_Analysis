@@ -33,17 +33,23 @@ from fermi_stacking.preprocessing.Preprocess import StackingAnalysis
 
 class MakeStack(StackingAnalysis):
 
+    """Performs stacking."""
+
     def PL2(self,Fit,name):
 
-        '''Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.
+        """Power law spectral model for stacking: sets parameters of PowerLaw2 spectral function.
         
         Parameters
-        ------
-        Fit : str
-            likelihood object.
+        ----------
+        Fit : BinnedAnalysis
+            Likelihood object.
         name : str 
-            name of source. 
-        '''
+            Name of source. 
+        
+        Returns
+        ------
+        Fit : BinnedAnalysis.  
+        """
 
         Fit[name].funcs['Spectrum'].getParam('Integral').setBounds(1e-17,1e7)
         Fit[name].funcs['Spectrum'].getParam('Integral').setScale(1.0)
@@ -66,17 +72,18 @@ class MakeStack(StackingAnalysis):
 
     def run_stacking(self,srcname,PSF,indir="default"):
         
-        """
+        """Construct 2D TS profiles for sources.
 
-        Construct 2D TS profiles for sources.
-
-        inputs:
-            - srcname: name of source.
-            - PSF: integer ranging from 0-3 indicating PSF class for JLA. 
-              Note: The passed value is 0 for standard analysis. 
-            - indir (optional arguement): input preprocessing directory to use for stacking. 
-              Note: Defualt is preprocessing directory from main run directory.
-        
+        Parameters
+        ---------
+        srcname : str 
+            Name of source.
+        PSF : int
+            Integer ranging from 0-3 indicating PSF class for JLA. 
+            The passed value is 0 for standard analysis. 
+        indir : str, optional
+            Input preprocessing directory to use for stacking (defualt 
+            is preprocessing directory from main run directory.
         """
 
 	# Make print statement:
@@ -237,13 +244,15 @@ class MakeStack(StackingAnalysis):
 
     def combine_likelihood(self, exclusion_list, savefile):
 	
-        """
-	Make 2D TS profiles for each source and add to get stacked profile.
+        """Make 2D TS profiles for each source and add to get stacked profile.
 
-	Input definitions:
-            - exclusion_list: list of sources to exclude from stacked profile.
-	    - savefile: Prefix of array to be saved. Do not include ".npy" at the end of the name; it's already included.
-	
+	Parameters
+        ----------
+        exclusion_list : list
+            List of sources to exclude from stacked profile.
+	Savefile : str
+            Prefix of array to be saved. Do not include ".npy" at the 
+            end of the name; it's already included.
         """
         
         # Make print statement:

@@ -33,19 +33,21 @@ from fermi_stacking.preprocessing.Preprocess import StackingAnalysis
 
 class Analyze(StackingAnalysis):    
     
+    """Analyzes stacked results."""
+
     def plot_final_array(self,savefig,array,use_index="default"):
 
-        """
+        """Plots the stacked profile.
 	 
-         Input definitions:
-	 
-	 savefig: Name of image file to be saved. 
-	
-	 array: Name of input array to plot. Must include ".npy".
-	
-         use_index (optional_arguement): option to calculate flux for specified index.
-            Note: default is best-fit index.
-
+        Parameters
+        ----------
+	savefig : str
+            Name of image file to be saved. 
+	array : str
+            Name of input array to plot. Must include ".npy".
+	use_index : bool, optional
+            Option to calculate flux for specified index (default is 
+            best-fit index).
         """
         
         # Make print statement:
@@ -239,15 +241,24 @@ class Analyze(StackingAnalysis):
 
     def power_law_2(self,N,gamma,E,Emin,Emax):
 
-        """ 
+        """Function for dN/dE in units of ph/cm^s/s/MeV.
         
-        dN/dE in units of ph/cm^s/s/MeV.
-            Inputs:
-            N: Integrated flux between Emin and Emax in ph/cm^2/s.
-            gamma: Spectral index.
-            E: Energy range in MeV. Should be array.
-            Emin, Emax: Min and max energy, respectively, in MeV. 
+        Parameters
+        ----------
+        N : float
+            Integrated flux between Emin and Emax in ph/cm^2/s.
+        gamma : float
+            Spectral index.
+        E : array
+            Energy range in MeV. 
+        Emin : float
+            Minimum energy in MeV. 
+        Emax: Maximum energy in MeV. 
         
+        Returns
+        -------
+        array
+            Function for dN/dE.
         """
             
         return N*(gamma+1)*(E**gamma) / (Emax**(gamma+1) - Emin**(gamma+1))
@@ -255,14 +266,13 @@ class Analyze(StackingAnalysis):
 
     def make_butterfly(self,name):
        
-        '''Calculate butterfly plot.
+        """Calculate butterfly plot.
             
         Parameters
         ----------
-
         name : str 
             name of input array (not including .npy). Note: this name is also used for output files.  
-        '''
+        """
 	
         # Make print statement:
         print()
@@ -413,21 +423,21 @@ class Analyze(StackingAnalysis):
 
     def get_stack_UL95(self, array_file, ul_index=2.0):
 
-        '''
-	
-        Calculate one-sided 95% UL from the 2D TS arrays: 2(logL_max - logL) = 2.71.
-        Note: Since the TS array is used, the factor of 2 is already included in the calculation!
+        """Calculate one-sided 95% UL from the 2D TS arrays: 2(logL_max - logL) = 2.71.
+
+	Parameters
+        ----------
+        array_file : array 
+            2D array to calculate UL from.
+        ul_index : float, optional
+            Spectral index to use for UL calculation (default value is 2.0).
+       
+        Note
+        ----
+        Since the TS array is used, the factor of 2 is already included in the calculation!
+        
         This methed is not applicable if TS<1.
-	The default index is set to -2.0.
-
-	Inputs definitions:
-
-	array_file: 2D array to calculate UL from
-
-        ul_index (optional arguement): spectral index to use for UL calculation.
-            Note: Default value is 2.0.
-	
-        '''
+       """
         
         # Make print statement:
         print()
@@ -504,32 +514,42 @@ class Analyze(StackingAnalysis):
         
     def calc_upper_limit(self,srcname,ul_emin,ul_emax,comp_list=[0,1,2,3],mult_lt=False):
         	
-        '''
-        
-	 Calculate upper limits using both a bayesian approach and a frequentist approach using results from preprocessing.
+        """Calculate upper limits using both a bayesian approach and 
+        a frequentist approach using results from preprocessing.
 	
-	 The frequentist appraoch uses the profile likelihood method, with 2.71/2 for 95% UL. This is standard in LAT analysis. 
-	 However, when there is a physical boundary on a parameter (such as a normalization) the profile likelihood is always restricted 
-	 to the physical region such that for a negative MLE the maximum is evaluated at zero.
+	The frequentist appraoch uses the profile likelihood method, with 
+        2.71/2 for 95% UL. This is standard in LAT analysis. However, 
+        when there is a physical boundary on a parameter (such as 
+        a normalization) the profile likelihood is always restricted 
+	to the physical region such that for a negative MLE the maximum is 
+        evaluated at zero.
 	 	
-	 For low significant sources the bayesian approach may be a better estimate (Thanks to Jean Ballet for pointing this out).
+	For low significant sources the bayesian approach may be a better 
+        estimate (Thanks to Jean Ballet for pointing this out).
 
-         Inputs:
-
-         srcname: Name of source for UL calculation.
-
-         ul_emin: Lower energy bound for UL calculation.
-
-         ul_emax: Upper energy bound for UL calculation.
-
-         comp_list (optional): List of components to add to the SummedLikelihood object for the JLA. 
-            Note: Default is for typical JLA with 4 components. 
-            Note: The added components must be defined in the energy range of the UL calculation.
-            Note: The function supports up to 10 components (0-9). For more, further definitions must be added.
-
-        mult_lt (optional): If using lt cubes for each component, set to True. Default is False, for single lt cube. 
-
-	'''      
+        Parameters
+        ----------
+        srcname : str
+            Name of source for UL calculation.
+        ul_emin : float
+            Lower energy bound for UL calculation in MeV.
+        ul_emax : float
+            Upper energy bound for UL calculation.
+        comp_list : list, optional
+            List of components to add to the SummedLikelihood object 
+            for the JLA (default is for typical JLA with 4 components). 
+            The added components must be defined in the energy
+            range of the UL calculation. The function supports up to 
+            10 components (0-9). For more, further definitions must be added.
+        mult_lt : bool, optional
+            If using lt cubes for each component, set to True (default is False, 
+            for single lt cube. 
+	
+        Returns
+        -------
+        float, float
+            Frequentist and Bayesian upper limit value, respectively. 
+        """      
         
         # Make print statement:
         print()

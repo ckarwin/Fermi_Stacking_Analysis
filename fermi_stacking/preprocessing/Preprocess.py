@@ -1,6 +1,9 @@
 ############################################################
 # 
-# Written by Chris karwin; April 2022; Clemson University.
+# Written by Chris Karwin; April 2022; Clemson University.
+# 
+# Significant restructuring by Chris Karwin Feb 2024; 
+# NASA Goddard Space Flight Center. 
 #
 # Based on original code from Marco Ajello, Vaidehi Paliya, and Abhishek Desai.
 #
@@ -45,7 +48,77 @@ from astropy.io import fits
 # Superclass:
 class StackingAnalysis:
    
-    """Main inputs are specified in inputs.yaml file"""
+    """Superclass for conducting Fermi-LAT stacking.
+    
+    Parameters
+    ----------
+    sample_file : str
+        Full path to sample file. 
+    file_type : str
+        Type for the sample file. Must be either 'csv', 'fits', or 'tab'.
+    column_name : str
+        Header of name column in sample file. 
+    column_ra : str
+        Header of ra column in sample file.
+    column_dec : str
+        Header of dec column in sample file. 
+    ft1 : str
+        Full path to ft1 photon data file. 
+    ft2 : str
+        Full path to spacecraft file. 
+    galdiff : str
+        Full path to Galactic diffuse model.
+    isodiff : str
+        Full path to isotropic model.
+    ltcube : str, optional
+        Full path to precomputed ltcube (the default is 'None', in
+        which case the ltcube is calculated on the fly).
+    use_scratch : bool
+        If True, will perform analysis in scratch directory.
+    scratch : str
+        Full path to sratch directory.
+    JLA : bool
+        If True will perform joint likelihood analysis, using 4 
+        different PSF classes. If False, a standard analysis will
+        be performed. 
+    irfs : str
+        Name of LAT instrument response functions.
+    emin : float or int
+        Miminum energy of analysis in MeV. 
+    emax : float or int
+        Maximum energy of analysis in MeV. 
+    tmin : float or int
+        Minimum time of analysis in mission elapsed time (MET).
+    tmax : float or int
+        Maximum time of analysis in mission elapsed time (MET).
+    zmax : float or int
+        Maximun zenith angle to use in the analysis in degrees. 
+    index_min : float
+         Minimum index for stacking scan (absolute value).
+    index_max : float
+        Maximum index for stacking scan (absolute value).
+    flux_min : float
+        Power of min flux for stacking scan.
+    flux_max : float
+        Power of max flux for stacking scan.
+    num_flux_bins : int
+        Number of flux bins to use.
+    calc_sed : bool
+        If True will calculate SED. 
+    sed_logEbins : list
+        Log of energy bin edges for SED calculation. 
+    delete_4fgl : bool
+        Option to run 4FGL source. If True, must provide 
+        "remove_list.csv" file in run directory, with col1=sample_name, 
+        col2=4fgl_name, and no header.
+    show_plots : bool
+        If True will show plots. Set to False for submitted batch jobs. 
+
+    Note
+    ----
+    All inputs are passed with inputs.yaml file.
+    """
+
 
     def __init__(self,input_yaml):
 
@@ -118,20 +191,26 @@ class StackingAnalysis:
         if self.file_type == "tab":
             df = pd.read_csv(self.sample_file, delim_whitespace=True)
             self.sample_name_list = df[self.column_name].tolist()
-    
-    ################
-    # Preprocessing:
 
     def ang_sep(self,ra0, dec0, ra1, dec1):
        
-        """
+        """Calculate angular distance between two points on the sky.
+
+        Parameters
+        ----------
+        ra0 : float
+            Right ascension of first source in degrees. 
+        dec0 : float
+            Declination of first source in degrees.
+        ra1 : float
+            Right ascension of second source in degrees.
+        dec1 : float
+            Declination of first source in degrees.
         
-        Calculate angular distance between two points on the sky.
-
-        Inputs:
-            - ra0, dec0: coordinates of point 1
-            - ra1, dec1: coordinates of point 2 
-
+        Returns
+        -------
+        float
+            Angular distance between two sources in degrees. 
         """
         
         C = np.pi/180.
@@ -151,15 +230,16 @@ class StackingAnalysis:
 
     def run_preprocessing(self,srcname,ra,dec):
        
-        """
-        
-        Perform preprocessing of sources.
+        """Perform preprocessing of source.
 
-        Inputs:
-            - srcname: name of source (string)
-            - ra: right ascension (float)
-            - dec: declination (float)
-
+        Parameters
+        ---------
+        srcname : str 
+            Name of source.
+        ra : float
+            Right ascension of source. 
+        dec : float
+            Declination of source. 
         """
 
 	# Make print statement:
@@ -427,6 +507,8 @@ class StackingAnalysis:
         return
 
     def make_preprocessing_summary(self):
+
+        """Makes sumarray of preprocessing."""
 
         # Construct empty dataframe:
         df_full = pd.DataFrame(data=None, columns=["name","dist_sep","flux","flux_err","index","index_err","flux_ul","TS"])
