@@ -1,3 +1,5 @@
+# fermi-stacking
+
 ## Introduction
 This repository contains code for running a gamma-ray stacking analysis with Fermi-LAT data. The technique was originally developed by Marco Ajello, Vaidehi Paliya, and Abhishek Desai, and it has been successfully applied to the following studies: <br />
 * Extreme blazars [(link)](https://arxiv.org/pdf/1908.02496.pdf)  <br />
@@ -12,30 +14,35 @@ The stacking analysis requires Fermipy, available [here](https://fermipy.readthe
 
 The stacking analysis is meant to be ran on a cluster. In particular, it has been developed using the Clemson University Palmetto Cluster. More information on the Palmetto Cluster can be found [here](https://www.palmetto.clemson.edu/palmetto/basic/started/).  <br />
 
+## Installation
+Using pip 
+```
+pip install fermi-stacking
+```
+From source (for developers)
+```
+git clone https://github.com/ckarwin/Fermi_Stacking_Analysis.git
+cd Fermi_Stacking_Analysis
+pip install -e .
+```
+
+## Documentation
+Documentation can be found here: https://fermi-stacking-analysis.readthedocs.io/en/latest/index.html
 
 ## Methodology 
 The main assumption made with the stacking technique is that the source population can be characterized by average quantities, such as average flux and spectral index. Of course other parameters can also be stacked. 2D TS profiles are then constructed for each source using a binned likelihood analysis, and the individual profiles are summed to obtain the global significance of the signal. See above references for more details.  
 
 ## Quickstart Guide <br /> 
 <pre>
-1. Clone Fermi_Stacking_Analysis repository:
-  - git clone https://github.com/ckarwin/Fermi_Stacking_Analysis.git
+1. For any new analysis: </b>
+ - Make a new analysis directory (e.g. mkdir Run_1)
+ - Run command line prompt 'make_stacking_run', which will setup the directory with all needed files.
 
-2. Install with pip: </b>
-  - cd Fermi_Stacking_Analysis
-  - pip install -e .
- 
-3. For any new analysis: </b>
- - make a new analysis directory (e.g. mkdir Run_1)
- - copy all files from Examples/standard_analysis into the new analysis directory. 
+2. Specify inputs in inputs.yaml. </b>
+  
+3. Uncomment functions inside the client code that you want to run. </b>
 
-4. Specify inputs in inputs.yaml. </b>
- - This is the only file a user should have to modify (apart from running functions in the client code).
- 
-5. Uncomment functions inside the client code that you want to run. </b>
-
-6. To run the code: 
- - To submit batch jobs: python submit_fermi_stacking_jobs.py 
+4. To run the code: 
+ - To submit batch jobs: batch script templates are provided for both SLURM and PBS.
  - To run from terminal: python client.py
-   Note: In this case the arguments can be passed from the terminial (i.e. 'srcname', ra, dec, psf) or they can be specified in the function explicitly by changing the client code.
 </pre>
