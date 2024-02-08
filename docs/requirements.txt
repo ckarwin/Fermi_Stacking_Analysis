@@ -4,3 +4,4 @@ pandoc
 pyyaml
 pandas
 matplotlib
+astropy
