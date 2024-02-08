@@ -6,6 +6,6 @@ Test 2
 Preprocess
 ----------
 
-.. autoclass:: fermi_stacking.preprocessing.Preprocess
+.. automodule:: fermi_stacking.preprocessing
    :show-inheritance:
    :members:
