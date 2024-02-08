@@ -11,6 +11,5 @@ Welcome to fermi_stacking's documentation!
    :caption: Contents:
 
    install
-   preprocessing
    api/index
 
