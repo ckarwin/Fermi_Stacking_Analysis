@@ -10,8 +10,6 @@ Install with pip::
   
   pip install fermi-stacking
 
-Note: you need to specify the alpha release version, otherwise pip
-  
 
 From source (for developers)
 ----------------------------
