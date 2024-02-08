@@ -9,7 +9,7 @@ setup(
     author='Chris Karwin',
     author_email='christopher.m.karwin@nasa.gov',
     packages=find_packages(),
-    install_requires = ["pandas","pyyaml","scipy==1.9.1"],
+    install_requires = ["pandas","pyyaml","scipy"],
     description = "Performs Fermi-LAT stacking analysis.",
     entry_points = {"console_scripts":["make_stacking_run = fermi_stacking.make_new_run:main"]}
 )
