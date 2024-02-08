@@ -10,5 +10,6 @@ Welcome to fermi_stacking's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   install
    api/index
 

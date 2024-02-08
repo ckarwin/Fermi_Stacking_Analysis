@@ -1,8 +1,6 @@
 API
 ===
 
-Hello World!
-
 .. warning::
     Under construction. 
 
