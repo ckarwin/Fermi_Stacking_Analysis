@@ -1,5 +1,5 @@
 sphinx_rtd_theme
 sphinx
 pandoc
-yaml
+pyyaml==6.0
 pandas
