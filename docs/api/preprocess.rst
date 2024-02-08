@@ -7,5 +7,6 @@ Preprocess
 ----------
 
 .. automodule:: fermi_stacking.preprocessing
-   :show-inheritance:
+   :imported-members:
    :members:
+   :undoc-members:
