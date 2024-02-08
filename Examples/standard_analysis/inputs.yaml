@@ -12,7 +12,6 @@ psf_low: 0 # lower PSF iterator for JLA stacking (0-3). Default is 0 for standar
 psf_high: 1 # upper PSF iterator for JLA stacking (1-4). Default is 1 for standard analysis and preprocessing.
 run_name: "LLAGN" # main name of run.
 job_type: "p" # for palmetto output files: "p" for preprocessing or "s" for stacking.
-resource: "ncpus=1:mem=15gb:interconnect=1g,walltime=72:00:00" # palmetto submission
 
 # Main default inputs:
 ft1: '/zfs/astrohe/Fermi_Data/weekly/photon/filelist.txt' # data file
@@ -31,6 +30,7 @@ scratch: '/scratch1/ckarwin/Run_5'
 JLA: False
 
 # Main LAT analysis parameters:
+irfs: 'P8R3_SOURCE_V3'
 emin: 1000 # min energy [MeV] 
 emax: 800000 # max energy [MeV]
 tmin: 239557417 # min time [s]
@@ -55,4 +55,3 @@ delete_4fgl: False
 # Plotting:
 show_plots: True 
 #----------#
-
