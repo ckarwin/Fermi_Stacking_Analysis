@@ -30,8 +30,9 @@ from UpperLimits import UpperLimits
 from SummedLikelihood import *
 from astropy.io import fits
 from fermi_stacking.preprocessing.Preprocess import StackingAnalysis
+from fermi_stacking.analyze_results.AnalyzeResults import Analyze
 
-class MakeStack(StackingAnalysis):
+class MakeStack(StackingAnalysis,Analyze):
 
     """Performs stacking."""
 

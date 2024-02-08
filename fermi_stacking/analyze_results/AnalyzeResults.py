@@ -29,9 +29,8 @@ from IntegralUpperLimit import calc_int
 from UpperLimits import UpperLimits
 from SummedLikelihood import *
 from astropy.io import fits
-from fermi_stacking.preprocessing.Preprocess import StackingAnalysis
 
-class Analyze(StackingAnalysis):    
+class Analyze():    
     
     """Analyzes stacked results."""
 
