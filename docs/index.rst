@@ -6,6 +6,24 @@
 Welcome to fermi-stacking's documentation!
 ==========================================
 
+Introduction
+------------
+This repository contains code for running a gamma-ray stacking analysis with Fermi-LAT data. The technique has been successfully applied to the following studies: 
+
+- `Extreme blazars <https://arxiv.org/pdf/1908.02496.pdf>`_
+- `Star-forming galaxies <https://arxiv.org/pdf/2003.05493.pdf>`_
+- `Extragalactic background <https://arxiv.org/pdf/1812.01031.pdf>`_
+- `Ultra-fast outflows <https://iopscience.iop.org/article/10.3847/1538-4357/ac1bb2>`_
+- `Molecular outflows <https://iopscience.iop.org/article/10.3847/1538-4357/acaf57>`_
+- `FR0 Radio galaxies <https://arxiv.org/abs/2310.19888>`_
+- `Dark matter searches <https://arxiv.org/abs/2311.04982>`_
+
+The stacking analysis requires Fermipy (available `here <https://fermipy.readthedocs.io>`_), and it is meant to be ran on a cluster.
+
+Methodology
+-----------
+The main assumption made with the stacking technique is that the source population can be characterized by average quantities, such as average flux and spectral index. Other parameters can also be stacked. 2D test statistic (TS) profiles are then constructed for each source using a binned likelihood analysis, and the individual profiles are summed to obtain the total significance of the signal. See above references for more details.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
