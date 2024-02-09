@@ -62,6 +62,19 @@ class StackingAnalysis:
         Header of ra column in sample file.
     column_dec : str
         Header of dec column in sample file. 
+    run_list : list
+        List of names to run (subsample of full sample). For full 
+        sample use "default".
+    psf_low : int
+        Lower PSF iterator for JLA stacking (0-3). Default is 0 for 
+        standard analysis and preprocessing.
+    psf_high : int
+        Upper PSF iterator for JLA stacking (1-4). Default is 1 for 
+        standard analysis and preprocessing.
+    run_name : str
+        Main name of run.
+    job_type : str
+        "p" for preprocessing or "s" for stacking.
     ft1 : str
         Full path to ft1 photon data file. 
     ft2 : str
