@@ -9,3 +9,6 @@ API
    :caption: Contents:
 
    preprocessing
+   stacking
+   analyze_results
+
