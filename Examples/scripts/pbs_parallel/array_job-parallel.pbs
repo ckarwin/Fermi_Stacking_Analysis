@@ -1,0 +1,12 @@
+#PBS -N llagn
+#PBS -l select=1:ncpus=1:mem=12gb:interconnect=1g,walltime=90:00:00
+#PBS -J 0-770:7
+
+#Need to delay job start times by random number to prevent overloading system:
+sleep `expr $RANDOM % 60`
+
+# source environment
+source /zfs/astrohe/Software/lat-stacking.sh
+cd $PBS_O_WORKDIR
+module add gnu-parallel
+parallel --delay=5 -j7 python submit_fermi_stacking_jobs-parallel.py $PBS_ARRAY_INDEX ::: {0..6}
