@@ -29,5 +29,6 @@ The main assumption made with the stacking technique is that the source populati
    :caption: Contents:
 
    install
+   quickstart/quickstart
    api/index
 
