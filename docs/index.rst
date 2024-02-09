@@ -8,7 +8,7 @@ Welcome to fermi-stacking's documentation!
 
 Introduction
 ------------
-This repository contains code for running a gamma-ray stacking analysis with Fermi-LAT data. The technique has been successfully applied to the following studies: 
+This package contains code for running a gamma-ray stacking analysis with Fermi-LAT data. The technique has been successfully applied to the following studies: 
 
 - `Extreme blazars <https://arxiv.org/pdf/1908.02496.pdf>`_
 - `Star-forming galaxies <https://arxiv.org/pdf/2003.05493.pdf>`_
@@ -18,7 +18,7 @@ This repository contains code for running a gamma-ray stacking analysis with Fer
 - `FR0 Radio galaxies <https://arxiv.org/abs/2310.19888>`_
 - `Dark matter searches <https://arxiv.org/abs/2311.04982>`_
 
-The stacking analysis requires Fermipy (available `here <https://fermipy.readthedocs.io>`_), and it is meant to be ran on a cluster.
+The stacking pipeline requires Fermipy (available `here <https://fermipy.readthedocs.io>`_), and it is meant to be run on a cluster.
 
 Methodology
 -----------
