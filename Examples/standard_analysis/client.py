@@ -1,5 +1,5 @@
 # Imports:
-from fermi_stacking_module import StackingAnalysis
+from fermi_stacking.stacking.Stack import MakeStack
 import sys 
 
 def main(cmd_line):
@@ -14,7 +14,7 @@ def main(cmd_line):
         psf = cmd_line[4]
 
     # Define instance with input parameter card:
-    instance = StackingAnalysis("inputs.yaml")
+    instance = MakeStack("inputs.yaml")
     
     # Define exclusion list:
     exclusion_list = []
@@ -27,9 +27,9 @@ def main(cmd_line):
     #instance.run_stacking(srcname,psf)
     #instance.combine_likelihood(exclusion_list,savefile)
     #instance.plot_final_array("name.png","name.npy")
+    #instance.evolution_plot(skip_list)
     #instance.make_butterfly(name)
     #instance.get_stack_UL95("name.npy")
-    #instance.calc_upper_limit(srcname,emin,emax)
 
     ###########################################
 

@@ -263,7 +263,7 @@ class Analyze():
         return N*(gamma+1)*(E**gamma) / (Emax**(gamma+1) - Emin**(gamma+1))
     
 
-    def make_butterfly(self,name):
+    def make_butterfly(self,name,fig_kwargs={},show_contour=False):
        
         """Calculate butterfly plot.
             
@@ -271,6 +271,10 @@ class Analyze():
         ----------
         name : str 
             name of input array (not including .npy). Note: this name is also used for output files.  
+        fig_kwargs : dict, optional
+            pass any kwargs to plt.gca().set()
+        show_contour : bool, optional
+            Sets contour region to zero, as sanity check (default is False).
         """
 	
         # Make print statement:
@@ -293,7 +297,7 @@ class Analyze():
         
         # Define flux and index.
         # Must be the same that was used to make the stacked array. 
-        flux_list = np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
+        flux_list = np.linspace(self.flux_min,self.flux_max,num=self.num_flux_bins,endpoint=True)
         flux_list = 10**flux_list
         index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
         
@@ -322,11 +326,12 @@ class Analyze():
         # Get indices within 1sigma contour:
         contour = np.where(this_array>=first)
         
-        # Test Method 1:
+        # Test Method:
         fig = plt.figure(figsize=(8,6))
         ax = plt.gca()
         plt.contour(flux_list,index_list,this_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=2*4.0)
-        #this_array[contour] = 0
+        if show_contour == True:
+            this_array[contour] = 0
         img = ax.pcolormesh(flux_list,index_list,this_array,cmap="inferno",vmin=0,vmax=max_value)
         ax.set_xscale('log')
         plt.xlabel("Flux [$\mathrm{ph \ cm^{-2} \ s^{-1}}$]",fontsize=12)
@@ -387,7 +392,7 @@ class Analyze():
         ax.tick_params(axis='both',which='minor',length=5)
         plt.xticks(fontsize=12)                        
         plt.yticks(fontsize=12)
-        plt.ylim(5e-16,5e-11)
+        ax.set(**fig_kwargs)
         plt.savefig(image_output,bbox_inches='tight')
         plt.show()
         plt.close()

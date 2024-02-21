@@ -240,9 +240,6 @@ class MakeStack(StackingAnalysis,Analyze):
         
         return
 
-    ###############
-    # Add Stacking:
-
     def combine_likelihood(self, exclusion_list, savefile):
 	
         """Make 2D TS profiles for each source and add to get stacked profile.
@@ -447,4 +444,115 @@ class MakeStack(StackingAnalysis,Analyze):
         # Return to home:
         os.chdir(self.home)
 		
-        return 	
+        return 
+
+    def evolution_plot(self, skip_rows, exclude_list=None, use_src_names=False):
+
+        """Plot max TS as a funtion of source.
+        
+        Parameters
+        ----------
+        skip_rows : list of ints
+            Rows to skip when readying txt file.
+        exlude_list : list of str, optional
+            Names of sources to exclude.
+        use_src_names : bool, optional
+            Option to use source names in x-axis of plot 
+            (default is False).
+        """
+
+	# Make print statement:
+        print()
+        print("Running evolution_plot...")
+        print()
+
+        name_file = os.path.join(self.home, "Preprocessed_Sources", 
+                "preprocessing_summary_" + self.run_name + ".txt")
+        df = pd.read_csv(name_file,sep='\s+',skiprows=skip_rows)
+        name_list = df["name"]
+        ts_list = df["TS"]
+
+        # Exclude sources:
+        if exclude_list != None:
+            keep_index = ~np.isin(name_list,exclude_list)
+            name_list = name_list[keep_index].tolist()
+            ts_list = ts_list[keep_index].tolist()
+
+        index_scan = np.arange(self.index_min,self.index_max,0.1)
+        flux_scan = np.linspace(self.flux_min,self.flux_max,num=41,endpoint=True)
+        flux_scan = 10**flux_scan
+
+        max_list = []
+        index_list = []
+        flux_list = []
+        name_plot_list = []
+        for s in range(0,len(name_list)):
+            index = len(name_list) - s - 1
+
+            # Load array:
+            this_name = name_list[index]
+
+            # Check that source name has not been changed:
+            if this_name not in self.sample_name_list:
+                print("WARNING: Name has been updated and will not be included: %s" %this_name)
+                continue
+    
+            plot_name = this_name		
+            this_file = "Add_Stacking/Numpy_Arrays/Individual_Sources/" + this_name + ".npy"
+            this_array = np.load(this_file)
+            name_plot_list.append(this_name)
+
+            # Add array
+            if s == 0:
+                total_array = this_array
+            if s > 0:
+                total_array = total_array + this_array
+
+            # Get best-fit values:
+            max_value = np.amax(total_array)
+	
+            ind = np.unravel_index(np.argmax(total_array,axis=None),total_array.shape)
+            best_index = ind[0]
+            best_flux = ind[1]
+
+            max_list.append(max_value)
+            index_list.append(index_scan[best_index])
+            flux_list.append(flux_scan[best_flux])
+
+
+        print() 
+        print("number of stacked sources: " + str(len(max_list)))
+        print()
+
+        # Plot
+        fig = plt.figure(figsize=(8,6))
+        ax = plt.gca()
+        
+        plot_range = np.arange(0,len(name_plot_list),1)
+
+        plt.plot(plot_range,max_list,marker='s',ls="--",ms=8,color="black",label="Max TS (for stack)")
+
+        plt.grid(color="grey",ls="-",alpha=0.5)
+        plt.yticks(fontsize=12)
+        plt.xticks(fontsize=12)
+
+        # Option to use source names for x axis:
+        if use_src_names == True:
+            ax.set_xticks(plot_range)
+            ax.set_xticklabels(ts_list,rotation=45,fontsize=12)
+            ax.set_xticklabels(name_list,rotation=45,fontsize=12)
+
+        ax.tick_params(axis='both',which='major',length=9)
+        ax.tick_params(axis='both',which='minor',length=5)
+        plt.xlabel("Number of Stacked Sources (TS ranked)", fontsize=14)
+        plt.ylabel("Max TS",fontsize=14,color="black")
+        ax.tick_params(axis='y',labelcolor="black")
+        plt.xlim(0,len(max_list)+10)
+
+        plt.tight_layout()
+
+        plt.savefig("Add_Stacking/Images/TS_evolution_full.pdf")
+        plt.show()	
+
+        return
+

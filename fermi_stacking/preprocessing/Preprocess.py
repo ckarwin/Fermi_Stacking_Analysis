@@ -162,6 +162,7 @@ class StackingAnalysis:
         self.JLA = inputs["JLA"]
         
         # Main analysis parameters:
+        self.run_name = inputs["run_name"]
         self.irfs = inputs["irfs"]
         self.emin = inputs["emin"]
         self.emax = inputs["emax"]
