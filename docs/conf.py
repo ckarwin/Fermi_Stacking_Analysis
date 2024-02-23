@@ -28,7 +28,7 @@ extensions = ['sphinx.ext.mathjax',
 
 
 autodoc_mock_imports = ['fermipy','pyLikelihood','BinnedAnalysis','IntegralUpperLimit',
-                        'UpperLimits','SummedLikelihood','scipy']
+                        'UpperLimits','SummedLikelihood','scipy','gt_apps']
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
