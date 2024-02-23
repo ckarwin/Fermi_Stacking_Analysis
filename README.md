@@ -7,10 +7,9 @@ This repository contains code for running a gamma-ray stacking analysis with Fer
 * Extragalactic background light [(link)](https://arxiv.org/pdf/1812.01031.pdf) <br />
 * Ultra-fast outflows [(link)](https://iopscience.iop.org/article/10.3847/1538-4357/ac1bb2) <br />
 * Molecular outflows [(link)](https://iopscience.iop.org/article/10.3847/1538-4357/acaf57) <br />
+* FRO radio galaxies [(link)](https://arxiv.org/abs/2310.19888) <br />
 
-The stacking analysis requires Fermipy, available [here](https://fermipy.readthedocs.io). <br />
-
-The stacking analysis is meant to be ran on a cluster. In particular, it has been developed using the Clemson University Palmetto Cluster. More information on the Palmetto Cluster can be found [here](https://www.palmetto.clemson.edu/palmetto/basic/started/).  <br />
+The stacking analysis requires Fermipy, available [here](https://fermipy.readthedocs.io), and it is meant to be ran on a cluster. <br />
 
 ## Installation
 Using pip 
