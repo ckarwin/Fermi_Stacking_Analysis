@@ -1,5 +1,5 @@
 Stacking
-=============
+========
 
 .. automodule:: fermi_stacking.stacking
    :imported-members:

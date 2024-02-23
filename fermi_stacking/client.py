@@ -1,5 +1,6 @@
 # Imports:
 from fermi_stacking.stacking.Stack import MakeStack
+from fermi_stacking.science_tools.BinnedAnalysis import MakeBinnedAnalysis
 import sys 
 
 def main(cmd_line):
@@ -21,16 +22,23 @@ def main(cmd_line):
 
     ###########################################
     # Uncomment below to run functions:
-    
+
+    # For pre-computed ltcube:
+    #binned_instance = MakeBinnedAnalysis("inputs.yaml")
+    #binned_instance.gtselect()
+    #binned_instance.maketime()
+    #binned_instance.expCube()
+
+    # Stacking routines:
     #instance.run_preprocessing(srcname,ra,dec)
     #instance.make_preprocessing_summary() 
     #instance.run_stacking(srcname,psf)
     #instance.combine_likelihood(exclusion_list,savefile)
     #instance.plot_final_array("name.png","name.npy")
+    #instance.evolution_plot([0,1],exclude_list=exclusion_list)
     #instance.make_butterfly(name)
     #instance.get_stack_UL95("name.npy")
     #instance.calc_upper_limit(srcname,emin,emax)
-
     ###########################################
 
 ########################

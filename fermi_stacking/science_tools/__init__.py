@@ -1,0 +1,1 @@
+from .BinnedAnalysis import MakeBinnedAnalysis

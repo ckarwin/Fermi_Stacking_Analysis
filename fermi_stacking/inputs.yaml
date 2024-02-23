@@ -31,6 +31,8 @@ JLA: False
 
 # Main LAT analysis parameters:
 irfs: 'P8R3_SOURCE_V3' # instrument response functions
+evclass: 128 # event class
+evtype: 3 # event type
 emin: 1000 # min energy [MeV] 
 emax: 800000 # max energy [MeV]
 tmin: 239557417 # min time [s]
@@ -54,4 +56,20 @@ delete_4fgl: False
 
 # Plotting:
 show_plots: True 
+
+# Science Tools:
+nxpix: 0 # Number of x pixels
+nypix: 0 # Number of y pixels
+xref: 0 # Center of roi (galactic longitude, l)
+yref: 0 # Center of roi (galactic latitude, b)
+binsz: 0 # Degrees per pixel
+coordsys: "NA" # Coordinate system (Galactic coordinates)
+enumbins: 0 # Number of energy bins
+proj: "NA" # Projection method
+reduced_x: 0 # Number of reduced x pixels, in accordance with ccube requirements
+reduced_y: 0 # Number of reduced y pixels, in accordance with ccube requirements
+path: "NA" # Path to data files
+ROI_RA: 266.405 # RA for ROI center; for data from NASA server use 'INDEF'
+ROI_DEC: -28.936 # DEC for ROI center; for data from NASA server use 'INDEF'
+ROI_radius: 180 # ROI radius; for data from NASA server use 'INDEF'
 #----------#

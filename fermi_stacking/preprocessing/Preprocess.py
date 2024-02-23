@@ -96,6 +96,10 @@ class StackingAnalysis:
         be performed. 
     irfs : str
         Name of LAT instrument response functions.
+    evclass : int
+        Event class, i.e. source, clean, etc.
+    evtype : int
+        Event type, i.e. back/front conversion, etc.
     emin : float or int
         Miminum energy of analysis in MeV. 
     emax : float or int
@@ -164,6 +168,8 @@ class StackingAnalysis:
         # Main analysis parameters:
         self.run_name = inputs["run_name"]
         self.irfs = inputs["irfs"]
+        self.evclass = inputs["evclass"]
+        self.evtype = inputs["evtype"]
         self.emin = inputs["emin"]
         self.emax = inputs["emax"]
         self.tmin = inputs["tmin"]
@@ -205,6 +211,22 @@ class StackingAnalysis:
         if self.file_type == "tab":
             df = pd.read_csv(self.sample_file, delim_whitespace=True)
             self.sample_name_list = df[self.column_name].tolist()
+
+        # Science Tools:
+        self.nxpix = inputs["nxpix"]
+        self.nypix = inputs["nypix"]
+        self.xref = inputs["xref"]
+        self.yref = inputs["yref"]
+        self.binsz = inputs["binsz"]
+        self.coordsys = inputs["coordsys"]
+        self.enumbins = inputs["enumbins"]
+        self.proj = inputs["proj"]
+        self.reduced_x = inputs["reduced_x"]
+        self.reduced_y = inputs["reduced_y"]
+        self.path = inputs["path"]
+        self.ROI_RA = inputs["ROI_RA"]
+        self.ROI_DEC = inputs["ROI_DEC"]
+        self.ROI_radius = inputs["ROI_radius"]
 
     def ang_sep(self,ra0, dec0, ra1, dec1):
        
@@ -321,8 +343,8 @@ class StackingAnalysis:
             yml.write("  radius : 15\n")
             yml.write("  tmin : %s\n" %self.tmin)
             yml.write("  tmax : %s\n" %self.tmax)
-            yml.write("  evclass : 128\n")
-            yml.write("  evtype : 3\n")
+            yml.write("  evclass : %s\n" %self.evclass)
+            yml.write("  evtype : %s\n" %self.evtype)
             yml.write("  filter : 'DATA_QUAL>0 && LAT_CONFIG==1'\n")
             yml.write("#--------#\n")
             yml.write("gtlike:\n")  

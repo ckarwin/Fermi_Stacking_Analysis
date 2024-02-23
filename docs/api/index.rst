@@ -11,4 +11,5 @@ API
    preprocessing
    stacking
    analyze_results
+   science_tools
 

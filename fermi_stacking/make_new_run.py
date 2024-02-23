@@ -7,7 +7,9 @@ def main():
 
     # Copy starting files to new analysis directory:
     new_dir = os.getcwd()
-    os.system("scp %s/inputs.yaml %s/client.py %s/submit_fermi_stacking_jobs.py %s" %(install_dir,install_dir,install_dir,new_dir))
+    os.system("scp %s/inputs.yaml %s/client.py 
+            %s/submit_fermi_stacking_jobs.py %/single_job.pbs %s" 
+            %(install_dir,install_dir,install_dir,new_dir))
 
 ########################
 if __name__=="__main__":
