@@ -9,8 +9,8 @@ API
    :caption: Contents:
 
 
-   analyze_results
    preprocessing
    stacking
+   analyze_results
    science_tools
 
