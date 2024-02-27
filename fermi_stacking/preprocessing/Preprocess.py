@@ -264,7 +264,7 @@ class StackingAnalysis:
         
         return np.arctan2(num, den) / C
 
-    def run_preprocessing(self,srcname,ra,dec):
+    def run_preprocessing(self,srcname,ra,dec,components=None):
        
         """Perform preprocessing of source.
 
@@ -276,6 +276,11 @@ class StackingAnalysis:
             Right ascension of source. 
         dec : float
             Declination of source. 
+        components : list of strings, optional
+            Specify components of analysis via a list, where each 
+            entry in the list is a line that is to be written in the 
+            yaml file. Must include new line command at the end of 
+            each line. 
         """
 
 	# Make print statement:
@@ -370,7 +375,7 @@ class StackingAnalysis:
             yml.write("  use_local_index : True\n")
 	        
             # Include components for joint likelihood analysis (JLA):
-            if self.JLA == True:
+            if self.JLA == True and components == None:
                 yml.write("components:\n")
                 yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V3_PSF0_v1.txt},\n")
                 yml.write("      selection : { evtype : 4 } }\n")
@@ -381,6 +386,19 @@ class StackingAnalysis:
                 yml.write("  - { model: {isodiff: iso_P8R3_SOURCE_V3_PSF3_v1.txt},\n")
                 yml.write("      selection : { evtype : 32 } }\n")
         
+            # Option to write components from list:
+            
+            # Require user to specify JLA = True when passing components:
+            if self.JLA == False and components != None:
+                print("ERROR: JLA must be True to pass component list.")
+                sys.exit()
+
+            # Read components from list:  
+            if self.JLA == True and components != None:
+                yml.write("components:\n")
+                for each in components:
+                    yml.write(each)
+
         yml.close()
 	
         gta = GTAnalysis('%s.yaml' % srcname,logging={'verbosity' : 3})
