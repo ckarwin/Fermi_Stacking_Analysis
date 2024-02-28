@@ -124,7 +124,7 @@ class Analyze():
         def plot_method_1():
             
             img = ax.pcolormesh(flux_list,index_list,summed_array,cmap="inferno",vmin=0,vmax=max_value)
-            plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=2*4.0)
+            plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),colors='limegreen',linestyles=["-.",'--',"-"], alpha=1,linewidths=2)
             plt.plot(best_flux,best_index,marker="+",ms=12,color="black")
             ax.set_xscale('log')
             plt.xticks(fontsize=16)
@@ -142,7 +142,7 @@ class Analyze():
             	        summed_array[i,j] = 0
             
             img = ax.contourf(flux_list,index_list,summed_array,100,cmap="inferno")
-            plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=4.0)
+            plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidths=4.0)
             plt.plot(best_flux,best_index,marker="+",ms=12,color="black")
             plt.yticks(fontsize=14)
             
@@ -152,7 +152,7 @@ class Analyze():
         def plot_method_3():
 
             img = ax.imshow(summed_array,origin="upper",cmap='inferno',vmin=0,vmax=max_value)
-            ax.contour(summed_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=4.0)
+            ax.contour(summed_array,levels = (third,second,first),colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidths=4.0)
 
             return img
         
@@ -227,14 +227,17 @@ class Analyze():
             	break
             if j == best_flux_value-1:
             	flux_sigma_lower = 0 #in this case the index is not constrained toward left of map
-                    
-        print() 
-        print("max TS: " + str(max_value) + "; sigma: " + str(sigma))
-        print("indices for max TS: " + str(ind))
-        print("Sanity check on indices: " + str(summed_array[ind]))
-        print("Best index: " + str(best_index) + ", Error:  +" + str(index_sigma_upper) + ", -" + str(index_sigma_lower))  
-        print("Best flux: " + str(best_flux)  + ", Error: +" + str(flux_sigma_upper) + ", -" + str(flux_sigma_lower))
-        print()
+        
+        try: 
+            print() 
+            print("max TS: " + str(max_value) + "; sigma: " + str(sigma))
+            print("indices for max TS: " + str(ind))
+            print("Sanity check on indices: " + str(summed_array[ind]))
+            print("Best index: " + str(best_index) + ", Error:  +" + str(index_sigma_upper) + ", -" + str(index_sigma_lower))  
+            print("Best flux: " + str(best_flux)  + ", Error: +" + str(flux_sigma_upper) + ", -" + str(flux_sigma_lower))
+            print()
+        except:
+            print("WARNING: Something wrong with bounds. Double check!")
         
         return
 

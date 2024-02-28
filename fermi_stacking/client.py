@@ -2,6 +2,8 @@
 from fermi_stacking.stacking.Stack import MakeStack
 from fermi_stacking.science_tools.BinnedAnalysis import MakeBinnedAnalysis
 import sys 
+import matplotlib
+matplotlib.use('TkAgg')
 
 def main(cmd_line):
 
