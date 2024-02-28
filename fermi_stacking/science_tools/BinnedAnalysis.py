@@ -6,8 +6,6 @@ import pyLikelihood
 from BinnedAnalysis import *
 import numpy as np
 #import pandas as pd
-import matplotlib 
-matplotlib.use('Agg') # Set the backend before importing pyplot; only for environments with no display
 import matplotlib.pyplot as plt
 import os
 from pylab import *

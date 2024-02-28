@@ -6,8 +6,6 @@ import random,shutil,yaml
 import os,sys
 from math import *
 import numpy as np
-import matplotlib 
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from fermipy.gtanalysis import GTAnalysis
 import gc
