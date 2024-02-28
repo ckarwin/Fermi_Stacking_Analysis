@@ -4,8 +4,7 @@ import os, sys
 import time 
 from astropy.io import fits
 import yaml
-
-this_run = int(sys.argv[1])
+import numpy as np
 
 # Load sample data from yaml file:
 with open("inputs.yaml","r") as file:
@@ -21,6 +20,13 @@ psf_low = inputs["psf_low"]
 psf_high = inputs["psf_high"]
 run_name = inputs["run_name"]
 job_type = inputs["job_type"]
+submission_type = inputs["submission_type"]
+
+# Specify submission type:
+if submission_type == "array":
+    this_run = int(sys.argv[1])
+if submission_type == "array-parallel":
+    this_run = int(sys.argv[1]) + int(sys.argv[2])
 
 if file_type == "fits":
     hdu = fits.open(this_file)
@@ -41,10 +47,15 @@ if file_type == "tab":
     ra_list = df[column_ra].tolist()
     dec_list = df[column_dec].tolist()
 
-# Specify which sources to run.
-# Set to name_list for full sample.
-if run_list == "default":
-    run_list = name_list
+# Specify which sources to run:
+if run_list != "default":
+    name_list = np.array(name_list)
+    ra_list = np.array(ra_list)
+    dec_list = np.array(dec_list)
+    run_index = np.isin(name_list,run_list)
+    name_list = name_list[run_index].tolist()
+    ra_list = ra_list[run_index].tolist()
+    dec_list = dec_list[run_index].tolist()
 
 # Get current working directory:
 this_dir = os.getcwd()

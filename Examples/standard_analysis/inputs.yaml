@@ -11,6 +11,7 @@ run_list: "default" # List of names to run (subsample of full sample). For full 
 psf_low: 0 # lower PSF iterator for JLA stacking (0-3). Default is 0 for standard analysis and preprocessing.
 psf_high: 1 # upper PSF iterator for JLA stacking (1-4). Default is 1 for standard analysis and preprocessing.
 run_name: "LLAGN" # main name of run.
+submission_type: "array" # for cluster submission: "array" or "array-parallel"
 job_type: "p" # for palmetto output files: "p" for preprocessing or "s" for stacking.
 
 # Main default inputs:
