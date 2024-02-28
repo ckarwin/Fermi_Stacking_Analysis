@@ -42,7 +42,7 @@ class Analyze():
             Name of image file to be saved. 
 	array : str
             Name of input array to plot. Must include ".npy".
-	use_index : bool, optional
+	use_index : float, optional
             Option to calculate flux for specified index (default is 
             best-fit index).
         """
