@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 # Setup:
 setup(
     name='fermi_stacking',
-    version="v0.1.2-alpha",
+    version="v0.1.3-alpha",
     url='https://github.com/ckarwin/Fermi_Stacking_Analysis.git',
     author='Chris Karwin',
     author_email='christopher.m.karwin@nasa.gov',

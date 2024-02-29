@@ -539,7 +539,7 @@ class Analyze():
         ul_emin : float
             Lower energy bound for UL calculation in MeV.
         ul_emax : float
-            Upper energy bound for UL calculation.
+            Upper energy bound for UL calculation in MeV.
         comp_list : list, optional
             List of components to add to the SummedLikelihood object 
             for the JLA (default is for typical JLA with 4 components). 
@@ -549,7 +549,11 @@ class Analyze():
         mult_lt : bool, optional
             If using lt cubes for each component, set to True (default is False, 
             for single lt cube. 
-	
+
+        Note 
+        ----
+        If getting 'IndexError', try moving the lower energy bound slightly below the bin. 
+
         Returns
         -------
         float, float
@@ -567,7 +571,7 @@ class Analyze():
                 if each > 9:
                     print("***ERROR***")
                     print("Looks like you have a complex analysis!")
-                    print("More than 9 components is not currently supported.")
+                    print("More than 10 components is not currently supported.")
                     print("You'll need to add more definitions to the source code.")
                     print()
                     sys.exit()
@@ -591,8 +595,8 @@ class Analyze():
         my_expCube = self.ltcube
         
         # Analysis selections (fixed for now):
-        irfs = "P8R3_SOURCE_V2"
-        optimizer = "Minuit" # Minuit or NewMinuit
+        irfs = self.irfs
+        optimizer = "NewMinuit" # Minuit or NewMinuit
         conf = BinnedConfig(edisp_bins=-1) #need to account for energy dispersion!
         
         if self.JLA == True:
