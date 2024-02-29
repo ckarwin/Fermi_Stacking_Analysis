@@ -529,6 +529,13 @@ class StackingAnalysis:
             xmlfile = 'output/fit_model_3_0%s.xml' %j
             savexml = 'output/null_likelihood_%s.xml'%j
             savetxt = 'output/null_likelihood_%s.txt' %j
+            
+            # Check for ltcube:
+            if os.path.isfile(self.ltcube) == False:
+                self.ltcube = 'output/ltcube_0%s.fits' %str(j)
+                if os.path.isfile(self.ltcube) == False:
+                    print("ERROR: no ltcube found.")
+                    sys.exit()
 
             obs = BinnedObs(srcMaps=srcmap,expCube=self.ltcube,binnedExpMap=bexpmap,irfs='%s' %self.irfs)
             like = BinnedAnalysis(obs,xmlfile,optimizer='Minuit') 

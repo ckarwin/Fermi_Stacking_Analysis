@@ -18,7 +18,13 @@ This package contains code for running a gamma-ray stacking analysis with Fermi-
 - `FR0 Radio galaxies <https://arxiv.org/abs/2310.19888>`_
 - `Dark matter searches <https://arxiv.org/abs/2311.04982>`_
 
-The stacking pipeline requires Fermipy (available `here <https://fermipy.readthedocs.io>`_), and it is meant to be run on a cluster.
+Requirements
+------------
+The stacking pipeline requires Fermipy (available `here <https://fermipy.readthedocs.io>`_), and it is meant to be run on a cluster. Specifically, the package is compatible with fermipy v1.2.2, which is based on fermitools v2.2.0, and uses python 3. 
+
+Getting Help
+------------
+For issues with the code please open an issue in github. For further assistance, please email Chris Karwin at christopher.m.karwin@nasa.gov. 
 
 Methodology
 -----------
@@ -32,3 +38,9 @@ The main assumption made with the stacking technique is that the source populati
    quickstart/quickstart
    api/index
 
+.. warning:: 
+While many features are already available, fermi-stacking is still actively under development. Note that the current releases are not stable and various components can be modified or deprecated shortly.
+
+Contributing
+------------
+This library is open source and anyone can contribute. If you have code you would like to contribute, please fork the repository and open a pull request. 
