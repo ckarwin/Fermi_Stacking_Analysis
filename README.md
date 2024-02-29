@@ -11,6 +11,12 @@ This repository contains code for running a gamma-ray stacking analysis with Fer
 
 The stacking analysis requires Fermipy, available [here](https://fermipy.readthedocs.io), and it is meant to be ran on a cluster. <br />
 
+## Methodology 
+The main assumption made with the stacking technique is that the source population can be characterized by average quantities, such as average flux and spectral index. Of course other parameters can also be stacked. 2D TS profiles are then constructed for each source using a binned likelihood analysis, and the individual profiles are summed to obtain the global significance of the signal. See above references for more details.
+
+## Documentation
+Documentation can be found here: https://fermi-stacking-analysis.readthedocs.io/en/latest/
+
 ## Installation
 Using pip 
 ```
@@ -22,12 +28,6 @@ git clone https://github.com/ckarwin/Fermi_Stacking_Analysis.git
 cd Fermi_Stacking_Analysis
 pip install -e .
 ```
-
-## Documentation
-Documentation can be found here: https://fermi-stacking-analysis.readthedocs.io/en/latest/
-
-## Methodology 
-The main assumption made with the stacking technique is that the source population can be characterized by average quantities, such as average flux and spectral index. Of course other parameters can also be stacked. 2D TS profiles are then constructed for each source using a binned likelihood analysis, and the individual profiles are summed to obtain the global significance of the signal. See above references for more details.  
 
 ## Quickstart Guide <br /> 
 <pre>
