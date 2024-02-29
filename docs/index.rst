@@ -18,6 +18,10 @@ This package contains code for running a gamma-ray stacking analysis with Fermi-
 - `FR0 Radio galaxies <https://arxiv.org/abs/2310.19888>`_
 - `Dark matter searches <https://arxiv.org/abs/2311.04982>`_
 
+Methodology
+-----------
+The main assumption made with the stacking technique is that the source population can be characterized by average quantities, such as average flux and spectral index. Other parameters can also be stacked. 2D test statistic (TS) profiles are then constructed for each source using a binned likelihood analysis, and the individual profiles are summed to obtain the total significance of the signal. See above references for more details.
+
 Requirements
 ------------
 The stacking pipeline requires Fermipy (available `here <https://fermipy.readthedocs.io>`_), and it is meant to be run on a cluster. Specifically, the package is compatible with fermipy v1.2.2, which is based on fermitools v2.2.0, and uses python 3. 
@@ -32,10 +36,6 @@ For issues with the code please open an issue in github. For further assistance,
 Contributing
 ------------
 This library is open source and anyone can contribute. If you have code you would like to contribute, please fork the repository and open a pull request. 
-
-Methodology
------------
-The main assumption made with the stacking technique is that the source population can be characterized by average quantities, such as average flux and spectral index. Other parameters can also be stacked. 2D test statistic (TS) profiles are then constructed for each source using a binned likelihood analysis, and the individual profiles are summed to obtain the total significance of the signal. See above references for more details.
 
 .. toctree::
    :maxdepth: 2
