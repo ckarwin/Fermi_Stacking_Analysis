@@ -9,10 +9,11 @@ This repository contains code for running a gamma-ray stacking analysis with Fer
 * Molecular outflows [(link)](https://iopscience.iop.org/article/10.3847/1538-4357/acaf57) <br />
 * FRO radio galaxies [(link)](https://arxiv.org/abs/2310.19888) <br />
 
-The stacking analysis requires Fermipy, available [here](https://fermipy.readthedocs.io), and it is meant to be ran on a cluster. <br />
-
 ## Methodology 
 The main assumption made with the stacking technique is that the source population can be characterized by average quantities, such as average flux and spectral index. Of course other parameters can also be stacked. 2D TS profiles are then constructed for each source using a binned likelihood analysis, and the individual profiles are summed to obtain the global significance of the signal. See above references for more details.
+
+## Requirements
+The stacking analysis requires Fermipy, available [here](https://fermipy.readthedocs.io), and it is meant to be ran on a cluster. <br />
 
 ## Documentation
 Documentation can be found here: https://fermi-stacking-analysis.readthedocs.io/en/latest/
