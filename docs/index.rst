@@ -38,8 +38,8 @@ The main assumption made with the stacking technique is that the source populati
    quickstart/quickstart
    api/index
 
-.. warning:: 
-While many features are already available, fermi-stacking is still actively under development. Note that the current releases are not stable and various components can be modified or deprecated shortly.
+.. warning::
+   While many features are already available, fermi-stacking is still actively under development. Note that the current releases are not stable and various components can be modified or deprecated shortly.
 
 Contributing
 ------------
