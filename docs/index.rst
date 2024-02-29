@@ -26,6 +26,13 @@ Getting Help
 ------------
 For issues with the code please open an issue in github. For further assistance, please email Chris Karwin at christopher.m.karwin@nasa.gov. 
 
+.. warning::
+   While many features are already available, fermi-stacking is still actively under development. Note that the current releases are not stable and various components can be modified or deprecated shortly.
+
+Contributing
+------------
+This library is open source and anyone can contribute. If you have code you would like to contribute, please fork the repository and open a pull request. 
+
 Methodology
 -----------
 The main assumption made with the stacking technique is that the source population can be characterized by average quantities, such as average flux and spectral index. Other parameters can also be stacked. 2D test statistic (TS) profiles are then constructed for each source using a binned likelihood analysis, and the individual profiles are summed to obtain the total significance of the signal. See above references for more details.
@@ -37,10 +44,3 @@ The main assumption made with the stacking technique is that the source populati
    install
    quickstart/quickstart
    api/index
-
-.. warning::
-   While many features are already available, fermi-stacking is still actively under development. Note that the current releases are not stable and various components can be modified or deprecated shortly.
-
-Contributing
-------------
-This library is open source and anyone can contribute. If you have code you would like to contribute, please fork the repository and open a pull request. 
