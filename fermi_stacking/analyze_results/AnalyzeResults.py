@@ -122,7 +122,8 @@ class Analyze():
         def plot_method_1():
             
             img = ax.pcolormesh(flux_list,index_list,summed_array,cmap="inferno",vmin=0,vmax=max_value)
-            plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),colors='limegreen',linestyles=["-.",'--',"-"], alpha=1,linewidths=2)
+            plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),
+                    colors='limegreen',linestyles=["-.",'--',"-"], alpha=1,linewidths=2)
             plt.plot(best_flux,best_index,marker="+",ms=12,color="black")
             ax.set_xscale('log')
             plt.xticks(fontsize=16)

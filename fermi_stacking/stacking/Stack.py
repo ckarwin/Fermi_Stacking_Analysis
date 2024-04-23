@@ -295,7 +295,7 @@ class MakeStack(StackingAnalysis,Analyze):
                     print('Does not exist: ' + srcname)
                     print()
 
-                if srcname not in exclusion_list and os.path.exists(lielihood_dir) == True and os.path.exists(stacking_dir) == True:
+                if srcname not in exclusion_list and os.path.exists(likelihood_dir) == True and os.path.exists(stacking_dir) == True:
 				
                     os.chdir(stacking_dir)
 	            
