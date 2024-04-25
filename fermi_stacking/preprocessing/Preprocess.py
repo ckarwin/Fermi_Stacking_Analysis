@@ -181,6 +181,16 @@ class StackingAnalysis:
         self.flux_max = inputs["flux_max"]
         self.num_flux_bins = inputs["num_flux_bins"]
 
+        # Parameters for alpha-beta stack
+        self.alpha_low = inputs["alpha_low"]
+        self.alpha_high = inputs["alpha_high"]
+        self.alpha_step = inputs["alpha_step"]
+        self.beta_low = inputs["beta_low"]
+        self.beta_high = inputs["beta_high"]
+        self.beta_step = inputs["beta_step"]
+        self.alpha_range = np.arange(self.alpha_low,self.alpha_high,self.alpha_step)
+        self.beta_range = np.arange(self.beta_low,self.beta_high,self.beta_step)
+
         # Option to run 4FGL sources:
         # Note: If True, must provide "remove_list.csv" file in run directory, with col1=sample_name, col2=4fgl_name, and no header.
         self.delete_4fgl = inputs["delete_4fgl"]

@@ -47,6 +47,14 @@ flux_min: -13.0 # power of min flux for stacking scan (float)
 flux_max: -9.0 # power of max flux for stacking scan (float)
 num_flux_bins: 40 # number of flux bins to use (int)
 
+# Main scanning inputs for alpha-beta:
+alpha_low: 0  # Lower bound of alpha range
+alpha_high: 1.5 # Upper bound of alpha range (non-inclusive)
+alpha_step: 0.1 # Step size of alpha list
+beta_low: 38 # Lower bound of beta range
+beta_high: 40 # Upper bound of beta range (non-inclusive)
+beta_step: 0.1 # step size of beta list
+
 # Additional Options:
 calc_sed: False # calculate SED
 sed_logEbins: [ 3., 3.50489,4.00976999,4.51466001,5.01953999,5.52443,5.90308999] # log of energy bins

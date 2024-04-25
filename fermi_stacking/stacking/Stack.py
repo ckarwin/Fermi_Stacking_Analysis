@@ -52,7 +52,7 @@ class MakeStack(StackingAnalysis,Analyze):
         Fit : BinnedAnalysis.  
         """
 
-        Fit[name].funcs['Spectrum'].getParam('Integral').setBounds(1e-17,1e7)
+        Fit[name].funcs['Spectrum'].getParam('Integral').setBounds(1e-50,1e100)
         Fit[name].funcs['Spectrum'].getParam('Integral').setScale(1.0)
         Fit[name].funcs['Spectrum'].getParam('Integral').setValue(1.0)
         Fit[name].funcs['Spectrum'].getParam('Integral').setFree(False)
@@ -161,7 +161,7 @@ class MakeStack(StackingAnalysis,Analyze):
         shutil.copy2('%s/bexpmap_0%s.fits' %(indir,PSF), 'bexpmap_0%s.fits' %PSF)
         shutil.copy2('%s/fit_model_3_0%s.xml' %(indir,PSF), 'fit_model_3_0%s.xml' %PSF)
 	
-        obs = BinnedObs(srcMaps='srcmap_0%s.fits' %PSF,expCube=self.ltcube,binnedExpMap='bexpmap_0%s.fits' %PSF,irfs='P8R3_SOURCE_V2')
+        obs = BinnedObs(srcMaps='srcmap_0%s.fits' %PSF,expCube=self.ltcube,binnedExpMap='bexpmap_0%s.fits' %PSF,irfs=self.irfs)
 	
         # Define index range for scan:
         index = -1.0*np.arange(self.index_min,self.index_max+0.1,0.1)
@@ -180,7 +180,7 @@ class MakeStack(StackingAnalysis,Analyze):
             Flux=[]
             Index=[]
 
-            # Define flux range for scane:
+            # Define flux range for scan:
             flux=np.linspace(self.flux_min,self.flux_max,num=self.num_flux_bins,endpoint=True)
 		
             for j in range(len(flux)):
@@ -453,7 +453,7 @@ class MakeStack(StackingAnalysis,Analyze):
         Parameters
         ----------
         skip_rows : list of ints
-            Rows to skip when readying txt file.
+            Rows to skip when reading txt file.
         exlude_list : list of str, optional
             Names of sources to exclude.
         use_src_names : bool, optional

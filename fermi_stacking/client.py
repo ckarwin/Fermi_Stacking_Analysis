@@ -1,6 +1,7 @@
 # Imports:
 from fermi_stacking.stacking.Stack import MakeStack
 from fermi_stacking.science_tools.BinnedAnalysis import MakeBinnedAnalysis
+from fermi_stacking.stacking.AlphaBeta import MakeAlphaBeta
 import sys 
 
 def main(cmd_line):
@@ -29,7 +30,7 @@ def main(cmd_line):
     #binned_instance.maketime()
     #binned_instance.expCube()
 
-    # Stacking routines:
+    # Standard Stacking routines:
     #instance.run_preprocessing(srcname,ra,dec)
     #instance.make_preprocessing_summary() 
     #instance.run_stacking(srcname,psf)
@@ -39,6 +40,12 @@ def main(cmd_line):
     #instance.make_butterfly(name)
     #instance.get_stack_UL95("name.npy")
     #instance.calc_upper_limit(srcname,emin,emax)
+    
+    # Alpha-Beta stacking:
+    #instance = MakeAlphaBeta("inputs.yaml")
+    #instance.alpha_beta_data(index, name_list, d_list, lum_list)
+    #instance.interpolate_array_alpha_beta("run_name")
+    #instance.run_stacking(srcname,psf)
     ###########################################
 
 ########################
