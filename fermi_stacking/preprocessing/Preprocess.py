@@ -119,7 +119,19 @@ class StackingAnalysis:
     flux_max : float
         Power of max flux for stacking scan.
     num_flux_bins : int
-        Number of flux bins to use.
+        Number of flux bins to use. 
+    alpha_low : float
+        Lower bound of alpha range. 
+    alpha_high : float
+        Upper bound of alpha range.
+    alpha_step : float
+        Step size of alpha list
+    beta_low : float
+        Log of Lower bound of beta range,
+    beta_high : float
+        Log of Upper bound of beta range (non-inclusive)
+    beta_step : float
+        step size of beta list
     calc_sed : bool
         If True will calculate SED. 
     sed_logEbins : list

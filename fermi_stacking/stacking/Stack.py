@@ -240,7 +240,8 @@ class MakeStack(StackingAnalysis,Analyze):
         
         return
 
-    def combine_likelihood(self, exclusion_list, savefile):
+    def combine_likelihood(self, exclusion_list, savefile, \
+            stack_mode="flux_index", likelihood_home="default"):
 	
         """Make 2D TS profiles for each source and add to get stacked profile.
 
@@ -251,6 +252,12 @@ class MakeStack(StackingAnalysis,Analyze):
 	Savefile : str
             Prefix of array to be saved. Do not include ".npy" at the 
             end of the name; it's already included.
+        stack_mode : str, optional
+            Type of stacking being performed. Default is flux_index. 
+            Other option is alpha_beta. 
+        likelihood_home : str, optional
+            Full path to run directory of preprocessing, where null
+            likelihood has been calculated (default is current working directory).
         """
         
         # Make print statement:
@@ -275,6 +282,10 @@ class MakeStack(StackingAnalysis,Analyze):
         if os.path.exists(image_main_dir) == False:
             os.system("mkdir %s" %image_main_dir)
 
+        # Define default likelihood directory:
+        if likelihood_home == "default":
+            likelihood_home = self.home
+
         if self.JLA == False:
 
 	    # Define counters and lists:
@@ -287,7 +298,7 @@ class MakeStack(StackingAnalysis,Analyze):
 			
                 srcname = self.sample_name_list[s]
 
-                likelihood_dir = os.path.join(self.home,"Preprocessed_Sources",srcname,"output/null_likelihood_0.txt")
+                likelihood_dir = os.path.join(likelihood_home,"Preprocessed_Sources",srcname,"output/null_likelihood_0.txt")
                 stacking_dir = os.path.join(self.home,"Stacked_Sources",srcname)
 	
                 if os.path.exists(stacking_dir) == False or os.path.exists(likelihood_dir) == False:
@@ -304,10 +315,15 @@ class MakeStack(StackingAnalysis,Analyze):
                     array_list = []
     
                     # Define index list of scan:
-                    index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
-                    index_list = np.around(index_list,decimals=1)
-                    index_list = index_list.tolist()
-            
+                    if stack_mode == "flux_index":
+                        index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
+                        index_list = np.around(index_list,decimals=1)
+                        index_list = index_list.tolist()
+                    if stack_mode == "alpha_beta":
+                        # Index implies alpha.
+                        # Flux implies beta.
+                        index_list = self.alpha_beta
+
                     # Read null likelihood:
                     f = open(likelihood_dir,'r')
                     lines = f.readlines()
@@ -370,7 +386,7 @@ class MakeStack(StackingAnalysis,Analyze):
                 for j in [0,1,2,3]:
             
                     likelihood_dir = "Preprocessed_Sources/%s/output/null_likelihood_%s.txt" %(srcname,str(j))
-                    likelihood_dir = os.path.join(self.home,likelihood_dir)
+                    likelihood_dir = os.path.join(likelihood_home,likelihood_dir)
                     stacking_dir = "Stacked_Sources/Likelihood_%s/%s" %(str(j),srcname)
                     stacking_dir = os.path.join(self.home,stacking_dir)
 
@@ -387,10 +403,13 @@ class MakeStack(StackingAnalysis,Analyze):
                         array_list = []
 
                         # Define index list of scan:
-                        index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
-                        index_list = np.around(index_list,decimals=1)
-                        index_list = index_list.tolist()
-                        
+                        if stack_mode == "flux_index":
+                            index_list = np.arange(self.index_min,self.index_max+0.1,0.1)
+                            index_list = np.around(index_list,decimals=1)
+                            index_list = index_list.tolist()
+                        if stack_mode == "alpha_beta":
+                            index_list = self.alpha_range
+
                         # Read null likelihood:
                         f = open(likelihood_dir,'r')
                         lines = f.readlines()
@@ -446,19 +465,32 @@ class MakeStack(StackingAnalysis,Analyze):
 		
         return 
 
-    def evolution_plot(self, skip_rows, exclude_list=None, use_src_names=False):
+    def evolution_plot(self, skip_rows, savefile, preprocess_home="default",\
+            exclude_list=None, use_src_names=False, stack_mode="flux_index",\
+            show_index=False, show_flux=False):
 
         """Plot max TS as a funtion of source.
         
         Parameters
         ----------
-        skip_rows : list of ints
-            Rows to skip when reading txt file.
+        skip_rows : list
+            List of rows to skip when reading preprocessing summary.
+        savefile : str
+            Prefix of output image. 
+        preprocess_home : str, optional
+            Full path to run directory of preprocessing.
         exlude_list : list of str, optional
             Names of sources to exclude.
         use_src_names : bool, optional
             Option to use source names in x-axis of plot 
             (default is False).
+        stack_mode : str, optional
+            Stacking mode to use. Default is flux_index. The other 
+            option is alpha_beta.
+        show_index : bool, optional
+            Show index evolution (default is False).
+        show_flux : bool, optional
+            Show flux evolution (default is False).
         """
 
 	# Make print statement:
@@ -466,7 +498,11 @@ class MakeStack(StackingAnalysis,Analyze):
         print("Running evolution_plot...")
         print()
 
-        name_file = os.path.join(self.home, "Preprocessed_Sources", 
+        # Define default preprocessing home:
+        if preprocess_home == "default":
+            preprocess_home = self.home
+
+        name_file = os.path.join(preprocess_home, "Preprocessed_Sources", 
                 "preprocessing_summary_" + self.run_name + ".txt")
         df = pd.read_csv(name_file,sep='\s+',skiprows=skip_rows)
         name_list = df["name"]
@@ -478,9 +514,14 @@ class MakeStack(StackingAnalysis,Analyze):
             name_list = name_list[keep_index].tolist()
             ts_list = ts_list[keep_index].tolist()
 
-        index_scan = np.arange(self.index_min,self.index_max,0.1)
-        flux_scan = np.linspace(self.flux_min,self.flux_max,num=41,endpoint=True)
-        flux_scan = 10**flux_scan
+        if stack_mode == "flux_index":
+            index_scan = np.arange(self.index_min,self.index_max,0.1)
+            flux_scan = np.linspace(self.flux_min,self.flux_max,num=41,endpoint=True)
+            flux_scan = 10**flux_scan
+        
+        if stack_mode == "alpha_beta":
+            index_scan = self.alpha_range
+            flux_scan = self.beta_range
 
         max_list = []
         index_list = []
@@ -499,6 +540,9 @@ class MakeStack(StackingAnalysis,Analyze):
     
             plot_name = this_name		
             this_file = "Add_Stacking/Numpy_Arrays/Individual_Sources/" + this_name + ".npy"
+            if os.path.exists(this_file) == False:
+                print("WARNING: File does not exists: %s" %this_file)
+                continue 
             this_array = np.load(this_file)
             name_plot_list.append(this_name)
 
@@ -530,7 +574,7 @@ class MakeStack(StackingAnalysis,Analyze):
         
         plot_range = np.arange(0,len(name_plot_list),1)
 
-        plt.plot(plot_range,max_list,marker='s',ls="--",ms=8,color="black",label="Max TS (for stack)")
+        plt.plot(plot_range,max_list,marker='s',ls="--",ms=8,color="black",zorder=10,label="Max TS (for stack)")
 
         plt.grid(color="grey",ls="-",alpha=0.5)
         plt.yticks(fontsize=12)
@@ -549,9 +593,34 @@ class MakeStack(StackingAnalysis,Analyze):
         ax.tick_params(axis='y',labelcolor="black")
         plt.xlim(0,len(max_list)+10)
 
+        # Plot second twin axis:
+        if show_index == True:
+            ax2 = ax.twinx()
+            ax2.plot(plot_range,index_list,marker='^',ls="-",ms=10,color="blue",alpha=0.6,label="Spectral Index")
+            ax2.tick_params(axis='y',labelcolor="blue")
+            if stack_mode == "flux_index":
+                plt.ylabel("Index",fontsize=16,color="blue")
+            if stack_mode == "alpha_beta":
+                plt.ylabel("Alpha",fontsize=16,color="blue")
+            plt.yticks(fontsize=12)
+        
+        # Plot third twin axis:
+        if show_flux == True:
+            ax3 = ax.twinx()
+            ax3.plot(plot_range,flux_list,marker='o',ls="-",ms=10,color="darkorange",alpha=0.6,label="Flux")
+            ax3.tick_params(axis='y',labelcolor="darkorange")
+            if stack_mode == "flux_index":
+                plt.ylabel("flux [$\mathrm{ph \ cm^{-2} \ s^{-1}}$]",fontsize=16,color="darkorange")
+            if stack_mode == "alpha_beta":
+                plt.ylabel("Beta",fontsize=16,color="darkorange")
+            plt.yticks(fontsize=12)
+            # Offset axis if also showing index:
+            if show_index == True:
+                ax3.spines.right.set_position(("axes", 1.2))
+
         plt.tight_layout()
 
-        plt.savefig("Add_Stacking/Images/TS_evolution_full.pdf")
+        plt.savefig("Add_Stacking/Images/%s.pdf" %savefile)
         plt.show()	
 
         return

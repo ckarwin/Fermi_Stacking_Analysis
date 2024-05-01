@@ -45,7 +45,11 @@ def main(cmd_line):
     #instance = MakeAlphaBeta("inputs.yaml")
     #instance.alpha_beta_data(index, name_list, d_list, lum_list)
     #instance.interpolate_array_alpha_beta("run_name")
-    #instance.run_stacking(srcname,psf)
+    #instance.run_stacking(srcname,psf,indir=preproceesing_dir)
+    #instance.combine_likelihood(exclusion_list,"full_sample",\
+    #        stack_mode="alpha_beta",likelihood_home=likelihood_dir)
+    #instance.plot_final_array("full_sample.png","full_sample.npy",\
+    #        stack_mode="alpha_beta")
     ###########################################
 
 ########################

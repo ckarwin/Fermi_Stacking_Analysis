@@ -144,82 +144,9 @@ class MakeAlphaBeta(MakeStack):
         print("Number of sources in total array: %s" %str(counter))
 
         # Save total array:
-        array_savefile = "Add_Stacking/Numpy_Arrays/" + savefile + "_total"
+        array_savefile = "Add_Stacking/Numpy_Arrays/" + savefile 
         np.save(array_savefile,self.total_array)
-
-        # Plot:
-        image_name = savefile + ".png"
-        self.plot_alpha_beta(array_savefile + ".npy",image_name)
         
-        return
-
-    def plot_alpha_beta(self, input_array, savefile, plot_method=1):
-
-        """Make plot of alpha-beta stack.
-        
-        Parameters
-        ----------
-        input_array : array
-            Input alpha-beta array to plot.
-        savefile : str
-            Name of output image.
-        plot_method : int, optional
-            Method for plotting, either 1 or 2 (default is 1).
-        """
-
-        ax = plt.gca()
-                
-        # Load array and Transpose to put alpha on y-axis:
-        input_array = np.load(input_array)
-        input_array = input_array.T
-
-        # Get max:
-        max_value = np.amax(input_array)
-
-        # Method 1:
-        if plot_method == 1:
-            img = ax.pcolormesh(self.beta_range,self.alpha_range,input_array,cmap="inferno",vmin=0,vmax=max_value)
-                   
-        # Method 2: 
-        if plot_method == 2:
-            # Clip the array at zero for visualization purposes:
-            for i in range(0,input_array.shape[0]):
-                for j in range(0,input_array.shape[1]):
-                    if input_array[i,j] < 0:
-                        input_array[i,j] = 0
-            img = ax.contourf(self.beta_range,self.alpha_range,input_array,100,cmap="inferno")
-		
-        # Significane contours for dof=2:
-        first = max_value - 2.3 # 0.68 level
-        second = max_value - 4.61 # 0.90 level
-        third =  max_value - 9.21 # 0.99 level
-
-        # Find indices for max values:
-        ind = np.unravel_index(np.argmax(input_array,axis=None),input_array.shape)
-        best_alpha_value = ind[0]
-        best_beta_value = ind[1]
-
-        best_alpha = self.alpha_range[ind[0]]
-        best_beta = self.beta_range[ind[1]]
-                    
-        plt.contour(self.beta_range,self.alpha_range,input_array,levels = (third,second,first),
-                colors='black',linestyles=["-.",'--',"-"], alpha=1,linewidth=4.0)
-        plt.plot(best_beta,best_alpha,marker="+",ms=12,color="black")
-
-        cbar = plt.colorbar(img,fraction=0.045)
-        plt.xlabel("Beta")
-        plt.ylabel("Alpha")
-        ax.set_aspect('auto')
-        plt.savefig("Add_Stacking/Images/%s" %savefile)
-        plt.show()
-        plt.close()
-       
-        print()
-        print("max TS: %s" %str(max_value))
-        print("Best alpha: %s" %str(best_alpha))
-        print("Best beta: %s" %str(best_beta))
-        print()
-
         return
 
     def run_stacking(self, srcname, PSF, indir="default"): 

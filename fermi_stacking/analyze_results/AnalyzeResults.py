@@ -27,12 +27,13 @@ from IntegralUpperLimit import calc_int
 from UpperLimits import UpperLimits
 from SummedLikelihood import *
 from astropy.io import fits
+from matplotlib.ticker import FormatStrFormatter
 
 class Analyze():    
     
     """Analyzes stacked results."""
 
-    def plot_final_array(self,savefig,array,use_index="default"):
+    def plot_final_array(self,savefig,array,use_index="default",stack_mode="flux_index"):
 
         """Plots the stacked profile.
 	 
@@ -45,6 +46,9 @@ class Analyze():
 	use_index : float, optional
             Option to calculate flux for specified index (default is 
             best-fit index).
+        stack_mode : str, optional
+            Mode of stacking. Default is flux_index. Other options are
+            alpha_beta or alpha_beta_interp. 
         """
         
         # Make print statement:
@@ -71,7 +75,9 @@ class Analyze():
         
         # Upload summed array:
         summed_array = np.load(array_file)
-        
+        if stack_mode == "alpha_beta_interp":
+            summed_array = summed_array.T
+
         # Get min and max:
         max_value = np.amax(summed_array)
         min_value = np.amin(summed_array)
@@ -91,12 +97,18 @@ class Analyze():
         best_flux_value = ind[1]
         
         # Get best index:
-        index_list = np.arange(self.index_min,self.index_max+0.1,0.1)     
+        if stack_mode == "flux_index":
+            index_list = np.arange(self.index_min,self.index_max+0.1,0.1)     
+        if stack_mode in ["alpha_beta","alpha_beta_interp"]:
+            index_list = self.alpha_range
         best_index = index_list[ind[0]]
         
         # Get best flux:
-        flux_list=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
-        flux_list = 10**flux_list 
+        if stack_mode == "flux_index":
+            flux_list=np.linspace(self.flux_min,self.flux_max,num=40,endpoint=True)
+            flux_list = 10**flux_list 
+        if stack_mode in ["alpha_beta","alpha_beta_interp"]:
+            flux_list = self.beta_range
         best_flux = flux_list[ind[1]]
         
         # Option to calculate flux for specified index:
@@ -125,7 +137,8 @@ class Analyze():
             plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),
                     colors='limegreen',linestyles=["-.",'--',"-"], alpha=1,linewidths=2)
             plt.plot(best_flux,best_index,marker="+",ms=12,color="black")
-            ax.set_xscale('log')
+            if stack_mode == "flux_index":
+                ax.set_xscale('log')
             plt.xticks(fontsize=16)
             plt.yticks(fontsize=16)
             
@@ -163,8 +176,12 @@ class Analyze():
         cbar.set_label("TS",size=16,labelpad=12)
         cbar.ax.tick_params(labelsize=12)
         
-        plt.ylabel('Photon Index',fontsize=22)
-        plt.xlabel(r'$\mathregular{\gamma}$-Ray Flux [ph $\mathrm{cm^2}$  s$\mathregular{^{-1}}$]',fontsize=22) #for flux
+        if stack_mode == "flux_index":
+            plt.ylabel('Photon Index',fontsize=22)
+            plt.xlabel(r'$\mathregular{\gamma}$-Ray Flux [ph $\mathrm{cm^2}$  s$\mathregular{^{-1}}$]',fontsize=22)
+        if stack_mode in ["alpha_beta","alpha_beta_interp"]:
+            plt.ylabel(r"$\alpha$",fontsize=22)
+            plt.xlabel(r"$\beta$",fontsize=22)
         ax.set_aspect('auto')
         ax.tick_params(axis='both',which='major',length=9)
         ax.tick_params(axis='both',which='minor',length=5)
