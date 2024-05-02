@@ -1,7 +1,7 @@
 Installation
 ============
 
-The stacking analysis requires Fermipy. 
+The stacking analysis requires Fermipy v1.2. . 
 
 Using pip
 ---------
