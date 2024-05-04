@@ -515,8 +515,8 @@ class MakeStack(StackingAnalysis,Analyze):
             ts_list = ts_list[keep_index].tolist()
 
         if stack_mode == "flux_index":
-            index_scan = np.arange(self.index_min,self.index_max,0.1)
-            flux_scan = np.linspace(self.flux_min,self.flux_max,num=41,endpoint=True)
+            index_scan = np.arange(self.index_min,self.index_max+0.1,0.1)
+            flux_scan = np.linspace(self.flux_min,self.flux_max,num=self.num_flux_bins,endpoint=True)
             flux_scan = 10**flux_scan
         
         if stack_mode == "alpha_beta":
@@ -619,7 +619,6 @@ class MakeStack(StackingAnalysis,Analyze):
                 ax3.spines.right.set_position(("axes", 1.2))
 
         plt.tight_layout()
-
         plt.savefig("Add_Stacking/Images/%s.pdf" %savefile)
         plt.show()	
 
