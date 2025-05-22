@@ -44,3 +44,6 @@ pip install -e .
  - To submit batch jobs: batch script templates are provided for both SLURM and PBS.
  - To run from terminal: python client.py
 </pre>
+
+## Citing 
+If you make use of this library in a publication, please provide a link to this page and cite [Paliya+19](https://arxiv.org/pdf/1908.02496.pdf), [Ajello+21](https://iopscience.iop.org/article/10.3847/1538-4357/ac1bb2), and the zenodo release: https://zenodo.org/records/15485037. 
