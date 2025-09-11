@@ -18,7 +18,6 @@ from scipy.stats import norm
 import matplotlib.mlab as mlab
 from scipy.ndimage.filters import gaussian_filter
 from astropy.convolution import convolve, Gaussian2DKernel
-from matplotlib.cm import register_cmap
 from scipy import stats, interpolate, optimize
 from matplotlib import ticker, cm
 from scipy.stats.contingency import margins
