@@ -6,7 +6,7 @@ from math import *
 
 
 from scipy.integrate import romberg,quad
-from scipy import sqrt as SQRT
+from numpy import sqrt as SQRT
 
 from array import *
 

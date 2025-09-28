@@ -134,7 +134,7 @@ class Analyze():
             
             img = ax.pcolormesh(flux_list,index_list,summed_array,cmap="inferno",vmin=0,vmax=max_value)
             plt.contour(flux_list,index_list,summed_array,levels = (third,second,first),
-                    colors='limegreen',linestyles=["-.",'--',"-"], alpha=1,linewidths=2)
+                    colors=['black','black','black'],linestyles=["-.",'--',"-"], alpha=1,linewidths=2)
             plt.plot(best_flux,best_index,marker="+",ms=12,color="black")
             if stack_mode == "flux_index":
                 ax.set_xscale('log')
@@ -172,8 +172,8 @@ class Analyze():
         
         # Plot colorbar
         cbar = plt.colorbar(img,fraction=0.045)
-        cbar.set_label("TS",size=16,labelpad=12)
-        cbar.ax.tick_params(labelsize=12)
+        cbar.set_label("TS",size=22,labelpad=12)
+        cbar.ax.tick_params(labelsize=16)
         
         if stack_mode == "flux_index":
             plt.ylabel('Photon Index',fontsize=22)
